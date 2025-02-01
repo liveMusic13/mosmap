@@ -1,0 +1,94 @@
+import { useSearchParams } from 'next/navigation';
+import { ChangeEvent, FC, useRef, useState } from 'react';
+
+import Input from '@/components/ui/input/Input';
+
+import { useGetDataMap } from '@/hooks/useGetDataMap';
+
+import styles from './ListOfObjects.module.scss';
+import List from './list/List';
+
+const ListOfObjects: FC = () => {
+	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
+	const { data, isLoading, isSuccess } = useGetDataMap(map ? map : '');
+	const [value, setValue] = useState<string>('');
+
+	//HELP: Ref для хранения ID таймера
+	const timeoutId = useRef<NodeJS.Timeout | null>(null);
+
+	const [searchValue, setSearchValue] = useState<string>('');
+
+	//HELP: Функция для обработки ввода
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const newValue = e.target.value;
+
+		//HELP: Мгновенно обновляем состояние инпута
+		setValue(newValue);
+
+		//HELP: Очищаем предыдущий таймер
+		if (timeoutId.current) {
+			clearTimeout(timeoutId.current);
+		}
+
+		//HELP: Устанавливаем новый таймер для дебаунсинга
+		timeoutId.current = setTimeout(
+			() => setSearchValue(newValue), //HELP: Обновляем дебаунсированное значение
+			500,
+		);
+	};
+
+	return (
+		<div className={styles.wrapper_listOfObjects}>
+			<h2 className={styles.title}>Список объектов</h2>
+			<div className={styles.block__counts}>
+				<div className={styles.block__description}>
+					<p className={styles.description}>Всего объектов в списке:</p>
+					<p className={styles.count}>{data?.['all-points']}</p>
+				</div>
+				<div className={styles.block__description}>
+					<p className={styles.description}>Всего объектов на карте:</p>
+					<p className={styles.count}>
+						{data?.points.filter(el => Array.isArray(el.crd)).length}
+					</p>
+				</div>
+			</div>
+			<div className={styles.line}></div>
+			<div className={styles.block__list}>
+				<Input
+					type='text'
+					value={value}
+					onChange={onChange}
+					srcImage='/images/icons/search.svg'
+					widthImage={16}
+					heightImage={16}
+					placeholder='Поиск'
+					style={{
+						width: 'calc(386/1920*100vw)',
+						height: 'calc(40/1920*100vw)',
+						borderRadius: 'calc(6/1920*100vw)',
+						marginLeft: 'calc(11/1920*100vw)',
+					}}
+					styleInput={{
+						outline: 'none',
+						fontSize: '1.14rem',
+					}}
+					styleImage={{
+						right: 'calc(12/1920*100vw)',
+						width: 'calc(16/1920*100vw)',
+						height: 'calc(16/1920*100vw)',
+						top: '50%',
+						transform: 'translateY(-50%)',
+					}}
+				/>
+				{data?.points
+					.filter(el =>
+						(el.name || '').toLowerCase().includes(searchValue.toLowerCase()),
+					)
+					.map(el => <List key={el.id} el={el} />)}
+			</div>
+		</div>
+	);
+};
+
+export default ListOfObjects;

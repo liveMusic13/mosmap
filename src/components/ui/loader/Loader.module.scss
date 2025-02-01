@@ -1,0 +1,6 @@
+@use '@st/functions.scss' as func;
+
+.loader {
+	width: func.adapt(50px, 1920px);
+	height: func.adapt(50px, 1920px);
+}

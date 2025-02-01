@@ -1,0 +1,98 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: func.adapt(80px, 1920px);
+	background-image: url('/images/header_image.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	padding: 0px func.adapt(60px, 1920px);
+
+	position: relative;
+	z-index: 3000000;
+}
+
+.block__logo {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(24px, 1920px);
+}
+
+.image_logo {
+	width: func.adapt(178px, 1920px);
+	height: func.adapt(39px, 1920px);
+	margin-bottom: func.adapt(-10px, 1920px);
+}
+
+.title {
+	font-size: 0.8rem;
+	font-weight: 900;
+	text-transform: uppercase;
+}
+
+.block__menu {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(35px, 1920px);
+}
+
+.block__menu_links {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(6px, 1920px);
+	position: relative;
+}
+
+.link,
+.menu__links {
+	font-size: 1.14rem;
+	font-weight: 600;
+	color: vars.$black_hard;
+}
+
+.menu__links {
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.image_arrow {
+	// width: func.adapt(8px, 1920px);
+	// height: func.adapt(6px, 1920px);
+	margin-top: func.adapt(6px, 1920px);
+}
+
+.menu__options {
+	display: flex;
+	position: absolute;
+	top: 1.8rem;
+	left: 0;
+
+	background-color: vars.$white;
+	box-shadow: 0px 0px 7px rgba($color: #000000, $alpha: 0.2);
+	border-radius: func.adapt(10px, 1920px);
+	flex-direction: column;
+	cursor: default;
+}
+
+.link_option {
+	font-size: 0.85rem;
+	color: vars.$black_hard;
+	padding: func.adapt(10px, 1920px) func.adapt(20px, 1920px);
+	white-space: nowrap;
+	border-bottom: 1px solid vars.$green;
+	transition: font-size 0.3s ease;
+
+	&:last-child {
+		border: none;
+	}
+
+	&:hover {
+		font-size: 1rem;
+	}
+}

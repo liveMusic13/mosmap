@@ -1,0 +1,34 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.wrapper_content {
+	padding: 0px func.adapt(60px, 1920px);
+	width: 100%;
+	height: calc(
+		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(163px, 1920px)}
+	);
+	display: flex;
+	flex-direction: column;
+}
+
+.title {
+	font-size: 2.71rem;
+	color: vars.$black_hard;
+	text-transform: uppercase;
+	font-family: 'Intro';
+	margin: func.adapt(15px, 1920px) 0;
+}
+
+// HELP: Порядок вычета высоты для .block__content следующий: вся высота минус шапка, минус название карты и отступы от него, минус футер и минус блок опций. Нужно для того чтобы высота элементов учитывалась и это блок не выталкивал другие элементы за границы экрана и не вызывал скрола.
+
+.block__content {
+	padding: func.adapt(20px, 1920px) 0px;
+	height: calc(
+		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(80px, 1920px)} -
+			#{func.adapt(163px, 1920px)} - #{func.adapt(45px, 1920px)}
+	);
+	flex-grow: 1;
+	width: 100%;
+	display: flex;
+	gap: func.adapt(20px, 1920px);
+}

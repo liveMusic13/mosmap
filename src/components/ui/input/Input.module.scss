@@ -1,0 +1,27 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.block__input {
+	width: func.adapt(450px, 1920px);
+	height: func.adapt(40px, 1920px);
+	border-radius: func.adapt(4px, 1920px);
+	border: 1px solid vars.$grey_middle;
+	background-color: transparent;
+	padding: func.adapt(10px, 1920px) func.adapt(42px, 1920px)
+		func.adapt(10px, 1920px) func.adapt(16px, 1920px);
+
+	position: relative;
+}
+
+.input {
+	color: vars.$black;
+
+	&::placeholder {
+		color: vars.$grey_hard;
+		font-size: 1rem;
+	}
+}
+
+.image {
+	position: absolute;
+}

@@ -1,0 +1,49 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+@mixin scrollbar() {
+	//HELP: Стили для браузеров на движке WebKit (Chrome, Safari, Edge)
+	&::-webkit-scrollbar {
+		width: func.adapt(8px, 1920px); //HELP: ширина скролбара
+		background-color: transparent; //HELP: фон скролбара, если нужен
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent; //HELP: фон дорожки
+		border-top-right-radius: func.adapt(12px, 1920px);
+		border-left: 1px solid vars.$grey_lines; //HELP: левая граница ползунка (пример: немного затемнённый цвет)
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: vars.$green; //HELP: цвет ползунка скроллбара
+		border-radius: func.adapt(12px, 1920px); //HELP: скругление углов ползунка
+		transition: background 0.3s ease;
+
+		&:hover {
+			cursor: grabbing;
+		}
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		background: vars.$green_middle;
+	}
+
+	// Стили для Firefox
+	// Firefox позволяет задать только общие параметры: тонкий/обычный скроллбар и цвета.
+	// Значение 'thin' – максимально тонкий вариант, произвольные размеры задать нельзя.
+	// scrollbar-width: thin;
+	// scrollbar-color: vars.$green transparent; // первый цвет – цвет ползунка, второй – цвет дорожки
+}
+
+@mixin hover_text() {
+	display: none;
+	position: absolute;
+	top: 150%;
+	z-index: 1500;
+	font-size: 1rem;
+	white-space: nowrap;
+	background-color: vars.$black;
+	color: vars.$white;
+	border-radius: func.adapt(6px, 1920px);
+	padding: func.adapt(10px, 1920px) func.adapt(8px, 1920px);
+}

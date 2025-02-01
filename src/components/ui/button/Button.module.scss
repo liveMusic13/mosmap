@@ -1,0 +1,18 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.button {
+	border-radius: func.adapt(6px, 1920px);
+	background-color: vars.$green;
+	color: vars.$white;
+	font-size: 1rem;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&:disabled {
+		cursor: default;
+		opacity: 0.5;
+	}
+}

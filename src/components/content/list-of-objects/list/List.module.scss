@@ -1,0 +1,47 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.block__name {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: relative;
+	padding: func.adapt(11px, 1920px);
+	border-bottom: 1px dotted vars.$grey_middle;
+
+	> button {
+		&:hover + .hover__text {
+			display: block;
+		}
+	}
+}
+
+.name {
+	font-weight: 500;
+	font-size: 1.42rem;
+	color: vars.$green;
+	transition: font-size 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		font-size: 1.5rem;
+	}
+}
+
+.icon_svg {
+	width: func.adapt(20px, 1920px);
+	height: func.adapt(20px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		width: func.adapt(23px, 1920px);
+		height: func.adapt(23px, 1920px);
+	}
+}
+
+.hover__text {
+	@include mix.hover_text();
+}

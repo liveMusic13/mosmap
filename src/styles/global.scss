@@ -1,0 +1,83 @@
+@use './variables.scss' as vars;
+@use './functions.scss' as func;
+@use './fonts.scss' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+*,
+*::before,
+*::after {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul,
+ol,
+li {
+	list-style: none;
+}
+
+img {
+	vertical-align: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: inherit;
+	font-size: inherit;
+}
+
+// font-family: "Open Sans", serif;
+// font-family: "Ubuntu", serif;
+// font-family: "Lato", serif;
+
+html,
+body {
+	height: 100%;
+	font-family: 'Inter', serif;
+	font-size: vars.$fz_standart;
+	color: vars.$black;
+
+	@media (max-width: 1620px) {
+		font-size: 13px;
+	}
+
+	@media (max-width: 1320px) {
+		font-size: 12px;
+	}
+
+	@media (max-width: 1220px) {
+		font-size: 11px;
+	}
+
+	@media (max-width: 1120px) {
+		font-size: 10px;
+	}
+
+	// @media (max-width: 991.98px) {
+	// 	font-size: 13px;
+	// }
+
+	// @media (max-width: 767.98px) {
+	// 	font-size: 14px;
+	// }
+
+	// @media (max-width: 479.98px) {
+	// 	font-size: 10px;
+	// }
+}
+
+//убираем логотип с украинским флагом
+.leaflet-control-attribution.leaflet-control {
+	display: none;
+}

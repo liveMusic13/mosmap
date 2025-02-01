@@ -1,0 +1,6 @@
+@use '@st/functions.scss' as func;
+
+.line {
+	width: 1px;
+	height: func.adapt(36px, 1920px);
+}
