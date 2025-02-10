@@ -1,0 +1,129 @@
+[
+	{
+		"id": 258,
+		"caption": "Количество123",
+		"name": "num_258",
+		"type": "number",
+		"min_value": "-64573",
+		"max_value": "400000"
+	},
+	{
+		"id": 89,
+		"caption": "Тип клиента",
+		"type": "list",
+		"multiple": 0,
+		"name": "list[89]",
+		"items": [
+			{ "item_id": 162, "item_name": "365" },
+			{ "item_id": 163, "item_name": "366" },
+			{ "item_id": 164, "item_name": "367" },
+			{ "item_id": 165, "item_name": "368" },
+			{ "item_id": 166, "item_name": "369" },
+			{ "item_id": 149, "item_name": "dsfsdfsdfsdf" },
+			{ "item_id": 130, "item_name": "newtype" },
+			{ "item_id": 151, "item_name": "okey" },
+			{ "item_id": 150, "item_name": "test1" },
+			{ "item_id": 127, "item_name": "typeA" },
+			{ "item_id": 128, "item_name": "typeB" },
+			{ "item_id": 129, "item_name": "typeC" },
+			{ "item_id": 126, "item_name": "wqeqwe" },
+			{ "item_id": 131, "item_name": "Адреса для проверки" },
+			{ "item_id": 157, "item_name": "Апрелевка" },
+			{ "item_id": 161, "item_name": "Кокошкино" },
+			{ "item_id": 133, "item_name": "Конкурирующие" },
+			{ "item_id": 159, "item_name": "Крёкшино" },
+			{ "item_id": 132, "item_name": "Наши объекты" },
+			{ "item_id": 135, "item_name": "Не работают" },
+			{ "item_id": 158, "item_name": "Победа" },
+			{ "item_id": 121, "item_name": "Проверенные" },
+			{ "item_id": 160, "item_name": "Санино" },
+			{ "item_id": 124, "item_name": "тип еще один" },
+			{ "item_id": 122, "item_name": "тип2" }
+		]
+	},
+	{
+		"id": 90,
+		"caption": "Агент",
+		"type": "list",
+		"multiple": 0,
+		"name": "list[90]",
+		"items": [
+			{ "item_id": 33, "item_name": "-?" },
+			{ "item_id": 16, "item_name": "0" },
+			{ "item_id": 52, "item_name": "151" },
+			{ "item_id": 51, "item_name": "152" },
+			{ "item_id": 53, "item_name": "365" },
+			{ "item_id": 54, "item_name": "366" },
+			{ "item_id": 55, "item_name": "367" },
+			{ "item_id": 56, "item_name": "368" },
+			{ "item_id": 57, "item_name": "369" },
+			{ "item_id": 21, "item_name": "Балашова Наталья" },
+			{ "item_id": 24, "item_name": "Груданова Анна" },
+			{ "item_id": 25, "item_name": "Добровольский Алексей Анатольевич" },
+			{ "item_id": 22, "item_name": "Казанова Елена" },
+			{ "item_id": 17, "item_name": "Казюлина Наталья" },
+			{ "item_id": 27, "item_name": "Клейман Татьяна" },
+			{ "item_id": 30, "item_name": "Кошелева Елена Валерьевна" },
+			{ "item_id": 31, "item_name": "Кручинина Ольга" },
+			{ "item_id": 15, "item_name": "Марюшкина Альбина" },
+			{ "item_id": 23, "item_name": "Новикова Элеонора" },
+			{ "item_id": 29, "item_name": "Носкова Елена" },
+			{ "item_id": 19, "item_name": "Панина Татьяна" },
+			{ "item_id": 13, "item_name": "Полева Светлана" },
+			{ "item_id": 18, "item_name": "Савельева Татьяна" },
+			{ "item_id": 32, "item_name": "Саркисов Виталий" },
+			{ "item_id": 28, "item_name": "Сорокин Андрей" },
+			{ "item_id": 20, "item_name": "Терехова Татьяна" },
+			{ "item_id": 12, "item_name": "Урянская Марина" },
+			{ "item_id": 14, "item_name": "Усачева Юниана" },
+			{ "item_id": 26, "item_name": "Яковенко Светлана" }
+		]
+	},
+	{
+		"id": 101,
+		"caption": "test",
+		"type": "list",
+		"multiple": 1,
+		"name": "list[101]",
+		"items": [
+			{ "item_id": 1040, "item_name": "testing" },
+			{ "item_id": 1228, "item_name": "Апрелевка" },
+			{ "item_id": 1233, "item_name": "в Апрелевке" },
+			{ "item_id": 1237, "item_name": "в Кокошкино" },
+			{ "item_id": 1235, "item_name": "в Крёкшино" },
+			{ "item_id": 1236, "item_name": "в Санино" },
+			{ "item_id": 1232, "item_name": "Кокошкино" },
+			{ "item_id": 1230, "item_name": "Крёкшино" },
+			{ "item_id": 1234, "item_name": "на Победе" },
+			{ "item_id": 1229, "item_name": "Победа" },
+			{ "item_id": 1231, "item_name": "Санино" }
+		]
+	},
+	{
+		"id": 4,
+		"caption": "Округа",
+		"type": "map",
+		"name": "sloi[4]",
+		"multiple": 1,
+		"items": [
+			{ "item_id": 12, "item_name": "Восточный" },
+			{ "item_id": 13, "item_name": "Северо-Восточный" },
+			{ "item_id": 5, "item_name": "Центральный" },
+			{ "item_id": 9, "item_name": "Юго-Восточный" },
+			{ "item_id": 7, "item_name": "Юго-Западный" },
+			{ "item_id": 6, "item_name": "Южный" }
+		]
+	},
+	{
+		"id": 5,
+		"caption": "Районы области",
+		"type": "map",
+		"name": "sloi[5]",
+		"multiple": 1,
+		"items": [
+			{ "item_id": 94, "item_name": "Городской округ Реутов" },
+			{ "item_id": 120, "item_name": "Наро-Фоминский городской округ" },
+			{ "item_id": 127, "item_name": "Новомосковский" }
+		]
+	}
+]

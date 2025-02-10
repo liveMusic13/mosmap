@@ -41,6 +41,11 @@
 	font-size: 1.14rem;
 	font-weight: 600;
 	color: vars.$white;
+	transition: font-size 0.3s ease;
+
+	&:hover {
+		font-size: 1.2rem;
+	}
 }
 
 .block__contacts {
@@ -53,6 +58,11 @@
 	font-size: 1.14rem;
 	font-weight: 600;
 	color: vars.$white;
+	transition: font-size 0.3s ease;
+
+	&:hover {
+		font-size: 1.2rem;
+	}
 }
 
 .line {

@@ -1,11 +1,21 @@
-import { FC } from 'react';
+import { CSSProperties, FC } from 'react';
 
 import styles from './Loader.module.scss';
 import { colors } from '@/app.constants';
 
-const Loader: FC = () => {
+const Loader: FC<{ width?: string; height?: string; style: CSSProperties }> = ({
+	width,
+	height,
+	style,
+}) => {
 	return (
-		<svg width='50' height='50' viewBox='0 0 50 50' className={styles.loader}>
+		<svg
+			width={width}
+			height={height}
+			viewBox='0 0 50 50'
+			className={styles.loader}
+			style={style}
+		>
 			<circle
 				cx='25'
 				cy='25'

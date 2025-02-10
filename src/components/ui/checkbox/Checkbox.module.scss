@@ -1,0 +1,59 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.label {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: func.adapt(5px, 1920px);
+	transition: font-size 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		font-size: 1.08rem;
+	}
+}
+
+.checkbox__custom {
+	width: func.adapt(20px, 1920px);
+	height: func.adapt(20px, 1920px);
+	border-radius: func.adapt(5px, 1920px);
+	border: 1px solid vars.$grey;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.active {
+	background-color: vars.$green;
+	border: none;
+}
+
+.checkbox__img {
+	width: func.adapt(11px, 1920px);
+	height: func.adapt(8px, 1920px);
+}
+
+.checkbox__input {
+	position: absolute;
+	left: 0;
+	opacity: 0;
+	z-index: 2;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&:hover + .checkbox__custom {
+		width: func.adapt(23px, 1920px);
+		height: func.adapt(23px, 1920px);
+	}
+
+	&:hover + .checkbox__img {
+		width: func.adapt(14px, 1920px);
+		height: func.adapt(10px, 1920px);
+	}
+}

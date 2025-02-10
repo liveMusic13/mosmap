@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 import Button from '@/components/ui/button/Button';
 import Line from '@/components/ui/line/Line';
 
-import { useListOfObjectsStore } from '@/store/store';
+import { useFiltersStore, useListOfObjectsStore } from '@/store/store';
 
 import { srcStandard } from '@/utils/pathSvg';
 
@@ -13,9 +13,14 @@ import { settingsArr, standardArr } from '@/data/options.data';
 
 const Options: FC = () => {
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
+	const isFilters = useFiltersStore(store => store.isFilters);
 
 	const onClick = useCallback((id: number) => {
-		if (id === 3) {
+		if (id === 2) {
+			useFiltersStore.setState(state => ({
+				isFilters: !state.isFilters,
+			}));
+		} else if (id === 3) {
 			useListOfObjectsStore.setState(state => ({
 				isListOfObjects: !state.isListOfObjects,
 			}));
@@ -41,7 +46,9 @@ const Options: FC = () => {
 						onClick={() => onClick(opt.id)}
 					>
 						<svg className={styles.icon_svg} style={{ color: colors.green }}>
-							<use xlinkHref={srcStandard(opt, isListOfObjects)}></use>
+							<use
+								xlinkHref={srcStandard(opt, isListOfObjects, isFilters)}
+							></use>
 						</svg>
 						<p className={styles.hover__text} style={{ left: 0 }}>
 							{opt.hover_text}

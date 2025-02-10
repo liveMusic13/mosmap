@@ -7,17 +7,18 @@ import { mapService } from '@/services/map.service';
 export const revalidate = 200;
 
 export async function generateMetadata() {
-	// Доступ к параметрам из cookies
+	//HELP: Доступ к параметрам из cookies
 	const cookieStore = cookies();
-	const mapParam = (await cookieStore).get('map')?.value || '7';
+	// const mapParam = (await cookieStore).get('map')?.value || '7';
+	const mapParam = (await cookieStore).get('map')?.value || null;
 
-	// Получение данных
+	//HELP: Получение данных
 	const { data: dataMap } = await mapService.getObjectISR(mapParam);
 
-	// Возвращаем метаданные
+	//HELP: Возвращаем метаданные
 	return {
-		title: dataMap.title || 'Default Title',
-		description: dataMap.description || 'Default Description',
+		title: dataMap.title || 'Придумать заголовок интерфейса',
+		description: dataMap.description || 'Придумать описание интерфейса',
 	};
 }
 

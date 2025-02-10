@@ -27,7 +27,7 @@ const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
 		>
 			<MapResizeHandler />
 			<TileLayer url={dataMap.tiles_url} />
-			{dataMap.points.slice(0, 40).map(mark => (
+			{dataMap.points.map(mark => (
 				<Marker
 					key={mark.id}
 					position={mark.crd || [0, 0]}

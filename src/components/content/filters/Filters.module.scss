@@ -1,0 +1,44 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_filters {
+	width: func.adapt(280px, 1920px);
+	padding: func.adapt(20px, 1920px) func.adapt(16px, 1920px)
+		func.adapt(16px, 1920px);
+	box-shadow: 0px 2px 15px rgba($color: #000000, $alpha: 0.1);
+	border-radius: func.adapt(12px, 1920px);
+	display: flex;
+	flex-direction: column;
+}
+
+.block__title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.title {
+	font-weight: 700;
+	font-size: 1.57rem;
+}
+
+.image_title {
+	width: func.adapt(9px, 1920px);
+	height: func.adapt(9px, 1920px);
+	margin-right: func.adapt(5px, 1920px);
+}
+
+.block__filters {
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(20px, 1920px);
+	margin-top: func.adapt(16px, 1920px);
+
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-grow: 1;
+	@include mix.scrollbar();
+
+	position: relative;
+}

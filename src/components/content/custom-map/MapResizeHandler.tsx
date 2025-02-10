@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 
-// import { useViewAllObjectsStore } from '@/store/store';
+import { useListOfObjectsStore } from '@/store/store';
 
 const MapResizeHandler = () => {
 	const map = useMap();
-	// const isViewAllObjects = useViewAllObjectsStore(
-	// 	store => store.isViewAllObjects,
-	// );
+	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
 
 	useEffect(() => {
 		if (map && typeof map.invalidateSize === 'function') {
@@ -17,15 +15,19 @@ const MapResizeHandler = () => {
 
 			return () => clearTimeout(timer);
 		}
-	}, [map]);
+	}, [map, isListOfObjects]);
 
 	// useEffect(() => {
+	// 	console.log('use');
+
 	// 	if (map) {
+	// 		console.log('yes');
 	// 		map.invalidateSize();
 	// 	}
 	// }, [
 	// 	// isViewAllObjects,
 	// 	map,
+	// 	isListOfObjects,
 	// ]);
 
 	return null;

@@ -41,3 +41,24 @@ export interface IDataMap {
 	zoom_max: number;
 	zoom_min: number;
 }
+
+export interface IApiResponse<T> {
+	status: number;
+	data: T;
+}
+
+export interface IItemFilter {
+	item_id: number;
+	item_name: string;
+}
+
+export interface IDataFilters {
+	caption: string;
+	id: number;
+	items?: IItemFilter[];
+	multiple?: number;
+	name: string;
+	type: string;
+	min_value?: string;
+	max_value?: string;
+}

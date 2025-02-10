@@ -2,6 +2,7 @@ import { useSearchParams } from 'next/navigation';
 import { ChangeEvent, FC, useRef, useState } from 'react';
 
 import Input from '@/components/ui/input/Input';
+import Loader from '@/components/ui/loader/Loader';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
@@ -11,7 +12,7 @@ import List from './list/List';
 const ListOfObjects: FC = () => {
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
-	const { data, isLoading, isSuccess } = useGetDataMap(map ? map : '');
+	const { data, isLoading, isSuccess } = useGetDataMap(map);
 	const [value, setValue] = useState<string>('');
 
 	//HELP: Ref для хранения ID таймера
@@ -55,6 +56,19 @@ const ListOfObjects: FC = () => {
 			</div>
 			<div className={styles.line}></div>
 			<div className={styles.block__list}>
+				{isLoading && (
+					<Loader
+						style={{
+							width: 'calc(50/1920*100vw)',
+							height: 'calc(50/1920*100vw)',
+							position: 'absolute',
+							top: '50%',
+							left: '50%',
+							transform: 'translate(-50%, -50%)',
+						}}
+					/>
+				)}
+
 				<Input
 					type='text'
 					value={value}

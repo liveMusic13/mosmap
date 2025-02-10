@@ -7,6 +7,7 @@ import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 
+import NotFound from '@/app/not-found/page';
 import { mapService } from '@/services/map.service';
 
 export const revalidate = 200;
@@ -14,10 +15,15 @@ export const revalidate = 200;
 const Home: FC = async () => {
 	//HELP: Доступ к параметрам search через headers или cookies
 	const cookieStore = cookies();
-	const mapParam = (await cookieStore).get('map')?.value || '7';
+	const mapParam = (await cookieStore).get('map')?.value || null;
 
 	//HELP: Получение данных на сервере
-	const { data: dataMap } = await mapService.getObjectISR(mapParam);
+	const { data: dataMap, status } = await mapService.getObjectISR(mapParam);
+	const { data: dataFilter } = await mapService.getFiltersISR(mapParam);
+
+	if (status > 400) {
+		return NotFound(status);
+	}
 
 	return (
 		<Layout>

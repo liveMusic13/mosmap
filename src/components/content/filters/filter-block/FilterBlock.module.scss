@@ -1,0 +1,32 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_filterBlock {
+	// max-height: func.adapt(300px, 1920px);
+}
+
+.title {
+	font-weight: 700;
+	font-size: 1rem;
+}
+
+.line {
+	margin-top: func.adapt(10px, 1902px);
+	margin-bottom: func.adapt(5px, 1902px);
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px dotted vars.$grey_lines;
+}
+
+.block__filter {
+	max-height: func.adapt(300px, 1920px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-grow: 1;
+	@include mix.scrollbar();
+
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(8px, 1902px);
+}

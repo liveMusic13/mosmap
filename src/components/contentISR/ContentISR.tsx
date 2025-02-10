@@ -8,7 +8,7 @@ const ContentISR: FC<IContent> = ({ dataMap }) => {
 	return (
 		<div className={styles.wrapper_contentISR}>
 			<div>
-				{dataMap.points.map((el: any, ind: any) => (
+				{dataMap?.points.map((el: any, ind: any) => (
 					<p key={ind}>
 						{el.name} <span>{el.color}</span>
 					</p>

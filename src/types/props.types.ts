@@ -1,6 +1,11 @@
 import { CSSProperties, ChangeEvent, PropsWithChildren } from 'react';
 
-import { IDataMap, IMarker } from './requestData.types';
+import {
+	IDataFilters,
+	IDataMap,
+	IItemFilter,
+	IMarker,
+} from './requestData.types';
 
 export interface IButton extends PropsWithChildren {
 	onClick?: () => void;
@@ -36,4 +41,32 @@ export interface IInput {
 	heightImage?: number;
 	srcImage?: string;
 	style?: CSSProperties;
+}
+
+export interface IFilterBlock {
+	filter: IDataFilters;
+}
+
+export interface IRangeProps {
+	min?: number;
+	max?: number;
+	step?: number;
+	values?: { min: number; max: number };
+	onChange?: (values: { min: number; max: number }) => void;
+	filter?: IDataFilters;
+	updateUrlParams?: (newParams: Record<string, string | null>) => void;
+}
+
+export interface ICheckbox {
+	label?: string;
+	value: string;
+	checked: boolean;
+	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	styleLabel?: CSSProperties;
+	styleCheckbox?: CSSProperties;
+}
+
+export interface ISelect {
+	items: IItemFilter[];
+	handleClick: (el: IItemFilter) => void;
 }

@@ -3,7 +3,7 @@ export interface IListOfObjectsStore {
 	setIsListOfObjects: (bol: boolean) => void;
 }
 
-// export interface IViewFiltersStore {
-// 	isViewFilters: boolean;
-// 	setIsViewFilters: (bol: boolean) => void;
-// }
+export interface IFiltersStore {
+	isFilters: boolean;
+	setIsFilters: (bol: boolean) => void;
+}

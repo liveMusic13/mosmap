@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { mapService } from '@/services/map.service';
 
-export const useGetDataMap = (mapParam: string) => {
+export const useGetDataMap = (mapParam: string | null) => {
 	const { data, error, isSuccess, isStale, isError, isLoading } = useQuery({
 		queryKey: ['data_map'],
 		queryFn: () => mapService.getObjectISR(mapParam),

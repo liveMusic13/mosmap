@@ -1,0 +1,82 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_select {
+	width: func.adapt(248px, 1920px);
+	// height: func.adapt(40px, 1920px);
+	position: relative;
+	// overflow: visible; // Разрешаем выход за границы
+	max-height: func.adapt(300px, 1920px);
+}
+
+.select {
+	width: 100%;
+	// height: 100%;
+	height: func.adapt(40px, 1920px);
+	background: linear-gradient(vars.$white, vars.$white_middle);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: func.adapt(11px, 1920px) func.adapt(10px, 1920px);
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+	border-radius: func.adapt(4px, 1920px);
+
+	&:hover {
+		cursor: pointer;
+
+		> .name {
+			font-size: 1.08rem;
+		}
+
+		> .image {
+			width: func.adapt(10px, 1920px);
+			height: func.adapt(20px, 1920px);
+		}
+	}
+}
+
+.name {
+	color: vars.$blue_hard;
+	font-weight: 500;
+	transition: font-size 0.3s ease;
+}
+
+.image {
+	width: func.adapt(8px, 1920px);
+	height: func.adapt(16px, 1920px);
+
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+}
+
+.options {
+	// position: absolute;
+	// top: 100%;
+	// left: 0;
+	// z-index: 3;
+	background-color: vars.$white_middle;
+	width: 100%;
+	height: 100%;
+	margin-top: func.adapt(5px, 1920px);
+	border-radius: func.adapt(4px, 1920px);
+	// max-height: func.adapt(300px, 1920px);
+
+	overflow-y: auto;
+	overflow-x: hidden;
+	@include mix.scrollbar();
+
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+}
+
+.option {
+	padding: func.adapt(5px, 1920px) func.adapt(10px, 1920px);
+	font-size: 1rem;
+	transition: font-size 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		font-size: 1.08rem;
+	}
+}
