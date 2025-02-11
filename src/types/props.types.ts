@@ -26,6 +26,10 @@ export interface ICustomMap {
 	dataMap: IDataMap;
 }
 
+export interface IRenderMarkers {
+	dataMap: IDataMap;
+}
+
 export interface IIconMarker {
 	mark: IMarker;
 	size: [number, number];

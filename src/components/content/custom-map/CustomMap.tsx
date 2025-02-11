@@ -1,15 +1,13 @@
-import { divIcon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FC } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-
-import IconMarker from '@/components/ui/icon-marker/IconMarker';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 
 import { ICustomMap } from '@/types/props.types';
 
 import styles from './CustomMap.module.scss';
 import MapResizeHandler from './MapResizeHandler';
+import RenderMarkers from './RenderMarkers';
 
 const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
 	return (
@@ -27,21 +25,13 @@ const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
 		>
 			<MapResizeHandler />
 			<TileLayer url={dataMap.tiles_url} />
-			{dataMap.points.map(mark => (
-				<Marker
-					key={mark.id}
-					position={mark.crd || [0, 0]}
-					icon={divIcon({
-						className: 'my-custom-icon',
-						iconSize: [22, 22],
-						html: renderToStaticMarkup(
-							<IconMarker key={mark.id} mark={mark} size={[22, 22]} />,
-						),
-					})}
-				>
-					<Popup>{mark.name}</Popup>
-				</Marker>
-			))}
+			{dataMap.clastering === 0 ? (
+				<RenderMarkers dataMap={dataMap} />
+			) : (
+				<MarkerClusterGroup chunkedLoading={true}>
+					<RenderMarkers dataMap={dataMap} />
+				</MarkerClusterGroup>
+			)}
 		</MapContainer>
 	);
 };
