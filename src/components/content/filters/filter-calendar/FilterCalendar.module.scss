@@ -1,0 +1,51 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.filter__calendar {
+}
+
+@include mix.filter_header();
+
+.block__result {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: func.adapt(15px, 1920px);
+
+	&:hover {
+		cursor: pointer;
+
+		.text {
+			font-size: 1.125rem;
+		}
+	}
+}
+
+.block__date {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(4px, 1920px);
+}
+
+.text {
+	font-size: 1rem;
+	color: vars.$black;
+	transition: font-size 0.3s ease;
+}
+
+.date {
+	width: func.adapt(96px, 1920px);
+	height: func.adapt(40px, 1920px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.2);
+	border-radius: func.adapt(4px, 1920px);
+
+	font-size: 1rem;
+
+	@media (max-width: 1320px) {
+		font-size: 0.75rem;
+	}
+}

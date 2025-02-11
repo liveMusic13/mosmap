@@ -6,18 +6,20 @@
 	// max-height: func.adapt(300px, 1920px);
 }
 
-.title {
-	font-weight: 700;
-	font-size: 1rem;
-}
+// .title {
+// 	font-weight: 700;
+// 	font-size: 1rem;
+// }
 
-.line {
-	margin-top: func.adapt(10px, 1902px);
-	margin-bottom: func.adapt(5px, 1902px);
-	width: 100%;
-	height: 1px;
-	border-bottom: 1px dotted vars.$grey_lines;
-}
+// .line {
+// 	margin-top: func.adapt(10px, 1902px);
+// 	margin-bottom: func.adapt(5px, 1902px);
+// 	width: 100%;
+// 	height: 1px;
+// 	border-bottom: 1px dotted vars.$grey_lines;
+// }
+
+@include mix.filter_header();
 
 .block__filter {
 	max-height: func.adapt(300px, 1920px);

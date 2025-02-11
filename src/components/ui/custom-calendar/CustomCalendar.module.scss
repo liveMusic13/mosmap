@@ -1,0 +1,177 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.calendar {
+	display: flex;
+	flex-direction: column;
+	// border: 1px solid #ddd;
+	border-radius: func.adapt(6px, 1920px);
+	padding: func.adapt(12px, 1920px);
+	max-width: func.adapt(290px, 1920px);
+	background-color: vars.$white;
+	// box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: func.adapt(12px, 1920px);
+}
+
+.navButton {
+	background: none;
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.2);
+	border-radius: func.adapt(4px, 1920px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// font-size: 16px;
+	width: func.adapt(32px, 1920px);
+	height: func.adapt(32px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		width: func.adapt(35px, 1920px);
+		height: func.adapt(35px, 1920px);
+
+		> .prevMonth,
+		.nextMonth {
+			width: func.adapt(15px, 1920px);
+			height: func.adapt(15px, 1920px);
+		}
+	}
+}
+
+.prevMonth,
+.nextMonth {
+	width: func.adapt(12px, 1920px);
+	height: func.adapt(12px, 1920px);
+}
+
+.prevMonth {
+	transform: rotate(180deg);
+}
+
+.title {
+	font-size: 1.125rem;
+	font-weight: 600;
+	text-transform: capitalize;
+
+	@media (max-width: 1320px) {
+		font-size: 0.95rem;
+	}
+}
+
+.weekDays,
+.week {
+	display: flex;
+	justify-content: space-between;
+}
+
+.weekDay {
+	// width: 14%;
+	font-size: 0.625rem;
+	text-align: center;
+	font-weight: 500;
+	width: func.adapt(36px, 1920px);
+	height: func.adapt(32px, 1920px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// padding: func.adapt(4px, 1920px) 0;
+}
+
+.day {
+	width: func.adapt(36px, 1920px);
+	height: func.adapt(32px, 1920px);
+	font-weight: 500;
+	font-size: 0.875rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: func.adapt(4px, 1920px);
+	transition: background-color 0.3s;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.currentMonth {
+	// background-color: #f9f9f9;
+	background-color: transparent;
+
+	&:hover {
+		// background-color: #e6f7ff;
+		background-color: rgba($color: vars.$grey_middle, $alpha: 0.7);
+	}
+}
+
+.otherMonth {
+	color: vars.$grey_light;
+
+	&:hover {
+		cursor: default;
+	}
+}
+
+.inRange {
+	// background-color: #bae7ff;
+	background-color: rgba($color: vars.$grey_middle, $alpha: 0.3);
+	color: vars.$green;
+}
+
+.footer {
+	display: flex;
+	justify-content: space-between;
+	margin-top: func.adapt(12px, 1920px);
+}
+
+.cancelButton,
+.applyButton {
+	// padding: 8px 16px;
+	// border: none;
+	border-radius: func.adapt(4px, 1920px);
+	font-size: 1rem;
+	font-weight: 600;
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	@media (max-width: 1320px) {
+		font-size: 0.85rem;
+	}
+}
+
+.cancelButton {
+	background-color: transparent;
+	color: vars.$grey_light;
+	width: func.adapt(105px, 1920px);
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.2);
+
+	&:hover {
+		cursor: pointer;
+		width: func.adapt(115px, 1920px);
+		height: func.adapt(45px, 1920px);
+	}
+}
+
+.applyButton {
+	// background-color: #1890ff;
+	background-color: vars.$green;
+	color: vars.$white;
+	width: func.adapt(133px, 1920px);
+	height: func.adapt(40px, 1920px);
+
+	&:hover {
+		cursor: pointer;
+		width: func.adapt(143px, 1920px);
+		height: func.adapt(45px, 1920px);
+	}
+}

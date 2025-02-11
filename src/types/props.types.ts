@@ -1,5 +1,6 @@
 import { CSSProperties, ChangeEvent, PropsWithChildren } from 'react';
 
+import { ICalendarState } from './localState.types';
 import {
 	IDataFilters,
 	IDataMap,
@@ -69,4 +70,8 @@ export interface ICheckbox {
 export interface ISelect {
 	items: IItemFilter[];
 	handleClick: (el: IItemFilter) => void;
+}
+
+export interface ICustomCalendar {
+	callbackDate: (date: ICalendarState) => void;
 }

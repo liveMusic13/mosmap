@@ -47,3 +47,18 @@
 	border-radius: func.adapt(6px, 1920px);
 	padding: func.adapt(10px, 1920px) func.adapt(8px, 1920px);
 }
+
+@mixin filter_header() {
+	.title {
+		font-weight: 700;
+		font-size: 1rem;
+	}
+
+	.line {
+		margin-top: func.adapt(10px, 1902px);
+		margin-bottom: func.adapt(5px, 1902px);
+		width: 100%;
+		height: 1px;
+		border-bottom: 1px dotted vars.$grey_lines;
+	}
+}

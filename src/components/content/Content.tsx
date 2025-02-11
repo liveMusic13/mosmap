@@ -47,6 +47,7 @@ const Content: FC<IContent> = ({ dataMap }) => {
 					{isFilters && <Filters />}
 					{isListOfObjects && <ListOfObjects />}
 					<DynamicCustomMap dataMap={dataMap} />
+					{/* <CustomCalendar /> */}
 				</div>
 			</div>
 		</QueryClientProvider>
