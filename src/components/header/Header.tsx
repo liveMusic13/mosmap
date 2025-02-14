@@ -1,8 +1,12 @@
 'use client';
 
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FC } from 'react';
+
+import { IHeader } from '@/types/props.types';
 
 import { useMenuDropdown } from '@/hooks/useMenuDropdown';
 
@@ -10,10 +14,11 @@ import Button from '../ui/button/Button';
 import Line from '../ui/line/Line';
 
 import styles from './Header.module.scss';
-import { colors } from '@/app.constants';
+import { TOKEN, colors } from '@/app.constants';
 import { arrMenuHeader } from '@/data/header.data';
 
-const Header: FC<any> = ({ dataMap }) => {
+const Header: FC<IHeader> = ({ style }) => {
+	const router = useRouter();
 	const {
 		isHovered,
 		handleMouseEnter,
@@ -22,8 +27,19 @@ const Header: FC<any> = ({ dataMap }) => {
 		handleMenuLeave,
 	} = useMenuDropdown();
 
+	const token = Cookies.get(TOKEN);
+
+	const onClick = () => {
+		if (token) {
+			Cookies.remove(TOKEN);
+			router.push('/auth');
+		} else {
+			router.push('/auth');
+		}
+	};
+
 	return (
-		<header className={styles.header}>
+		<header className={styles.header} style={style}>
 			<div className={styles.block__logo}>
 				<Image
 					src={'/images/icons/logo.svg'}
@@ -51,8 +67,9 @@ const Header: FC<any> = ({ dataMap }) => {
 									fontWeight: '600',
 									fontSize: '1.14rem',
 								}}
+								onClick={onClick}
 							>
-								{el.title}
+								{token ? 'Выход' : el.title}
 							</Button>
 						);
 					} else if (el.type === 'link') {

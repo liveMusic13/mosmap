@@ -16,7 +16,9 @@ const Input: FC<IInput> = ({
 	heightImage,
 	srcImage,
 	style,
+	callback,
 }) => {
+	console.log(type);
 	return (
 		<div className={styles.block__input} style={style}>
 			<input
@@ -27,14 +29,17 @@ const Input: FC<IInput> = ({
 				style={styleInput}
 				className={styles.input}
 			/>
-			<Image
-				src={srcImage || ''}
-				alt='image'
-				width={widthImage}
-				height={heightImage}
-				style={styleImage}
-				className={styles.image}
-			/>
+			{srcImage && (
+				<Image
+					src={srcImage || ''}
+					alt='image'
+					width={widthImage}
+					height={heightImage}
+					style={styleImage}
+					className={styles.image}
+					onClick={callback}
+				/>
+			)}
 		</div>
 	);
 };

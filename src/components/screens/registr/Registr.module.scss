@@ -1,0 +1,9 @@
+@use '@st/functions.scss' as func;
+
+.title {
+	font-size: 2.71rem;
+	text-transform: uppercase;
+	font-family: 'Intro';
+	margin: func.adapt(15px, 1920px) 0;
+	margin-left: func.adapt(60px, 1920px);
+}
