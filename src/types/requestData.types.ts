@@ -7,14 +7,17 @@
 // 	id?: string;
 // 	value: string | number;
 // }
+import { LatLngExpression } from 'leaflet';
 
 export interface IMarker {
-	crd: [number, number] | null;
+	// crd: [number, number] | null;
+	crd: LatLngExpression | null;
 	id: number;
 	icon: string;
 	color: string;
 	raion_id: string;
-	polygon: number[][];
+	// polygon: number[][];
+	polygon: LatLngExpression[] | LatLngExpression[][] | LatLngExpression[][][];
 	name: string;
 	name_map: null | string;
 	// values?: IValues[];
@@ -61,4 +64,12 @@ export interface IDataFilters {
 	type: string;
 	min_value?: string;
 	max_value?: string;
+}
+
+export interface IRegistrationData {
+	login: string;
+	password: string;
+	email: string;
+	mapname: string;
+	descr: string;
 }

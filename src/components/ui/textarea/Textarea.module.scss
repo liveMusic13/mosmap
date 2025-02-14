@@ -1,0 +1,21 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.textarea {
+	resize: none;
+	font-family: 'Ubuntu', serif;
+	width: func.adapt(450px, 1920px);
+	height: func.adapt(150px, 1920px);
+	outline: none;
+	background-color: vars.$white;
+	border-radius: func.adapt(10px, 1920px);
+	padding: func.adapt(10px, 1920px) func.adapt(16px, 1920px);
+
+	@include mix.scrollbar();
+
+	&::placeholder {
+		color: vars.$grey_hard;
+		font-size: 1rem;
+	}
+}

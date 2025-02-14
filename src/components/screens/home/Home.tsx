@@ -27,7 +27,7 @@ const Home: FC = async () => {
 
 	return (
 		<Layout>
-			<Header dataMap={dataMap} />
+			<Header />
 			<Content dataMap={dataMap} />
 
 			<ContentISR dataMap={dataMap} />

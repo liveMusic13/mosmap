@@ -1,5 +1,6 @@
 import { CSSProperties, ChangeEvent, PropsWithChildren } from 'react';
 
+import { IFormAuth } from './data.types';
 import { ICalendarState } from './localState.types';
 import {
 	IDataFilters,
@@ -22,11 +23,19 @@ export interface IContent {
 	dataMap: IDataMap;
 }
 
+export interface IHeader {
+	dataMap?: IDataMap;
+}
+
 export interface ICustomMap {
 	dataMap: IDataMap;
 }
 
 export interface IRenderMarkers {
+	dataMap: IDataMap;
+}
+
+export interface ICanvasMarkersLayer {
 	dataMap: IDataMap;
 }
 
@@ -39,6 +48,7 @@ export interface IInput {
 	type: string;
 	value: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	callback?: () => void;
 	placeholder?: string;
 	styleInput?: CSSProperties;
 	styleImage?: CSSProperties;
@@ -78,4 +88,30 @@ export interface ISelect {
 
 export interface ICustomCalendar {
 	callbackDate: (date: ICalendarState) => void;
+}
+
+export interface IEntryBlock {
+	formData: IFormAuth[];
+	title: string;
+	title_link: string;
+	title_bot: string;
+	link_bot: string;
+	title_block: string;
+}
+
+export interface ILayout extends PropsWithChildren {
+	style?: CSSProperties;
+}
+
+export interface IHeader {
+	style?: CSSProperties;
+}
+
+export interface ITextarea {
+	value: string;
+	onChange: (
+		e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
+	) => void;
+	style?: CSSProperties;
+	placeholder?: string;
 }

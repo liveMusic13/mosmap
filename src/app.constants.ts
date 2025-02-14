@@ -1,4 +1,5 @@
 export const TOKEN: string = 'token';
+export const ACCESSIBLYMAP: string = 'AccessiblyMap';
 export const API_URL = 'https://app.mosmap.ru';
 
 export const colors = {

@@ -5,6 +5,7 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 
 import { ICustomMap } from '@/types/props.types';
 
+import CanvasMarkersLayer from './CanvasMarkersLayer';
 import styles from './CustomMap.module.scss';
 import MapResizeHandler from './MapResizeHandler';
 import RenderMarkers from './RenderMarkers';
@@ -25,12 +26,17 @@ const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
 		>
 			<MapResizeHandler />
 			<TileLayer url={dataMap.tiles_url} />
-			{dataMap.clastering === 0 ? (
-				<RenderMarkers dataMap={dataMap} />
-			) : (
-				<MarkerClusterGroup chunkedLoading={true}>
+			{/* TODO: На время отрицание, потом поменять обратно на строгое равно */}
+			{dataMap.canvas_map === 0 ? (
+				dataMap.clastering === 0 ? (
 					<RenderMarkers dataMap={dataMap} />
-				</MarkerClusterGroup>
+				) : (
+					<MarkerClusterGroup chunkedLoading={true}>
+						<RenderMarkers dataMap={dataMap} />
+					</MarkerClusterGroup>
+				)
+			) : (
+				<CanvasMarkersLayer dataMap={dataMap} />
 			)}
 		</MapContainer>
 	);
