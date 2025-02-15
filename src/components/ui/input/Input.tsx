@@ -18,7 +18,6 @@ const Input: FC<IInput> = ({
 	style,
 	callback,
 }) => {
-	console.log(type);
 	return (
 		<div className={styles.block__input} style={style}>
 			<input

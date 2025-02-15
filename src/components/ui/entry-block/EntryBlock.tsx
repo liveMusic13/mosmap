@@ -33,11 +33,11 @@ const EntryBlock: FC<IEntryBlock> = ({
 	const [viewPass, setViewPass] = useState(true);
 
 	const dataRegistr: IRegistrationData = {
-		login: valueFields['Логин'].value,
-		password: valueFields['Пароль'].value,
-		email: valueFields['Email'].value,
-		mapname: valueFields['Название карты'].value,
-		descr: valueFields['Описание карты..'].value,
+		login: valueFields['Логин']?.value,
+		password: valueFields['Пароль']?.value,
+		email: valueFields['Email']?.value,
+		mapname: valueFields['Название карты']?.value,
+		descr: valueFields['Описание карты..']?.value,
 	};
 
 	const handleChangeViewPass = (e: ChangeEvent<HTMLInputElement>) => {

@@ -44,4 +44,16 @@ export const authService = {
 			console.log(error);
 		}
 	},
+	confirm: async (data: { token: string }) => {
+		try {
+			const { data: dataResponse } = await axios.post(
+				`${API_URL}/api/confirm.php`,
+				data,
+			);
+			console.log('dataResponse', dataResponse);
+			return dataResponse;
+		} catch (error) {
+			console.log(error);
+		}
+	},
 };
