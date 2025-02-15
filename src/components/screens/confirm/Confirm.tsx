@@ -9,18 +9,19 @@ import Layout from '@/components/layout/Layout';
 import styles from './Confirm.module.scss';
 
 const SearchParamsComponent = () => {
-	const par = useSearchParams();
+	const searchParams = useSearchParams();
 	useEffect(() => {
-		console.log(par);
-	}, [par]);
+		// Получаем токен из параметров запроса
+		const token = searchParams?.get('token'); // Используем метод get для получения параметра
+		if (token) {
+			console.log('Токен:', token);
+			// Здесь можно выполнить дополнительные действия с токеном, например, отправить его на сервер
+		} else {
+			console.error('Токен не найден в адресной строке');
+		}
+	}, [searchParams]);
 	return null;
 };
-
-// export async function generateMetadata({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
-// 	const params = searchParams;
-// 	console.log('Server-side params:', params);
-// 	return {};
-// }
 
 const Confirm: FC = () => {
 	return (
