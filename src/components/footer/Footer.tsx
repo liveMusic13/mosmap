@@ -1,15 +1,17 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
+import { IFooter } from '@/types/props.types';
+
 import Line from '../ui/line/Line';
 
 import styles from './Footer.module.scss';
 import { colors } from '@/app.constants';
 import { arrMenuFooter } from '@/data/footer.data';
 
-const Footer: FC = () => {
+const Footer: FC<IFooter> = ({ style }) => {
 	return (
-		<footer className={styles.footer}>
+		<footer className={styles.footer} style={style}>
 			<div className={styles.block__one}>
 				<div className={styles.block__title}>
 					<h2 className={styles.title}>mosmap</h2>

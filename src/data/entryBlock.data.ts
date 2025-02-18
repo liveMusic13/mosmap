@@ -13,6 +13,32 @@ export const arrFormAuth: IFormAuth[] = [
 	},
 ];
 
+export const arrFormRestore: IFormAuth[] = [
+	{
+		id: 0,
+		type: 'text',
+		placeholder: 'Логин',
+	},
+	{
+		id: 1,
+		type: 'text',
+		placeholder: 'Email',
+	},
+];
+
+export const arrFormNewPass: IFormAuth[] = [
+	{
+		id: 0,
+		type: 'password',
+		placeholder: 'Пароль',
+	},
+	{
+		id: 1,
+		type: 'password',
+		placeholder: 'Подтверждение пароля',
+	},
+];
+
 export const arrFormRegistr: IFormAuth[] = [
 	{
 		id: 2,

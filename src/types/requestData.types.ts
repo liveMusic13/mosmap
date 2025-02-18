@@ -73,3 +73,18 @@ export interface IRegistrationData {
 	mapname: string;
 	descr: string;
 }
+
+export interface IRestoreData {
+	login?: string;
+	email?: string;
+}
+
+export interface INewpassData {
+	password: string;
+	token: string;
+}
+
+export interface IRegistrResponse {
+	message: string;
+	status: string;
+}

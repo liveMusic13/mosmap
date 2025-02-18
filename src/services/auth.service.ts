@@ -2,7 +2,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
-import { IRegistrationData } from '@/types/requestData.types';
+import {
+	INewpassData,
+	IRegistrationData,
+	IRestoreData,
+} from '@/types/requestData.types';
 
 import { ACCESSIBLYMAP, API_URL, TOKEN } from '@/app.constants';
 
@@ -11,7 +15,6 @@ export const authService = {
 		login: string,
 		password: string,
 		router: ReturnType<typeof useRouter>,
-		// setIsAuth: (value: boolean) => void,
 	) => {
 		try {
 			const { data } = await axios.post(`${API_URL}/api/get_token.php`, {
@@ -48,6 +51,30 @@ export const authService = {
 		try {
 			const { data: dataResponse } = await axios.post(
 				`${API_URL}/api/confirm.php`,
+				data,
+			);
+			console.log('dataResponse', dataResponse);
+			return dataResponse;
+		} catch (error) {
+			console.log(error);
+		}
+	},
+	restore: async (data: IRestoreData) => {
+		try {
+			const { data: dataResponse } = await axios.post(
+				`${API_URL}/api/restore.php`,
+				data,
+			);
+			console.log('dataResponse', dataResponse);
+			return dataResponse;
+		} catch (error) {
+			console.log(error);
+		}
+	},
+	newpass: async (data: INewpassData) => {
+		try {
+			const { data: dataResponse } = await axios.post(
+				`${API_URL}/api/newpass.php`,
 				data,
 			);
 			console.log('dataResponse', dataResponse);

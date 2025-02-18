@@ -6,3 +6,9 @@ export interface ICalendarState {
 export interface IObjectFieldsState {
 	[key: string]: { value: string };
 }
+
+export interface IPopupErrorInConfirmPage {
+	isPopup: boolean;
+	message: string;
+	status?: string;
+}

@@ -7,6 +7,7 @@ import {
 	IDataMap,
 	IItemFilter,
 	IMarker,
+	IRegistrResponse,
 } from './requestData.types';
 
 export interface IButton extends PropsWithChildren {
@@ -97,6 +98,7 @@ export interface IEntryBlock {
 	title_bot: string;
 	link_bot: string;
 	title_block: string;
+	handleCallback?: (data: IRegistrResponse) => void;
 }
 
 export interface ILayout extends PropsWithChildren {
@@ -107,6 +109,10 @@ export interface IHeader {
 	style?: CSSProperties;
 }
 
+export interface IFooter {
+	style?: CSSProperties;
+}
+
 export interface ITextarea {
 	value: string;
 	onChange: (
@@ -114,4 +120,10 @@ export interface ITextarea {
 	) => void;
 	style?: CSSProperties;
 	placeholder?: string;
+}
+
+export interface IPopup {
+	message: string;
+	isHtmlMessage?: boolean;
+	onClick?: () => void;
 }

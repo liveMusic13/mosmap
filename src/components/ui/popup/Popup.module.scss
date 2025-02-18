@@ -1,0 +1,40 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.block__popup {
+	box-shadow: 0px 0px 10px vars.$green_light;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: func.adapt(44px, 1920px);
+	position: absolute;
+	z-index: 12;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: func.adapt(12px, 1920px);
+	width: func.adapt(900px, 1920px);
+	height: func.adapt(480px, 1920px);
+	background-color: vars.$white;
+
+	> p {
+		font-weight: 700;
+		text-align: center;
+		font-size: 1.71rem;
+		width: func.adapt(708px, 1920px);
+	}
+
+	> button {
+		transition:
+			width 0.3s ease,
+			height 0.3s ease,
+			font-size 0.3s ease;
+
+		&:hover {
+			width: func.adapt(180px, 1920px) !important;
+			height: func.adapt(45px, 1920px) !important;
+			font-size: 1.2rem !important;
+		}
+	}
+}

@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { IHeader } from '@/types/props.types';
 
@@ -27,7 +27,15 @@ const Header: FC<IHeader> = ({ style }) => {
 		handleMenuLeave,
 	} = useMenuDropdown();
 
-	const token = Cookies.get(TOKEN);
+	//HELP: Состояние для отслеживания, что компонент смонтирован на клиенте
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	//HELP: Читаем токен только когда компонент смонтирован, иначе — null
+	const token = mounted ? Cookies.get(TOKEN) : null;
 
 	const onClick = () => {
 		if (token) {
@@ -69,7 +77,9 @@ const Header: FC<IHeader> = ({ style }) => {
 								}}
 								onClick={onClick}
 							>
-								{token ? 'Выход' : el.title}
+								{/*HELP: Если компонент ещё не смонтирован, рендерим одно и то же значение,
+                    чтобы избежать рассогласования(ошибка гидратации). После монтирования покажется нужное */}
+								{mounted ? (token ? 'Выход' : el.title) : el.title}
 							</Button>
 						);
 					} else if (el.type === 'link') {

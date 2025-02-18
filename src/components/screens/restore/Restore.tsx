@@ -11,21 +11,21 @@ import Popup from '@/components/ui/popup/Popup';
 
 import { useCallbackPopup } from '@/hooks/useCallbackPopup';
 
-import styles from './Registr.module.scss';
-import { arrFormRegistr } from '@/data/entryBlock.data';
+import styles from './Restore.module.scss';
+import { arrFormRestore } from '@/data/entryBlock.data';
 
-const Registr: FC = () => {
+const Restore: FC = () => {
 	const { handleCallback, onClickPopup, popup } = useCallbackPopup();
 
 	return (
 		<Layout>
 			<Header />
-			<h1 className={styles.title}>Регистрация</h1>
+			<h1 className={styles.title}>Восстановление пароля</h1>
 			<EntryBlock
-				formData={arrFormRegistr}
-				title_block='Регистрация'
-				title='Восстановить пароль'
-				title_link='/restore'
+				formData={arrFormRestore}
+				title_block='Восстановление пароля'
+				title='Зарегистрироваться'
+				title_link='/registr'
 				title_bot='Войти'
 				link_bot='/auth'
 				handleCallback={handleCallback}
@@ -45,4 +45,4 @@ const Registr: FC = () => {
 	);
 };
 
-export default Registr;
+export default Restore;

@@ -2,6 +2,7 @@
 
 import { FC } from 'react';
 
+import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 import EntryBlock from '@/components/ui/entry-block/EntryBlock';
@@ -20,8 +21,9 @@ const Auth: FC = () => {
 				title='Зарегистрироваться'
 				title_link='/registr'
 				title_bot='Восстановить пароль'
-				link_bot='/'
+				link_bot='/restore'
 			/>
+			<Footer style={{ position: 'absolute', bottom: '0' }} />
 		</Layout>
 	);
 };

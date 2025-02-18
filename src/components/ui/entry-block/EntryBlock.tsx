@@ -1,10 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 
 import { IEntryBlock } from '@/types/props.types';
-import { IRegistrationData } from '@/types/requestData.types';
+import {
+	INewpassData,
+	IRegistrationData,
+	IRestoreData,
+} from '@/types/requestData.types';
 
 import { useEntryAuth } from '@/hooks/useEntryAuth';
 
@@ -23,14 +27,56 @@ const EntryBlock: FC<IEntryBlock> = ({
 	title_bot,
 	link_bot,
 	title_block,
+	handleCallback,
 }) => {
 	const isAuth = title_block === 'Авторизация';
 	const isRegistr = title_block === 'Регистрация';
+	const isRestore = title_block === 'Восстановление пароля';
+	const isNewpass = title_block === 'Восстановление пароля '; //HELP: Ставлю пробел, т.к. тайтлы одинаковы, чтобы не менять способы сравнения у всех, добавлю просто пробел для различия строк с страницей /restore
 
-	const { handleAuth, onChange, valueFields, handleRegistr } =
-		useEntryAuth(formData);
+	const {
+		handleAuth,
+		onChange,
+		valueFields,
+		handleRegistr,
+		handleRestore,
+		handleNewpass,
+	} = useEntryAuth(formData);
+
+	const isDisabledButton = isRegistr
+		? valueFields['Логин'].value === '' ||
+			valueFields['Пароль'].value === '' ||
+			valueFields['Email'].value === ''
+		: isRestore
+			? valueFields['Логин'].value === '' || valueFields['Email'].value === ''
+			: isNewpass
+				? valueFields['Подтверждение пароля'].value === '' ||
+					valueFields['Пароль'].value === '' ||
+					valueFields['Пароль'].value !==
+						valueFields['Подтверждение пароля'].value
+				: valueFields['Логин'].value === '' ||
+					valueFields['Пароль'].value === '';
 
 	const [viewPass, setViewPass] = useState(true);
+	const [token, setToken] = useState<string>('');
+
+	useEffect(() => {
+		//HELP: Получаем полную строку запроса из URL
+		const queryString = window.location.search;
+
+		//HELP: Удаляем символ "?" в начале строки
+		const token = queryString.startsWith('?')
+			? queryString.slice(1)
+			: queryString;
+
+		if (token) {
+			console.log('Токен:', token);
+			//HELP: Здесь можно отправить токен на сервер или выполнить другие действия
+			setToken(token);
+		} else {
+			console.log('Токен не найден в адресной строке');
+		}
+	}, []);
 
 	const dataRegistr: IRegistrationData = {
 		login: valueFields['Логин']?.value,
@@ -39,12 +85,45 @@ const EntryBlock: FC<IEntryBlock> = ({
 		mapname: valueFields['Название карты']?.value,
 		descr: valueFields['Описание карты..']?.value,
 	};
+	const dataRestore = (): IRestoreData => {
+		const result: IRestoreData = {};
+
+		if (valueFields['Логин'].value) {
+			result.login = valueFields['Логин'].value;
+		}
+		if (valueFields['Email'].value) {
+			result.email = valueFields['Email'].value;
+		}
+
+		return result;
+	};
+	const dataNewPass: INewpassData = {
+		password: valueFields['Пароль'].value,
+		token,
+	};
 
 	const handleChangeViewPass = (e: ChangeEvent<HTMLInputElement>) => {
 		setViewPass(e.target.checked);
 	};
 	const handleViewPass = () => {
 		setViewPass(!viewPass);
+	};
+	const onClickButton = async () => {
+		if (isAuth) {
+			handleAuth();
+		} else if (isRestore) {
+			const response = await handleRestore(dataRestore());
+
+			if (handleCallback) handleCallback(response);
+		} else if (isNewpass) {
+			const response = await handleNewpass(dataNewPass);
+
+			if (handleCallback) handleCallback(response);
+		} else {
+			const response = await handleRegistr(dataRegistr);
+
+			if (handleCallback) handleCallback(response);
+		}
 	};
 
 	return (
@@ -77,11 +156,17 @@ const EntryBlock: FC<IEntryBlock> = ({
 								key={el.id}
 								value={valueFields[el.placeholder].value}
 								onChange={e => onChange(e, el.placeholder)}
-								callback={isRegistr && isPass ? handleViewPass : undefined}
+								callback={
+									(isRegistr || isNewpass) && isPass
+										? handleViewPass
+										: undefined
+								}
 								type={isPass ? controlType : el.type}
 								placeholder={el.placeholder}
 								srcImage={
-									isRegistr && isPass ? '/images/icons/eye.svg' : undefined
+									(isRegistr || isNewpass) && isPass
+										? '/images/icons/eye.svg'
+										: undefined
 								}
 								widthImage={25}
 								heightImage={25}
@@ -121,6 +206,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 					</div>
 				)}
 				<Button
+					disabled={isDisabledButton}
 					style={{
 						width: 'calc(450/1920*100vw)',
 						height: 'calc(60/1920*100vw)',
@@ -128,9 +214,15 @@ const EntryBlock: FC<IEntryBlock> = ({
 						marginTop: isAuth ? 'calc(15/1920*100vw)' : '0px',
 						boxShadow: `0px 0px 10px ${colors.green_light}`,
 					}}
-					onClick={() => (isAuth ? handleAuth() : handleRegistr(dataRegistr))}
+					onClick={onClickButton}
 				>
-					{isAuth ? 'Войти' : 'Зарегистрироваться'}
+					{isAuth
+						? 'Войти'
+						: isRestore
+							? 'Восстановить'
+							: isNewpass
+								? 'Сменить пароль'
+								: 'Зарегистрироваться'}
 				</Button>
 				{isRegistr && (
 					<>
@@ -144,6 +236,20 @@ const EntryBlock: FC<IEntryBlock> = ({
 							После регистрации на указанный вами Email придет письмо с
 							подтверждением регистрации. Вам необходимо будет перейти по ссылке
 							внутри письма
+						</p>
+					</>
+				)}
+				{isRestore && (
+					<>
+						<p className={styles.isRegistr}>
+							Уже зарегистрировались?{' '}
+							<Link href={link_bot} className={styles.link}>
+								{title_bot}
+							</Link>
+						</p>
+						<p className={styles.description}>
+							Укажите логин и Email, с которого вы регистрировались. На этот
+							адрес придет письмо с ссылкой на сброс пароля
 						</p>
 					</>
 				)}

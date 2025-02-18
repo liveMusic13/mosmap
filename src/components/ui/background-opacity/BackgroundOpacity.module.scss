@@ -1,0 +1,11 @@
+@use '@st/variables.scss' as vars;
+
+.background__opacity {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 11;
+	background-color: rgba($color: vars.$black, $alpha: 0.7);
+}
