@@ -1,5 +1,5 @@
 import 'leaflet/dist/leaflet.css';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
@@ -11,8 +11,11 @@ import MapResizeHandler from './MapResizeHandler';
 import RenderMarkers from './RenderMarkers';
 
 const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
+	const mapRef = useRef(null); //TODO: ДОДЕЛАТЬ ЗУМ К МАРКЕРУ ПРИ КЛИКЕ НА СПИСОК
+
 	return (
 		<MapContainer
+			ref={mapRef}
 			center={[55.7522, 37.6156]}
 			minZoom={dataMap.zoom_min}
 			maxZoom={dataMap.zoom_max}
