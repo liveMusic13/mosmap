@@ -11,4 +11,5 @@ export interface IPopupErrorInConfirmPage {
 	isPopup: boolean;
 	message: string;
 	status?: string;
+	error?: boolean;
 }

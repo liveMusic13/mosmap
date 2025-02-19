@@ -23,10 +23,10 @@ const DynamicCustomMap = dynamic(() => import('./custom-map/CustomMap'), {
 			style={{
 				width: 'calc(100/1920*100vw)',
 				height: 'calc(100/1920*100vw)',
-				position: 'absolute',
+				position: 'relative',
+				left: '25%',
 				top: '50%',
-				left: '50%',
-				transform: 'translate(-50%, -50%)',
+				transform: 'translate(-25%, -50%)',
 			}}
 		/>
 	),
@@ -47,7 +47,6 @@ const Content: FC<IContent> = ({ dataMap }) => {
 					{isFilters && <Filters />}
 					{isListOfObjects && <ListOfObjects />}
 					<DynamicCustomMap dataMap={dataMap} />
-					{/* <CustomCalendar /> */}
 				</div>
 			</div>
 		</QueryClientProvider>

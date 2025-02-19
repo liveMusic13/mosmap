@@ -20,7 +20,7 @@ export const useEntryAuth = (formData: IFormAuth[]) => {
 		getStateFromDate(formData),
 	);
 
-	const handleAuth = async () =>
+	const handleAuth = async (): Promise<IRegistrResponse> =>
 		await authService.login(
 			valueFields['Логин'].value,
 			valueFields['Пароль'].value,

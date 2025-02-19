@@ -87,4 +87,5 @@ export interface INewpassData {
 export interface IRegistrResponse {
 	message: string;
 	status: string;
+	error?: boolean;
 }

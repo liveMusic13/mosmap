@@ -29,6 +29,8 @@ export const authService = {
 			}
 
 			console.log('auth', data);
+
+			return data;
 		} catch (error) {
 			console.log(error);
 		}

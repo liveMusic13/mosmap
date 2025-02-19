@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 
-import { IFiltersStore, IListOfObjectsStore } from '@/types/store.types';
+import {
+	ICenterMapStore,
+	IClearAllFiltersStore,
+	IFiltersStore,
+	IListOfObjectsStore,
+} from '@/types/store.types';
 
 export const useListOfObjectsStore = create<IListOfObjectsStore>(set => ({
 	isListOfObjects: true,
@@ -10,4 +15,14 @@ export const useListOfObjectsStore = create<IListOfObjectsStore>(set => ({
 export const useFiltersStore = create<IFiltersStore>(set => ({
 	isFilters: true,
 	setIsFilters: bol => set({ isFilters: bol }),
+}));
+
+export const useCenterMapStore = create<ICenterMapStore>(set => ({
+	centerMap: [55.7522, 37.6156],
+	setCenterMap: coords => set({ centerMap: coords }),
+}));
+
+export const useClearAllFiltersStore = create<IClearAllFiltersStore>(set => ({
+	isClear: false,
+	setCenterMap: bol => set({ isClear: bol }),
 }));
