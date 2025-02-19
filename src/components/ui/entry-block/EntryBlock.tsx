@@ -98,7 +98,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 		return result;
 	};
 	const dataNewPass: INewpassData = {
-		password: valueFields['Пароль'].value,
+		password: valueFields['Пароль']?.value || '',
 		token,
 	};
 
@@ -110,7 +110,9 @@ const EntryBlock: FC<IEntryBlock> = ({
 	};
 	const onClickButton = async () => {
 		if (isAuth) {
-			handleAuth();
+			const response = await handleAuth();
+
+			if (handleCallback) handleCallback(response);
 		} else if (isRestore) {
 			const response = await handleRestore(dataRestore());
 

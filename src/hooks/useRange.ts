@@ -116,5 +116,6 @@ export const useRange = ({
 		rangeBoundaries,
 		sliderValues,
 		handleRangeChange,
+		setLocalValues,
 	};
 };

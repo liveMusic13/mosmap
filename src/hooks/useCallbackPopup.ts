@@ -12,7 +12,12 @@ export const useCallbackPopup = () => {
 
 	const handleCallback = (data: IRegistrResponse) => {
 		console.log(data);
-		setPopup({ isPopup: true, message: data.message, status: data.status });
+		setPopup({
+			isPopup: true,
+			message: data.message,
+			status: data.status,
+			error: data?.error || false,
+		});
 	};
 
 	const onClickPopup = () => setPopup({ isPopup: false, message: '' });

@@ -1,10 +1,19 @@
 @use '@st/functions.scss' as func;
 @use '@st/variables.scss' as vars;
 
+// .block__custom_map {
+// 	flex-grow: 1;
+// 	border-radius: func.adapt(12px, 1920px);
+// 	box-shadow: 0px 4px 20px rgba($color: vars.$green_light, $alpha: 0.3);
+// 	display: flex;
+// }
+
 .custom_map {
 	flex-grow: 1; //HELP: ставлю это а не ширину 100% потому что так он занимает все доступное пространство, а при 100% ширине он начинает сдавливать соседние блоки
-	// width: 100%;
-	// height: 100%;
+	// // width: 100%;
+	// // height: 100%;
 	border-radius: func.adapt(12px, 1920px);
 	box-shadow: 0px 4px 20px rgba($color: vars.$green_light, $alpha: 0.3);
+	flex-grow: 1;
+	// position: relative;
 }

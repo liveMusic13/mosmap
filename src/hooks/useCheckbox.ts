@@ -49,5 +49,6 @@ export const useCheckbox = (
 		checkboxState,
 		onChange,
 		checkValueInUrl,
+		setCheckboxState,
 	};
 };

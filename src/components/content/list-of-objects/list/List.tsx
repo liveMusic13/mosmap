@@ -5,9 +5,17 @@ import Button from '@/components/ui/button/Button';
 
 import { IMarker } from '@/types/requestData.types';
 
+import { useCenterMapStore } from '@/store/store';
+
 import styles from './List.module.scss';
 
 const List = memo(({ el }: { el: IMarker }) => {
+	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
+
+	const onClick = (el: IMarker) => {
+		if (el.crd) setCenterMap(el.crd);
+	};
+
 	return (
 		<div key={el.id} className={styles.block__name}>
 			<p className={styles.name}>{el.name}</p>
@@ -20,6 +28,7 @@ const List = memo(({ el }: { el: IMarker }) => {
 					width: 'calc(25/1920*100vw)',
 					height: 'calc(25/1920*100vw)',
 				}}
+				onClick={() => onClick(el)}
 			>
 				<Image
 					src={
