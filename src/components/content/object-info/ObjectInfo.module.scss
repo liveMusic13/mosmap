@@ -1,0 +1,89 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_objectInfo {
+	// flex-grow: 1;
+	// position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(8px, 1920px);
+	// height: 100vh;
+	// height: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	@include mix.scrollbar();
+	padding-bottom: func.adapt(16px, 1920px);
+}
+
+.block__objectInfo {
+	width: func.adapt(280px, 1920px);
+	padding: func.adapt(20px, 1920px) func.adapt(16px, 1920px)
+		func.adapt(16px, 1920px);
+	box-shadow: 0px 2px 15px rgba($color: #000000, $alpha: 0.1);
+	border-radius: func.adapt(12px, 1920px);
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(16px, 1920px);
+
+	// position: relative;
+}
+
+.block__title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.title {
+	font-weight: 700;
+	font-size: 1.57rem;
+}
+
+.image_title {
+	width: func.adapt(16px, 1920px);
+	height: func.adapt(16px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		width: func.adapt(19px, 1920px);
+		height: func.adapt(19px, 1920px);
+	}
+}
+
+.block__info {
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(10px, 1920px);
+
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-grow: 1;
+	@include mix.scrollbar();
+}
+
+.block__buttons {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(5px, 1920px);
+
+	> button {
+		font-size: 0.928rem;
+		width: func.adapt(90px, 1920px);
+		height: func.adapt(40px, 1920px);
+		border-radius: func.adapt(8px, 1920px);
+		box-shadow: 0px 0px 20px rgba($color: vars.$green, $alpha: 0.1);
+		transition:
+			font-size 0.3s ease,
+			width 0.3s ease,
+			height 0.3s ease;
+
+		&:hover {
+			width: func.adapt(92px, 1920px);
+			height: func.adapt(41px, 1920px);
+			font-size: 1.02rem;
+		}
+	}
+}

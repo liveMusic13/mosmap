@@ -1,26 +1,29 @@
-// export interface IValues {
-// 	disabled: number;
-// 	el: string;
-// 	label: string;
-// 	name: string;
-// 	type?: string;
-// 	id?: string;
-// 	value: string | number;
-// }
 import { LatLngExpression } from 'leaflet';
 
+export interface IValuesObjectInfo {
+	disabled: number;
+	el: string;
+	label: string;
+	name: string;
+	type?: string;
+	id?: string;
+	value: string | number;
+}
+
 export interface IMarker {
-	// crd: [number, number] | null;
+	// crd: LatLngExpression | null;
 	crd: LatLngExpression | null;
 	id: number;
 	icon: string;
 	color: string;
 	raion_id: string;
-	// polygon: number[][];
 	polygon: LatLngExpression[] | LatLngExpression[][] | LatLngExpression[][][];
 	name: string;
 	name_map: null | string;
-	// values?: IValues[];
+	//HELP: Для информации об объекте
+	cuts?: number[];
+	area?: LatLngExpression;
+	values?: IValuesObjectInfo[];
 }
 
 export interface IDataMap {
@@ -48,6 +51,11 @@ export interface IDataMap {
 export interface IApiResponse<T> {
 	status: number;
 	data: T;
+}
+
+export interface IDeleteAndOtherResponses {
+	delete: boolean;
+	id: number;
 }
 
 export interface IItemFilter {

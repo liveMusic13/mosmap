@@ -2,16 +2,23 @@ import { useQuery } from '@tanstack/react-query';
 
 import { mapService } from '@/services/map.service';
 
-export const useGetDataMap = (mapParam: string | null) => {
-	const { data, error, isSuccess, isStale, isError, isLoading } = useQuery({
-		queryKey: ['data_map'],
-		queryFn: () => mapService.getObjectISR(mapParam),
-		staleTime: 5 * 60 * 1000, //HELP: кэширование на 5 минут
-		retry: 1,
-		refetchOnWindowFocus: false, //HELP: отключаем повторные запросы при фокусе
-		refetchOnReconnect: true, //HELP: повторный запрос при восстановлении сетевого соединения
-		select: data => data.data,
-	});
+export const useGetDataMap = (queryParams: string | null) => {
+	const { data, error, isSuccess, isStale, isError, isLoading, refetch } =
+		useQuery({
+			queryKey: ['data_map'],
+			queryFn: () => mapService.getObjectWithFilters(queryParams),
+			staleTime: 5 * 60 * 1000,
+			retry: 1,
+			select: data => data.data,
+		});
 
-	return { data, error, isSuccess, isStale, isError, isLoading };
+	return {
+		data,
+		error,
+		isSuccess,
+		isStale,
+		isError,
+		isLoading,
+		refetch,
+	};
 };

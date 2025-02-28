@@ -28,6 +28,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 	link_bot,
 	title_block,
 	handleCallback,
+	setIsLoading,
 }) => {
 	const isAuth = title_block === 'Авторизация';
 	const isRegistr = title_block === 'Регистрация';
@@ -57,7 +58,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 				: valueFields['Логин'].value === '' ||
 					valueFields['Пароль'].value === '';
 
-	const [viewPass, setViewPass] = useState(true);
+	const [viewPass, setViewPass] = useState<boolean>(true);
 	const [token, setToken] = useState<string>('');
 
 	useEffect(() => {
@@ -109,22 +110,38 @@ const EntryBlock: FC<IEntryBlock> = ({
 		setViewPass(!viewPass);
 	};
 	const onClickButton = async () => {
-		if (isAuth) {
-			const response = await handleAuth();
-
-			if (handleCallback) handleCallback(response);
-		} else if (isRestore) {
-			const response = await handleRestore(dataRestore());
-
-			if (handleCallback) handleCallback(response);
-		} else if (isNewpass) {
-			const response = await handleNewpass(dataNewPass);
-
-			if (handleCallback) handleCallback(response);
-		} else {
-			const response = await handleRegistr(dataRegistr);
-
-			if (handleCallback) handleCallback(response);
+		// if (isAuth) {
+		// 	const response = await handleAuth();
+		// 	if (handleCallback) handleCallback(response);
+		// } else if (isRestore) {
+		// 	const response = await handleRestore(dataRestore());
+		// 	if (handleCallback) handleCallback(response);
+		// } else if (isNewpass) {
+		// 	const response = await handleNewpass(dataNewPass);
+		// 	if (handleCallback) handleCallback(response);
+		// } else {
+		// 	const response = await handleRegistr(dataRegistr);
+		// 	if (handleCallback) handleCallback(response);
+		// }
+		try {
+			if (setIsLoading) setIsLoading(true);
+			if (isAuth) {
+				const response = await handleAuth();
+				if (handleCallback) handleCallback(response);
+			} else if (isRestore) {
+				const response = await handleRestore(dataRestore());
+				if (handleCallback) handleCallback(response);
+			} else if (isNewpass) {
+				const response = await handleNewpass(dataNewPass);
+				if (handleCallback) handleCallback(response);
+			} else {
+				const response = await handleRegistr(dataRegistr);
+				if (handleCallback) handleCallback(response);
+			}
+		} catch (error) {
+			console.error('Ошибка', error);
+		} finally {
+			if (setIsLoading) setIsLoading(false);
 		}
 	};
 

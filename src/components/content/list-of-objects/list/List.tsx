@@ -5,20 +5,41 @@ import Button from '@/components/ui/button/Button';
 
 import { IMarker } from '@/types/requestData.types';
 
-import { useCenterMapStore } from '@/store/store';
+import {
+	useCenterMapStore,
+	useFiltersStore,
+	useIdObjectInfoStore,
+	useObjectInfoStore,
+} from '@/store/store';
+
+import { useGetObjectInfo } from '@/hooks/useGetObjectInfo';
 
 import styles from './List.module.scss';
 
 const List = memo(({ el }: { el: IMarker }) => {
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
+	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
+	const setIsFilters = useFiltersStore(store => store.setIsFilters);
+	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
+
+	const { refetch, data, isSuccess } = useGetObjectInfo(el.id);
 
 	const onClick = (el: IMarker) => {
 		if (el.crd) setCenterMap(el.crd);
 	};
+	const handleClickInfo = () => {
+		//HELP: Добавляем id объекта для взятия из кэша данных об объекте. Отключаем видимость фильтров и включаем видимость блока информации об объекте. После этого запускаем запрос
+		setIdObjectInfo(el.id);
+		setIsFilters(false);
+		setIsObjectInfo(true);
+		refetch();
+	};
 
 	return (
 		<div key={el.id} className={styles.block__name}>
-			<p className={styles.name}>{el.name}</p>
+			<p className={styles.name} onClick={handleClickInfo}>
+				{el.name}
+			</p>
 			<Button
 				style={{
 					backgroundColor: 'transparent',

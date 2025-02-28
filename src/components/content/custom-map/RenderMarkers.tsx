@@ -7,7 +7,11 @@ import IconMarker from '@/components/ui/icon-marker/IconMarker';
 
 import { IRenderMarkers } from '@/types/props.types';
 
+import { useClickOnMarker } from '@/hooks/useClickOnMarker';
+
 const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
+	const handleClickOnMarker = useClickOnMarker();
+
 	return dataMap.points.map(mark => (
 		<Marker
 			key={mark.id}
@@ -19,8 +23,13 @@ const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 					<IconMarker key={mark.id} mark={mark} size={[22, 22]} />,
 				),
 			})}
+			eventHandlers={{ click: () => handleClickOnMarker(mark.id) }}
 		>
-			<Popup>{mark.name}</Popup>
+			<Popup>
+				{mark.values
+					? mark.values?.find(el => el.label === 'Наименование')?.value
+					: mark.name}
+			</Popup>
 		</Marker>
 	));
 };

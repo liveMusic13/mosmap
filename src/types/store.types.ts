@@ -10,6 +10,16 @@ export interface IFiltersStore {
 	setIsFilters: (bol: boolean) => void;
 }
 
+export interface IObjectInfoStore {
+	isObjectInfo: boolean;
+	setIsObjectInfo: (bol: boolean) => void;
+}
+
+export interface IIdObjectInfoStore {
+	idObjectInfo: number | null;
+	setIdObjectInfo: (bol: number) => void;
+}
+
 export interface ICenterMapStore {
 	centerMap: LatLngExpression;
 	setCenterMap: (coords: LatLngExpression) => void;
@@ -17,5 +27,5 @@ export interface ICenterMapStore {
 
 export interface IClearAllFiltersStore {
 	isClear: boolean;
-	setCenterMap: (bol: boolean) => void;
+	setIsClear: (bol: boolean) => void;
 }

@@ -1,4 +1,10 @@
-import { CSSProperties, ChangeEvent, PropsWithChildren } from 'react';
+import {
+	CSSProperties,
+	ChangeEvent,
+	Dispatch,
+	PropsWithChildren,
+	SetStateAction,
+} from 'react';
 
 import { IFormAuth } from './data.types';
 import { ICalendarState } from './localState.types';
@@ -8,6 +14,7 @@ import {
 	IItemFilter,
 	IMarker,
 	IRegistrResponse,
+	IValuesObjectInfo,
 } from './requestData.types';
 
 export interface IButton extends PropsWithChildren {
@@ -29,7 +36,7 @@ export interface IHeader {
 }
 
 export interface ICustomMap {
-	dataMap: IDataMap;
+	dataMap?: IDataMap;
 }
 
 export interface IRenderMarkers {
@@ -85,6 +92,7 @@ export interface ICheckbox {
 export interface ISelect {
 	items: IItemFilter[];
 	handleClick: (el: IItemFilter) => void;
+	queryName?: string;
 }
 
 export interface ICustomCalendar {
@@ -99,6 +107,7 @@ export interface IEntryBlock {
 	link_bot: string;
 	title_block: string;
 	handleCallback?: (data: IRegistrResponse) => void;
+	setIsLoading?: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface ILayout extends PropsWithChildren {
@@ -126,4 +135,12 @@ export interface IPopup {
 	message: string;
 	isHtmlMessage?: boolean;
 	onClick?: () => void;
+}
+
+export interface IInfo {
+	value_info: IValuesObjectInfo;
+}
+
+export interface IInfoEdit extends IInfo {
+	callback: (data: { label: string; value: string }) => void;
 }

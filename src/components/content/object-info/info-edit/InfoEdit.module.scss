@@ -1,0 +1,19 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.title {
+	font-weight: 700;
+	margin-bottom: func.adapt(8px, 1920px);
+}
+
+.description {
+	font-weight: 500;
+	padding: func.adapt(11px, 1920px) func.adapt(14px, 1920px);
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+	border-radius: func.adapt(4px, 1920px);
+	color: vars.$green;
+	width: 100%;
+	outline: none;
+	font-size: 1rem;
+}

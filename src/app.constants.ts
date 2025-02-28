@@ -10,7 +10,7 @@ export const colors = {
 	black_hard: '#0A1D17',
 	white: '#fff',
 	grey: '#858383',
-	grey_light: '#858383',
+	grey_light: '#818787',
 	grey_hard: '#a69f9f',
 	grey_middle: '#c0c4c742',
 	grey_lines: '#bcbaba',

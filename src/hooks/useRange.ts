@@ -1,6 +1,8 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { IRangeProps } from '@/types/props.types';
+
+import { useClearAllFiltersStore } from '@/store/store';
 
 export const useRange = ({
 	min = 0,
@@ -11,6 +13,8 @@ export const useRange = ({
 	filter,
 	updateUrlParams,
 }: IRangeProps) => {
+	const isClear = useClearAllFiltersStore(store => store.isClear);
+
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [dragging, setDragging] = useState<'min' | 'max' | null>(null);
 	const [localValues, setLocalValues] = useState(values);
@@ -94,14 +98,54 @@ export const useRange = ({
 			Number(searchParams.get(`num_to[${filter?.id}]`)) || rangeBoundaries.max,
 	};
 
+	useEffect(() => {
+		//HELP: При сбросе настроек откатываем range к стандартным значениям здесь и в самом компоненте Range, т.к. там почему-то предыдущее значение оставалось
+		if (isClear && filter?.min_value) {
+			setLocalValues({
+				min: rangeBoundaries.min,
+				max: rangeBoundaries.max,
+			});
+		}
+	}, [isClear, rangeBoundaries, filter?.min_value]);
+
+	// const handleRangeChange = (values: { min: number; max: number }) => {
+	// 	if (
+	// 		values.min !== Number(searchParams.get(`num_from[${filter?.id}]`)) ||
+	// 		values.max !== Number(searchParams.get(`num_to[${filter?.id}]`))
+	// 	) {
+	// 		if (updateUrlParams) {
+	// 			updateUrlParams({
+	// 				[`num_from[${filter?.id}]`]: values.min.toString(),
+	// 				[`num_to[${filter?.id}]`]: values.max.toString(),
+	// 			});
+	// 		}
+	// 	}
+	// };
+
 	//HELP: Эта функция вызывается, когда пользователь отпустил ползунок.
 	//HELP: Обновляем URL с новыми значениями.
 	const handleRangeChange = (values: { min: number; max: number }) => {
-		if (updateUrlParams) {
-			updateUrlParams({
-				[`num_from[${filter?.id}]`]: values.min.toString(),
-				[`num_to[${filter?.id}]`]: values.max.toString(),
-			});
+		const currentMin = searchParams.get(`num_from[${filter?.id}]`);
+		const currentMax = searchParams.get(`num_to[${filter?.id}]`);
+
+		if (
+			currentMin === null &&
+			values.min === rangeBoundaries.min &&
+			currentMax === null &&
+			values.max === rangeBoundaries.max
+		) {
+			return; //HELP: Не обновляем URL, если он еще не содержит значений и они дефолтные
+		}
+
+		if (
+			values.min !== Number(currentMin) ||
+			values.max !== Number(currentMax)
+		) {
+			if (updateUrlParams)
+				updateUrlParams({
+					[`num_from[${filter?.id}]`]: values.min.toString(),
+					[`num_to[${filter?.id}]`]: values.max.toString(),
+				});
 		}
 	};
 

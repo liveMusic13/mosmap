@@ -10,6 +10,21 @@
 	border-radius: func.adapt(12px, 1920px);
 	display: flex;
 	flex-direction: column;
+
+	> button {
+		min-height: func.adapt(44px, 1920px);
+
+		transition:
+			width 0.3s ease,
+			height 0.3s ease,
+			font-size 0.3s ease;
+
+		&:hover {
+			width: 102% !important;
+			min-height: func.adapt(44px, 1920px) !important ;
+			font-size: 1.2rem !important;
+		}
+	}
 }
 
 .block__title {

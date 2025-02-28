@@ -49,7 +49,11 @@ const FilterBlock: FC<IFilterBlock> = memo(({ filter }) => {
 						/>
 					))}
 				{filter.type === 'list' && (
-					<Select items={filter.items || []} handleClick={handleClick} />
+					<Select
+						items={filter.items || []}
+						handleClick={handleClick}
+						queryName={filter.name || ''}
+					/>
 				)}
 			</div>
 		</div>

@@ -11,8 +11,9 @@ import List from './list/List';
 
 const ListOfObjects: FC = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
-	const { data, isLoading, isSuccess } = useGetDataMap(map);
+	//HELP: Преобразование searchParams в строку
+	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
 	const [value, setValue] = useState<string>('');
 
 	//HELP: Ref для хранения ID таймера
@@ -68,7 +69,6 @@ const ListOfObjects: FC = () => {
 						}}
 					/>
 				)}
-
 				<Input
 					type='text'
 					value={value}
@@ -95,7 +95,7 @@ const ListOfObjects: FC = () => {
 						transform: 'translateY(-50%)',
 					}}
 				/>
-				{data?.points
+				{data?.points //HELP:Предложить вывод ограниченного количества объектов и подгружать их при скроле. Т.к. все равно же есть фильтрация в новой версии
 					.filter(el =>
 						(el.name || '').toLowerCase().includes(searchValue.toLowerCase()),
 					)

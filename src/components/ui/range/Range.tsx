@@ -21,6 +21,7 @@ const Range: FC<IRangeProps> = ({
 		handleTouchMove,
 		handleTouchStart,
 		localValues,
+		setLocalValues,
 	} = useRange({ values, min, max, step, onChange });
 
 	useEffect(() => {
@@ -35,6 +36,11 @@ const Range: FC<IRangeProps> = ({
 			document.removeEventListener('touchend', handleMouseUp);
 		};
 	}, [handleMouseMove, handleMouseUp, handleTouchMove]);
+
+	useEffect(() => {
+		//HELP: При сбросе настроек откатываем range к стандартным значениям здесь т.к. из кастомного хука почему-то вылетает предыдещее значение, поэтому здесь принудительно устанавливаем
+		setLocalValues(values); //HELP: Принудительно обновляем state при изменении props
+	}, [values]);
 
 	const minPosition = ((localValues.min - min) / (max - min)) * 100;
 	const maxPosition = ((localValues.max - min) / (max - min)) * 100;

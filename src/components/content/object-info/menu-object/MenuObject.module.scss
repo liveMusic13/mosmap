@@ -1,0 +1,34 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.block__menu {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(3px, 1920px);
+
+	> button {
+		&:hover {
+			> .hover__text {
+				display: block;
+			}
+		}
+	}
+}
+
+.icon_svg {
+	width: func.adapt(22px, 1920px);
+	height: func.adapt(22px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		width: func.adapt(25px, 1920px);
+		height: func.adapt(25px, 1920px);
+	}
+}
+
+.hover__text {
+	@include mix.hover_text();
+}

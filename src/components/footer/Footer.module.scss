@@ -6,6 +6,8 @@
 	height: func.adapt(163px, 1920px);
 	padding: 0px func.adapt(125px, 1920px);
 	background-color: vars.$green;
+	position: relative;
+	z-index: 10;
 }
 
 .block__one {

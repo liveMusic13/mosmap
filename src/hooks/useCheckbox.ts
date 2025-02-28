@@ -1,11 +1,14 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { IDataFilters, IItemFilter } from '@/types/requestData.types';
+
+import { useClearAllFiltersStore } from '@/store/store';
 
 export const useCheckbox = (
 	filter: IDataFilters,
 	updateUrlParams: (newParams: Record<string, string | null>) => void,
 ) => {
+	const isClear = useClearAllFiltersStore(store => store.isClear);
 	const searchParams = new URLSearchParams(window.location.search);
 
 	//HELP: Получаем параметры из адресной строки и создаем начальное состояние чекбоксов
@@ -21,6 +24,20 @@ export const useCheckbox = (
 	const [checkboxState, setCheckboxState] = useState<{
 		[key: string]: boolean;
 	}>(initialState);
+
+	useEffect(() => {
+		//HELP: при удалении всех параметров из адресной строки, все чекбоксы ставим в false
+		if (isClear) {
+			const initialState = (filter.items || []).reduce(
+				(acc, el) => {
+					acc[el.item_id] = false;
+					return acc;
+				},
+				{} as { [key: string]: boolean },
+			);
+			setCheckboxState(initialState);
+		}
+	}, [isClear]);
 
 	//HELP: Обработчик изменения чекбокса
 	const onChange = (e: ChangeEvent<HTMLInputElement>, el: IItemFilter) => {
