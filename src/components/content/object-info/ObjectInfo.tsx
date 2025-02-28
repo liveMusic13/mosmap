@@ -12,6 +12,8 @@ import {
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useObjectInfoStore,
+	useTargetObjectStore,
+	useToggleViewAreaStore,
 } from '@/store/store';
 
 import { useDeleteObject } from '@/hooks/useDeleteObject';
@@ -29,6 +31,8 @@ const ObjectInfo: FC = () => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIsFilters = useFiltersStore(store => store.setIsFilters);
 	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
+	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
+	const { setMarker, clearMarker } = useTargetObjectStore(store => store);
 
 	const searchParams = useSearchParams();
 	//HELP: Преобразование searchParams в строку
@@ -59,9 +63,18 @@ const ObjectInfo: FC = () => {
 		}
 	}, [isSuccess, data]);
 
+	useEffect(() => {
+		//HELP: По изменению id таргета добавляем в глобальный стейт данные о маркере таргета полученными из запроса. Т.к. в общих данных нету поля area приходится хранить в глобальном сторе данные об объекте таргета, которые возвращает запрос object_info
+		if (idObjectInfo) {
+			setMarker(data as IMarker);
+		}
+	}, [isSuccess, data, idObjectInfo]);
+
 	const handleClose = () => {
 		setIsObjectInfo(false);
 		setIsFilters(true);
+		setIsViewArea(false);
+		clearMarker();
 	};
 	const onCallbackNewValue = useCallback(
 		(data: { label: string; value: string }) => {

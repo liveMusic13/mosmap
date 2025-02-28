@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { useSearchParams } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
@@ -15,6 +15,7 @@ import CanvasMarkersLayer from './CanvasMarkersLayer';
 import styles from './CustomMap.module.scss';
 import FlyToLocation from './FlyToLocation';
 import MapResizeHandler from './MapResizeHandler';
+import RenderArea from './RenderArea';
 import RenderMarkers from './RenderMarkers';
 
 const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
@@ -23,10 +24,6 @@ const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
 	const centerMap = useCenterMapStore(store => store.centerMap);
-
-	useEffect(() => {
-		console.log('in map', centerMap, isSuccess);
-	}, [centerMap, isSuccess]);
 
 	return (
 		isSuccess && (
@@ -49,14 +46,21 @@ const CustomMap: FC<ICustomMap> = ({ dataMap }) => {
 				<TileLayer url={data?.tiles_url || ''} />
 				{data?.canvas_map === 0 ? (
 					data?.clastering === 0 ? (
-						<RenderMarkers dataMap={data} />
+						<>
+							<RenderMarkers dataMap={data} />
+							<RenderArea />
+						</>
 					) : (
 						<MarkerClusterGroup chunkedLoading={true}>
 							<RenderMarkers dataMap={data} />
+							<RenderArea />
 						</MarkerClusterGroup>
 					)
 				) : (
-					<CanvasMarkersLayer dataMap={data || ({} as IDataMap)} />
+					<>
+						<CanvasMarkersLayer dataMap={data || ({} as IDataMap)} />
+						<RenderArea />
+					</>
 				)}
 				<FlyToLocation />
 			</MapContainer>

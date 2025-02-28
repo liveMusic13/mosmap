@@ -9,6 +9,7 @@ import { IRenderMarkers } from '@/types/props.types';
 
 import { useClickOnMarker } from '@/hooks/useClickOnMarker';
 
+//TODO: Забыл при разных зумах добавить полигоны. Надо сделать
 const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 	const handleClickOnMarker = useClickOnMarker();
 

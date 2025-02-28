@@ -7,6 +7,8 @@ import {
 	IIdObjectInfoStore,
 	IListOfObjectsStore,
 	IObjectInfoStore,
+	ITargetObjectStore,
+	IToggleViewAreaStore,
 } from '@/types/store.types';
 
 export const useListOfObjectsStore = create<IListOfObjectsStore>(set => ({
@@ -37,4 +39,15 @@ export const useCenterMapStore = create<ICenterMapStore>(set => ({
 export const useClearAllFiltersStore = create<IClearAllFiltersStore>(set => ({
 	isClear: false,
 	setIsClear: bol => set({ isClear: bol }),
+}));
+
+export const useToggleViewAreaStore = create<IToggleViewAreaStore>(set => ({
+	isViewArea: false,
+	setIsViewArea: bol => set({ isViewArea: bol }),
+}));
+
+export const useTargetObjectStore = create<ITargetObjectStore>(set => ({
+	marker: null,
+	setMarker: marker => set({ marker: marker }),
+	clearMarker: () => set({ marker: null }),
 }));

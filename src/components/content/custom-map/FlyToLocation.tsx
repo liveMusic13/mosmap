@@ -9,7 +9,6 @@ const FlyToLocation: FC = () => {
 
 	useEffect(() => {
 		if (centerMap) {
-			console.log('FlyToLocation', centerMap);
 			map.flyTo(centerMap, map.getZoom(), {
 				animate: true,
 				duration: 1,

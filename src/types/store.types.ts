@@ -1,5 +1,7 @@
 import { LatLngExpression } from 'leaflet';
 
+import { IMarker } from './requestData.types';
+
 export interface IListOfObjectsStore {
 	isListOfObjects: boolean;
 	setIsListOfObjects: (bol: boolean) => void;
@@ -28,4 +30,15 @@ export interface ICenterMapStore {
 export interface IClearAllFiltersStore {
 	isClear: boolean;
 	setIsClear: (bol: boolean) => void;
+}
+
+export interface IToggleViewAreaStore {
+	isViewArea: boolean;
+	setIsViewArea: (bol: boolean) => void;
+}
+
+export interface ITargetObjectStore {
+	marker: IMarker | null;
+	setMarker: (marker: IMarker) => void;
+	clearMarker: () => void;
 }

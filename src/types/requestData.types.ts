@@ -22,7 +22,7 @@ export interface IMarker {
 	name_map: null | string;
 	//HELP: Для информации об объекте
 	cuts?: number[];
-	area?: LatLngExpression;
+	area?: LatLngExpression[] | LatLngExpression[][] | LatLngExpression[][][];
 	values?: IValuesObjectInfo[];
 }
 

@@ -3,7 +3,11 @@ import { FC, memo, useEffect } from 'react';
 
 import Button from '@/components/ui/button/Button';
 
-import { useCenterMapStore, useIdObjectInfoStore } from '@/store/store';
+import {
+	useCenterMapStore,
+	useIdObjectInfoStore,
+	useToggleViewAreaStore,
+} from '@/store/store';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSaveObject } from '@/hooks/useSaveObject';
@@ -19,13 +23,9 @@ const MenuObject: FC = memo(() => {
 
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
-	const centerMap = useCenterMapStore(store => store.centerMap);
+	const { isViewArea, setIsViewArea } = useToggleViewAreaStore(store => store);
 
-	const {
-		refetch: refetch_getDataMap,
-		data,
-		isSuccess,
-	} = useGetDataMap(queryString);
+	const { refetch: refetch_getDataMap, data } = useGetDataMap(queryString);
 	const { mutate, isSuccess: isSuccess_save } = useSaveObject();
 
 	const findTargetObject = data?.points.find(el => el.id === idObjectInfo); //HELP: Находим объект таргета
@@ -51,12 +51,15 @@ const MenuObject: FC = memo(() => {
 			mutate({ ...findTargetObject, crd: [null, null] });
 		}
 	};
+	const handleViewArea = () => setIsViewArea(!isViewArea);
 	const onClick = (id: number) => {
 		if (id === 0) {
 			handleViewInMap();
 			console.log('handleViewInMap');
 		} else if (id === 1) {
 			handleSetNewCrd();
+		} else if (id === 2) {
+			handleViewArea();
 		}
 	};
 
