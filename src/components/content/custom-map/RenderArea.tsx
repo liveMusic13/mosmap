@@ -4,7 +4,6 @@ import { Polygon } from 'react-leaflet';
 import { useTargetObjectStore, useToggleViewAreaStore } from '@/store/store';
 
 const RenderArea: FC = () => {
-	//HELP: Пока что оставлю тип от маркера, т.к. принимают одинаковые данные. Чуть что потом напишу свой.
 	const isViewArea = useToggleViewAreaStore(store => store.isViewArea);
 	const marker = useTargetObjectStore(store => store.marker);
 

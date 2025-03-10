@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import { FC, memo, useEffect } from 'react';
+import { CSSProperties, FC, memo, useEffect } from 'react';
 
 import Button from '@/components/ui/button/Button';
 
@@ -63,6 +63,16 @@ const MenuObject: FC = memo(() => {
 		}
 	};
 
+	const personActiveStyle = (id: number): CSSProperties | undefined => {
+		if (id === 2) {
+			return {
+				color: isViewArea ? colors.red : colors.green,
+			};
+		} else {
+			return { color: colors.green };
+		}
+	};
+
 	return (
 		<div className={styles.block__menu}>
 			{arrMenuObject.map(el => (
@@ -80,7 +90,7 @@ const MenuObject: FC = memo(() => {
 					}}
 					onClick={() => onClick(el.id)}
 				>
-					<svg className={styles.icon_svg} style={{ color: colors.green }}>
+					<svg className={styles.icon_svg} style={personActiveStyle(el.id)}>
 						<use xlinkHref={`/images/icons/sprite.svg#${el.src}`}></use>
 					</svg>
 					<p

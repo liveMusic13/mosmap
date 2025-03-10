@@ -1,5 +1,6 @@
 @use '@st/functions.scss' as func;
 @use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
 
 .wrapper_content {
 	padding: 0px func.adapt(60px, 1920px);
@@ -33,4 +34,41 @@
 	display: flex;
 	gap: func.adapt(20px, 1920px);
 	position: relative;
+}
+
+.block__buttons_map {
+	position: absolute;
+	right: func.adapt(16px, 1920px);
+	top: func.adapt(36px, 1920px);
+	z-index: 500;
+	display: flex;
+	align-items: center;
+	gap: func.adapt(10px, 1920px);
+
+	> button {
+		box-shadow: rgba($color: vars.$green_light, $alpha: 0.5);
+
+		&:hover {
+			> .hover__text {
+				display: block;
+			}
+		}
+	}
+}
+
+.icon_svg {
+	width: func.adapt(27px, 1920px);
+	height: func.adapt(27px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		width: func.adapt(30px, 1920px);
+		height: func.adapt(30px, 1920px);
+	}
+}
+
+.hover__text {
+	@include mix.hover_text();
 }

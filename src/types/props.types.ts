@@ -134,7 +134,12 @@ export interface ITextarea {
 export interface IPopup {
 	message: string;
 	isHtmlMessage?: boolean;
-	onClick?: () => void;
+	isConfirm?: boolean;
+	functions?: {
+		onClick?: () => void;
+		confirm?: () => void;
+		cancel?: () => void;
+	};
 }
 
 export interface IInfo {

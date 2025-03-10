@@ -7,7 +7,7 @@ import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
 import EntryBlock from '@/components/ui/entry-block/EntryBlock';
-import Popup from '@/components/ui/popup/Popup';
+import PopupInfo from '@/components/ui/popup/Popup';
 
 import { useCallbackPopup } from '@/hooks/useCallbackPopup';
 
@@ -33,7 +33,7 @@ const Registr: FC = () => {
 			{popup.isPopup && (
 				<>
 					<BackgroundOpacity />
-					<Popup
+					<PopupInfo
 						message={popup.message}
 						onClick={onClickPopup}
 						isHtmlMessage={true}

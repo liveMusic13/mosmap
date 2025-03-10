@@ -5,13 +5,16 @@ import { FC, useCallback, useEffect, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
+import Popup from '@/components/ui/popup/Popup';
 
 import { IMarker, IValuesObjectInfo } from '@/types/requestData.types';
 
 import {
+	useActiveAddObjectStore,
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useObjectInfoStore,
+	usePopupStore,
 	useTargetObjectStore,
 	useToggleViewAreaStore,
 } from '@/store/store';
@@ -27,12 +30,20 @@ import Info from './info/Info';
 import MenuObject from './menu-object/MenuObject';
 import { TOKEN, colors } from '@/app.constants';
 
+const messageSave = 'Вы действительно хотите сохранить?';
+const messageDelete = 'Вы действительно хотите удалить?';
+
 const ObjectInfo: FC = () => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIsFilters = useFiltersStore(store => store.setIsFilters);
 	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
 	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
 	const { setMarker, clearMarker } = useTargetObjectStore(store => store);
+	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
+		store => store,
+	);
+	const { isPopup, setIsPopup, setMessageInPopup, messageInPopup } =
+		usePopupStore(store => store);
 
 	const searchParams = useSearchParams();
 	//HELP: Преобразование searchParams в строку
@@ -72,6 +83,7 @@ const ObjectInfo: FC = () => {
 
 	const handleClose = () => {
 		setIsObjectInfo(false);
+		setIsActiveAddObject(false);
 		setIsFilters(true);
 		setIsViewArea(false);
 		clearMarker();
@@ -98,6 +110,9 @@ const ObjectInfo: FC = () => {
 		mutate(editValuesObject as IMarker);
 		const timeoutId = setTimeout(() => refetch_getDataMap(), 1500);
 
+		setIsActiveAddObject(false);
+		setIsPopup(false);
+
 		return () => clearTimeout(timeoutId);
 	};
 	const deleteObject = () => {
@@ -105,17 +120,29 @@ const ObjectInfo: FC = () => {
 
 		setIsObjectInfo(false);
 		setIsFilters(true);
+		setIsPopup(false);
 
 		const timeoutId = setTimeout(() => refetch_getDataMap(), 1500);
 
 		return () => clearTimeout(timeoutId);
 	};
+	const onPopupSave = () => {
+		setIsPopup(true);
+		setMessageInPopup(messageSave);
+	};
+	const onPopupDelete = () => {
+		setIsPopup(true);
+		setMessageInPopup(messageDelete);
+	};
+	const cancelPopup = () => setIsPopup(false);
 
 	return (
 		<div className={styles.wrapper_objectInfo}>
 			<div className={styles.block__objectInfo}>
 				<div className={styles.block__title}>
-					<h2 className={styles.title}>Просмотр обьекта</h2>
+					<h2 className={styles.title}>
+						{isActiveAddObject ? 'Добавление объекта' : 'Просмотр обьекта'}{' '}
+					</h2>
 					<Button
 						style={{
 							backgroundColor: 'transparent',
@@ -134,7 +161,7 @@ const ObjectInfo: FC = () => {
 						/>
 					</Button>
 				</div>
-				{!isLoading && <MenuObject />}
+				{!isActiveAddObject && !isLoading && <MenuObject />}
 				{isLoading && (
 					<Loader
 						style={{
@@ -173,21 +200,45 @@ const ObjectInfo: FC = () => {
 				</div>
 			</div>
 
+			{isPopup && (
+				<Popup
+					message={messageInPopup}
+					isConfirm={true}
+					functions={{
+						confirm:
+							messageSave === messageInPopup ? handleSaveValues : deleteObject,
+						cancel: cancelPopup,
+					}}
+				/>
+			)}
+
 			{token && (
 				<div className={styles.block__buttons}>
-					<Button onClick={handleSaveValues}>Сохранить</Button>
+					<Button
+						onClick={
+							// handleSaveValues
+							onPopupSave
+						}
+					>
+						Сохранить
+					</Button>
 					<Button
 						style={{ color: colors.grey_light, backgroundColor: 'transparent' }}
 						onClick={resetValue}
 					>
 						Отменить
 					</Button>
-					<Button
-						style={{ color: colors.red, backgroundColor: 'transparent' }}
-						onClick={deleteObject}
-					>
-						Удалить
-					</Button>
+					{!isActiveAddObject && (
+						<Button //HELP: Чтобы не появлялась кнопка удаления при добавлении объекта
+							style={{ color: colors.red, backgroundColor: 'transparent' }}
+							onClick={
+								// deleteObject
+								onPopupDelete
+							}
+						>
+							Удалить
+						</Button>
+					)}
 				</div>
 			)}
 		</div>

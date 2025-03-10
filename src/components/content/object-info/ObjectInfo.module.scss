@@ -68,6 +68,7 @@
 	display: flex;
 	align-items: center;
 	gap: func.adapt(5px, 1920px);
+	justify-content: space-between;
 
 	> button {
 		font-size: 0.928rem;

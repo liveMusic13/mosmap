@@ -77,7 +77,14 @@ body {
 	// }
 }
 
-//убираем логотип с украинским флагом
+//HELP:убираем логотип с украинским флагом
 .leaflet-control-attribution.leaflet-control {
 	display: none;
+}
+
+//HELP: УБИРАЕМ КНОПКУ ДЛЯ РЕДАКТИРОВАНИЯ ВЫДЕЛЕННОЙ ОБЛАСТИ
+.leaflet-bar {
+	> .leaflet-draw-edit-edit {
+		display: none;
+	}
 }

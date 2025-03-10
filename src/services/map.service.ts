@@ -5,6 +5,7 @@ import {
 	IDataFilters,
 	IDataMap,
 	IDeleteAndOtherResponses,
+	IHelpSearchAddress,
 	IMarker,
 } from '@/types/requestData.types';
 
@@ -282,6 +283,42 @@ export const mapService = {
 			return {
 				status: response.status,
 				data: response.data,
+			};
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
+	getHelpSearchAddress: async (
+		query: string,
+	): Promise<
+		IApiResponse<
+			{ list: IHelpSearchAddress[] } | AxiosError<{ message?: string }> | Error
+		>
+	> => {
+		try {
+			const response = await axios.get(
+				`https://mosmap.ru/api/adres_response.php?term=${query}`, //TODO: Узнать про тестовый домен и чуть что поменять на константу апи юрл
+			);
+
+			return {
+				data: response.data,
+				status: response.status,
 			};
 		} catch (err) {
 			//HELP: Типизируем ошибку как AxiosError или Error

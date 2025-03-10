@@ -7,7 +7,13 @@ import Button from '../button/Button';
 import styles from './Popup.module.scss';
 import { colors } from '@/app.constants';
 
-const Popup: FC<IPopup> = ({ message, onClick, isHtmlMessage }) => {
+//TODO: Сделать из этого попапа и для авторизации и для подтверждений, просто через условие. Чтобы не дублировать компоненты попапа
+const Popup: FC<IPopup> = ({
+	message,
+	functions,
+	isHtmlMessage,
+	isConfirm,
+}) => {
 	return (
 		<div className={styles.block__popup}>
 			{isHtmlMessage ? (
@@ -15,19 +21,49 @@ const Popup: FC<IPopup> = ({ message, onClick, isHtmlMessage }) => {
 			) : (
 				<p>{message}</p>
 			)}
-			<Button
-				style={{
-					width: 'calc(170/1920*100vw)',
-					height: 'calc(40/1920*100vw)',
-					boxShadow: `0px 0px 10px ${colors.green_light}`,
-					backgroundColor: colors.white,
-					color: colors.green,
-					fontSize: '1.14rem',
-				}}
-				onClick={onClick}
-			>
-				Закрыть
-			</Button>
+			{isConfirm ? (
+				<div className={styles.block__buttons}>
+					<Button
+						style={{
+							width: 'calc(170/1920*100vw)',
+							height: 'calc(40/1920*100vw)',
+							boxShadow: `0px 0px 10px ${colors.green_light}`,
+							color: colors.white,
+							fontSize: '1.14rem',
+						}}
+						onClick={functions?.confirm}
+					>
+						Подтвердить
+					</Button>
+					<Button
+						style={{
+							width: 'calc(170/1920*100vw)',
+							height: 'calc(40/1920*100vw)',
+							boxShadow: `0px 0px 10px ${colors.green_light}`,
+							backgroundColor: 'transparent',
+							color: colors.red,
+							fontSize: '1.14rem',
+						}}
+						onClick={functions?.cancel}
+					>
+						Отменить
+					</Button>
+				</div>
+			) : (
+				<Button
+					style={{
+						width: 'calc(170/1920*100vw)',
+						height: 'calc(40/1920*100vw)',
+						boxShadow: `0px 0px 10px ${colors.green_light}`,
+						backgroundColor: colors.white,
+						color: colors.green,
+						fontSize: '1.14rem',
+					}}
+					onClick={functions?.onClick}
+				>
+					Закрыть
+				</Button>
+			)}
 		</div>
 	);
 };

@@ -4,7 +4,7 @@ export const srcStandard = (
 	opt: IOptionsData,
 	isListOfObjects: boolean,
 	isFilters: boolean,
-) => {
+): string => {
 	if (opt.id === 2 && !isFilters) {
 		return `/images/icons/sprite.svg#${opt.src_active}`;
 	} else if (opt.id === 2 && isFilters) {

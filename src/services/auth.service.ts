@@ -25,6 +25,7 @@ export const authService = {
 			if (data.access_token) {
 				Cookies.set(TOKEN, data.access_token);
 				Cookies.set(ACCESSIBLYMAP, data.user);
+				console.log('push', data.user, router);
 				router.push(`/?map=${data.user}`);
 			}
 

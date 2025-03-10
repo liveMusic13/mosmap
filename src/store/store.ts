@@ -1,14 +1,20 @@
 import { create } from 'zustand';
 
 import {
+	IActiveAddObjectStore,
 	ICenterMapStore,
 	IClearAllFiltersStore,
 	IFiltersStore,
 	IIdObjectInfoStore,
 	IListOfObjectsStore,
+	IMapLayersStore,
 	IObjectInfoStore,
+	IPopupStore,
+	ISearchAddressStore,
+	ISelectAreaStore,
 	ITargetObjectStore,
 	IToggleViewAreaStore,
+	IZoomLevelStore,
 } from '@/types/store.types';
 
 export const useListOfObjectsStore = create<IListOfObjectsStore>(set => ({
@@ -50,4 +56,52 @@ export const useTargetObjectStore = create<ITargetObjectStore>(set => ({
 	marker: null,
 	setMarker: marker => set({ marker: marker }),
 	clearMarker: () => set({ marker: null }),
+}));
+
+export const useActiveAddObjectStore = create<IActiveAddObjectStore>(set => ({
+	isActiveAddObject: false,
+	setIsActiveAddObject: bol => set({ isActiveAddObject: bol }),
+}));
+
+export const usePopupStore = create<IPopupStore>(set => ({
+	isPopup: false,
+	setIsPopup: bol => set({ isPopup: bol }),
+	messageInPopup: '',
+	setMessageInPopup: mes => set({ messageInPopup: mes }),
+}));
+
+export const useSearchAddressStore = create<ISearchAddressStore>(set => ({
+	isSearchAddress: false,
+	setIsSearchAddress: bol => set({ isSearchAddress: bol }),
+}));
+
+export const useZoomLevelStore = create<IZoomLevelStore>(set => ({
+	zoomLevel: 13,
+	setZoomLevel: num => set({ zoomLevel: num }),
+}));
+
+export const useSelectAreaStore = create<ISelectAreaStore>(set => ({
+	isSelectArea: false,
+	setSelectArea: bol => set({ isSelectArea: bol }),
+}));
+
+export const useMapLayersStore = create<IMapLayersStore>(set => ({
+	indexTargetPolygon: null,
+	arrayPolygons: [],
+	clearPolygon: () => set({ arrayPolygons: [] }),
+	setIndexTargetPolygon: id =>
+		set(state => {
+			const index = state.arrayPolygons.findIndex(pol => pol.id === id);
+			if (index !== -1) {
+				return { indexTargetPolygon: index };
+			} else {
+				return { indexTargetPolygon: state.indexTargetPolygon };
+			}
+		}),
+	deletePolygon: id =>
+		set(state => ({
+			arrayPolygons: state.arrayPolygons.filter(polygon => polygon.id !== id),
+		})),
+	addPolygon: pol =>
+		set(state => ({ arrayPolygons: [...state.arrayPolygons, pol] })),
 }));

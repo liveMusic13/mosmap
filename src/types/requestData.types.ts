@@ -12,7 +12,7 @@ export interface IValuesObjectInfo {
 
 export interface IMarker {
 	// crd: LatLngExpression | null;
-	crd: LatLngExpression | null;
+	crd: number[] | null;
 	id: number;
 	icon: string;
 	color: string;
@@ -96,4 +96,11 @@ export interface IRegistrResponse {
 	message: string;
 	status: string;
 	error?: boolean;
+}
+
+export interface IHelpSearchAddress {
+	id: string;
+	name: string;
+	subname?: string;
+	coords?: LatLngExpression;
 }

@@ -1,0 +1,53 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.block__searchAddress {
+	position: absolute;
+	top: func.adapt(70px, 1920px);
+	left: 50%;
+	z-index: 500;
+	width: func.adapt(420px, 1920px);
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(15px, 1920px);
+}
+
+.input {
+	width: 100%;
+	outline: none;
+	border-radius: func.adapt(8px, 1920px);
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+	height: func.adapt(58px, 1920px);
+	font-size: 1rem;
+	padding: 0px func.adapt(12px, 1920px);
+	background-color: vars.$white;
+
+	&::placeholder {
+		color: rgba($color: vars.$black, $alpha: 0.3);
+	}
+}
+
+.block__variables {
+	box-shadow: 0px 2px 15px rgba($color: #000000, $alpha: 0.1);
+	border-radius: func.adapt(12px, 1920px);
+	max-height: func.adapt(257px, 1920px);
+	background-color: vars.$white;
+
+	overflow-y: auto;
+	overflow-x: hidden;
+	@include mix.scrollbar();
+}
+
+.variables {
+	// background-color: vars.$white;
+	font-size: 0.75rem;
+	border-bottom: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+	padding: func.adapt(10px, 1920px) func.adapt(20px, 1920px);
+	transition: font-size 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		font-size: 1rem;
+	}
+}

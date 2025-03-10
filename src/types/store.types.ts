@@ -37,8 +37,52 @@ export interface IToggleViewAreaStore {
 	setIsViewArea: (bol: boolean) => void;
 }
 
+export interface IActiveAddObjectStore {
+	isActiveAddObject: boolean;
+	setIsActiveAddObject: (bol: boolean) => void;
+}
+
 export interface ITargetObjectStore {
 	marker: IMarker | null;
 	setMarker: (marker: IMarker) => void;
 	clearMarker: () => void;
+}
+
+export interface IPopupStore {
+	isPopup: boolean;
+	setIsPopup: (bol: boolean) => void;
+	messageInPopup: string;
+	setMessageInPopup: (mes: string) => void;
+}
+
+export interface ISearchAddressStore {
+	isSearchAddress: boolean;
+	setIsSearchAddress: (bol: boolean) => void;
+}
+
+export interface IZoomLevelStore {
+	zoomLevel: number;
+	setZoomLevel: (num: number) => void;
+}
+
+export interface ISelectAreaStore {
+	isSelectArea: boolean;
+	setSelectArea: (bol: boolean) => void;
+}
+
+export interface IPolygonForMapLayers {
+	id: number;
+	latLngs: {
+		lat: number;
+		lng: number;
+	}[];
+}
+
+export interface IMapLayersStore {
+	indexTargetPolygon: number | null;
+	arrayPolygons: IPolygonForMapLayers[];
+	setIndexTargetPolygon: (id: number | null) => void;
+	addPolygon: (pol: IPolygonForMapLayers) => void;
+	deletePolygon: (id: number) => void;
+	clearPolygon: () => void;
 }

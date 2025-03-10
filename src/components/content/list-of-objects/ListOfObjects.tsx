@@ -4,7 +4,11 @@ import { ChangeEvent, FC, useRef, useState } from 'react';
 import Input from '@/components/ui/input/Input';
 import Loader from '@/components/ui/loader/Loader';
 
+import { useMapLayersStore } from '@/store/store';
+
 import { useGetDataMap } from '@/hooks/useGetDataMap';
+
+import { isMarkerInsidePolygon } from '@/utils/markersInsidePolygon';
 
 import styles from './ListOfObjects.module.scss';
 import List from './list/List';
@@ -14,7 +18,19 @@ const ListOfObjects: FC = () => {
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
+
+	const { arrayPolygons, indexTargetPolygon } = useMapLayersStore(
+		store => store,
+	);
+
 	const [value, setValue] = useState<string>('');
+
+	const objects =
+		arrayPolygons.length === 0
+			? data?.points
+			: data?.points.filter(marker =>
+					isMarkerInsidePolygon(marker, arrayPolygons[indexTargetPolygon || 0]),
+				);
 
 	//HELP: Ref для хранения ID таймера
 	const timeoutId = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +67,7 @@ const ListOfObjects: FC = () => {
 				<div className={styles.block__description}>
 					<p className={styles.description}>Всего объектов на карте:</p>
 					<p className={styles.count}>
-						{data?.points.filter(el => Array.isArray(el.crd)).length}
+						{data?.points?.filter(el => Array.isArray(el.crd)).length}
 					</p>
 				</div>
 			</div>
@@ -95,11 +111,17 @@ const ListOfObjects: FC = () => {
 						transform: 'translateY(-50%)',
 					}}
 				/>
-				{data?.points //HELP:Предложить вывод ограниченного количества объектов и подгружать их при скроле. Т.к. все равно же есть фильтрация в новой версии
-					.filter(el =>
-						(el.name || '').toLowerCase().includes(searchValue.toLowerCase()),
-					)
-					.map(el => <List key={el.id} el={el} />)}
+				{
+					// data?.points //HELP:Предложить вывод ограниченного количества объектов и подгружать их при скроле. Т.к. все равно же есть фильтрация в новой версии
+					objects &&
+						objects
+							.filter(el =>
+								(el.name || '')
+									.toLowerCase()
+									.includes(searchValue.toLowerCase()),
+							)
+							.map(el => <List key={el.id} el={el} />)
+				}
 			</div>
 		</div>
 	);

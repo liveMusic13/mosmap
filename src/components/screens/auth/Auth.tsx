@@ -8,7 +8,7 @@ import Layout from '@/components/layout/Layout';
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
 import EntryBlock from '@/components/ui/entry-block/EntryBlock';
 import Loader from '@/components/ui/loader/Loader';
-import Popup from '@/components/ui/popup/Popup';
+import PopupInfo from '@/components/ui/popup/Popup';
 
 import { useCallbackPopup } from '@/hooks/useCallbackPopup';
 
@@ -51,7 +51,7 @@ const Auth: FC = () => {
 			{popup.isPopup && popup.error && (
 				<>
 					<BackgroundOpacity />
-					<Popup
+					<PopupInfo
 						message={popup.message || `Статус запроса: ${popup.status}`}
 						onClick={onClickPopup}
 						isHtmlMessage={true}
