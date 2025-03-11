@@ -1,3 +1,4 @@
+import { LatLngExpression } from 'leaflet';
 import { useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, memo, useEffect } from 'react';
 
@@ -44,7 +45,7 @@ const MenuObject: FC = memo(() => {
 	const handleViewInMap = () => {
 		//HELP: Изменяем центр карты, устанавливая центром координаты объекта таргета, тем самым находя его на карте
 		if (findTargetObject && findTargetObject.crd)
-			setCenterMap(findTargetObject?.crd);
+			setCenterMap(findTargetObject?.crd as LatLngExpression);
 	};
 	const handleSetNewCrd = () => {
 		if (findTargetObject && findTargetObject.crd) {

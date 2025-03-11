@@ -1,4 +1,4 @@
-import { divIcon } from 'leaflet';
+import { LatLngExpression, divIcon } from 'leaflet';
 import { FC } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Marker, Polygon, Popup } from 'react-leaflet';
@@ -34,7 +34,7 @@ const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 			return (
 				<Marker
 					key={mark.id}
-					position={mark.crd || [0, 0]}
+					position={(mark.crd as LatLngExpression) || [0, 0]}
 					icon={divIcon({
 						className: 'my-custom-icon',
 						iconSize: [22, 22],

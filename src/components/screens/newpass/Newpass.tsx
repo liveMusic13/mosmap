@@ -7,7 +7,7 @@ import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
 import EntryBlock from '@/components/ui/entry-block/EntryBlock';
-import PopupInfo from '@/components/ui/popup/Popup';
+import Popup from '@/components/ui/popup/Popup';
 
 import { useCallbackPopup } from '@/hooks/useCallbackPopup';
 
@@ -33,9 +33,11 @@ const Newpass: FC = () => {
 			{popup.isPopup && (
 				<>
 					<BackgroundOpacity />
-					<PopupInfo
+					<Popup
 						message={popup.message || `Статус запроса: ${popup.status}`}
-						onClick={onClickPopup}
+						functions={{
+							onClick: onClickPopup,
+						}}
 						isHtmlMessage={true}
 					/>
 				</>

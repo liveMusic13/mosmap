@@ -7,7 +7,7 @@ import { FC, useEffect, useState } from 'react';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
-import PopupInfo from '@/components/ui/popup/Popup';
+import Popup from '@/components/ui/popup/Popup';
 
 import { IPopupErrorInConfirmPage } from '@/types/localState.types';
 
@@ -67,9 +67,11 @@ const Confirm: FC = () => {
 			<Header />
 			<h1 className={styles.title}>Подтверждение пользователя</h1>
 			{popupError.isPopup && (
-				<PopupInfo
+				<Popup
 					message={popupError.message}
-					onClick={onClick}
+					functions={{
+						onClick: onClick,
+					}}
 					isHtmlMessage={true}
 				/>
 			)}

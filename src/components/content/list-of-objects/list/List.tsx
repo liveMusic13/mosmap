@@ -1,3 +1,4 @@
+import { LatLngExpression } from 'leaflet';
 import Image from 'next/image';
 import { memo } from 'react';
 
@@ -25,7 +26,7 @@ const List = memo(({ el }: { el: IMarker }) => {
 	const { refetch, data, isSuccess } = useGetObjectInfo(el.id);
 
 	const onClick = (el: IMarker) => {
-		if (el.crd) setCenterMap(el.crd);
+		if (el.crd) setCenterMap(el.crd as LatLngExpression);
 	};
 	const handleClickInfo = () => {
 		//HELP: Добавляем id объекта для взятия из кэша данных об объекте. Отключаем видимость фильтров и включаем видимость блока информации об объекте. После этого запускаем запрос

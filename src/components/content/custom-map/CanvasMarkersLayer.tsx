@@ -1,4 +1,4 @@
-import L, { Canvas } from 'leaflet';
+import L, { Canvas, LatLngExpression } from 'leaflet';
 import { FC, useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 
@@ -41,7 +41,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 				let mapObject: L.Layer | null = null;
 
 				//HELP: Проверяем, входит ли маркер в видимую область карты. Если нет, то не отрисовываем его
-				if (!bounds.contains(crd)) return;
+				if (!bounds.contains(crd as LatLngExpression)) return;
 
 				//HELP: Если зум >= 16 и есть полигон то рисуем полигон
 				if (zoomLevelMap >= 16 && marker.polygon && marker.polygon.length > 0) {
@@ -62,11 +62,13 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 						iconUrl: dataUrl,
 						iconSize: [20, 20],
 					});
-					mapObject = L.marker(crd, { icon }).addTo(markersLayerRef.current!);
+					mapObject = L.marker(crd as LatLngExpression, { icon }).addTo(
+						markersLayerRef.current!,
+					);
 				}
 				//HELP: Если зум < 14 то рисуем круглый маркер (CircleMarker)
 				else {
-					mapObject = L.circleMarker(crd, {
+					mapObject = L.circleMarker(crd as LatLngExpression, {
 						renderer: canvasLayerRef.current!,
 						radius: 6,
 						color: `#${marker.color}`,
