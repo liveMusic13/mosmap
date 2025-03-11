@@ -9,7 +9,7 @@ import { useClearAllFiltersStore } from '@/store/store';
 
 import styles from './Select.module.scss';
 
-const Select: FC<ISelect> = ({ items, handleClick, queryName }) => {
+const Select: FC<ISelect> = ({ items, handleClick, queryName, forInfo }) => {
 	const searchParams = useSearchParams();
 	const nameSelect = searchParams.get(queryName || '');
 	const isClear = useClearAllFiltersStore(store => store.isClear);
@@ -18,8 +18,15 @@ const Select: FC<ISelect> = ({ items, handleClick, queryName }) => {
 	const [isOptions, setIsOptions] = useState<boolean>(false);
 
 	useEffect(() => {
-		//HELP: Для установки значения при копировании ссылки, если оно есть в адресной строке
+		//HELP: При использовании селекта в компоненте информации об объекте, используем значение установленное в данных как дефолтное для установки его в компоненте. И ставим в зависимость значение value из пропса, чтобы при переключении объектов в таргете перерисовывался компонент селекта и устанавливал новое значение в таргет, если оно есть.
+		if (forInfo) {
+			setTarget(forInfo.value);
+		}
+	}, [forInfo?.value]);
+
+	useEffect(() => {
 		if (nameSelect) {
+			//HELP: Для установки значения при копировании ссылки, если оно есть в адресной строке
 			const value = items.find(el => Number(el.item_id) === Number(nameSelect));
 			if (value) setTarget(value.item_name);
 		}
@@ -30,6 +37,7 @@ const Select: FC<ISelect> = ({ items, handleClick, queryName }) => {
 	}, [isClear]);
 
 	const onClick = (el: IItemFilter) => {
+		console.log('in select', el);
 		setTarget(el.item_name);
 		handleClick(el);
 		setIsOptions(false);

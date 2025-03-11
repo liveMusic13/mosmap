@@ -6,8 +6,13 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 import Popup from '@/components/ui/popup/Popup';
+import Select from '@/components/ui/select/Select';
 
-import { IMarker, IValuesObjectInfo } from '@/types/requestData.types';
+import {
+	IItemFilter,
+	IMarker,
+	IValuesObjectInfo,
+} from '@/types/requestData.types';
 
 import {
 	useActiveAddObjectStore,
@@ -21,8 +26,10 @@ import {
 
 import { useDeleteObject } from '@/hooks/useDeleteObject';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
+import { useGetFilters } from '@/hooks/useGetFilters';
 import { useGetObjectInfo } from '@/hooks/useGetObjectInfo';
 import { useSaveObject } from '@/hooks/useSaveObject';
+import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
 import styles from './ObjectInfo.module.scss';
 import InfoEdit from './info-edit/InfoEdit';
@@ -46,15 +53,17 @@ const ObjectInfo: FC = () => {
 		usePopupStore(store => store);
 
 	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const { refetch: refetch_getDataMap } = useGetDataMap(queryString);
-
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
 	);
 	const { mutate, isSuccess: isSuccess_save } = useSaveObject();
 	const { mutate: mutate_delete } = useDeleteObject();
+	const { data: dataFilters, isLoading: isLoading_dataFilters } =
+		useGetFilters(map);
 
 	const token = Cookies.get(TOKEN);
 
@@ -80,6 +89,63 @@ const ObjectInfo: FC = () => {
 			setMarker(data as IMarker);
 		}
 	}, [isSuccess, data, idObjectInfo]);
+
+	/////
+	// const [formState, setFormState] = useState<{
+	// 	[key: string]: IItemFilter | undefined;
+	// }>({});
+	// useEffect(() => {
+	// 	if (isSuccess && data) {
+	// 		// console.log('step zero', (data as IMarker).values);
+
+	// 		(data as IMarker)?.values?.forEach(field => {
+	// 			// console.log('step one. foreach', field);
+
+	// 			if (field.el === 'select') {
+	// 				const filter = dataFilters?.find(
+	// 					filter => filter.name === field.name,
+	// 				);
+
+	// 				// console.log('step two filter', filter);
+
+	// 				if (filter) {
+	// 					const options = filter.items;
+	// 					// console.log('step three. options', options, field, filter);
+	// 					const value = options?.find(
+	// 						option => option.item_name === field.value,
+	// 					);
+	// 					setFormState((prev: any) => ({
+	// 						...prev,
+	// 						[field.name]: value,
+	// 					}));
+	// 					// console.log('result', { [field.name]: [value] });
+	// 				}
+	// 			}
+	// 		});
+	// 	}
+	// }, [idObjectInfo, isSuccess]);
+
+	// useEffect(() => {
+	// 	setEditValuesObject(prev =>
+	// 		prev
+	// 			? {
+	// 					...prev,
+	// 					values:
+	// 						prev.values?.map(opt =>
+	// 							opt.el === 'select'
+	// 								? { ...opt, value: formState[opt.name]?.item_name || '' }
+	// 								: opt,
+	// 						) || [],
+	// 					crd: prev.crd ?? null,
+	// 				}
+	// 			: null,
+	// 	);
+	// }, [formState]);
+	const { setFormState } = useSelectFromInfoComponent(
+		setEditValuesObject,
+		dataFilters,
+	);
+	//////
 
 	const handleClose = () => {
 		setIsObjectInfo(false);
@@ -175,7 +241,7 @@ const ObjectInfo: FC = () => {
 					/>
 				)}
 				<div className={styles.block__info}>
-					{isSuccess &&
+					{/* {isSuccess &&
 						data &&
 						(data as IMarker)?.values?.map((el, ind) => {
 							if (token) {
@@ -193,6 +259,49 @@ const ObjectInfo: FC = () => {
 										callback={onCallbackNewValue}
 									/>
 								);
+							} else {
+								return <Info key={ind} value_info={el} />;
+							}
+						})} */}
+					{isSuccess &&
+						data &&
+						(data as IMarker)?.values?.map((el, ind) => {
+							if (token) {
+								if (el.el === 'select') {
+									const filter = dataFilters?.find(
+										filter => filter.name === el.name,
+									);
+
+									const onCallbackForSelect = (opt: IItemFilter) => {
+										setFormState(prev => ({ ...prev, [el.name]: opt }));
+									};
+
+									console.log(`in jsx ${el.name}`, el.value);
+
+									return (
+										<Select
+											key={ind}
+											items={filter?.items || []}
+											handleClick={onCallbackForSelect}
+											forInfo={{ isInfo: true, value: el.value.toString() }}
+										/>
+									);
+								} else {
+									let value_info_in_state = {} as IValuesObjectInfo;
+									if (editValuesObject?.values) {
+										value_info_in_state =
+											editValuesObject?.values.find(
+												element => element.label === el.label,
+											) || ({} as IValuesObjectInfo);
+									}
+									return (
+										<InfoEdit
+											key={ind}
+											value_info={value_info_in_state}
+											callback={onCallbackNewValue}
+										/>
+									);
+								}
 							} else {
 								return <Info key={ind} value_info={el} />;
 							}

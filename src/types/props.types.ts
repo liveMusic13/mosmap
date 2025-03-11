@@ -93,6 +93,10 @@ export interface ISelect {
 	items: IItemFilter[];
 	handleClick: (el: IItemFilter) => void;
 	queryName?: string;
+	forInfo?: {
+		isInfo: boolean;
+		value: string;
+	};
 }
 
 export interface ICustomCalendar {
