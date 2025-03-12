@@ -11,6 +11,7 @@ import { ICalendarState } from './localState.types';
 import {
 	IDataFilters,
 	IDataMap,
+	IDotInfoData,
 	IItemFilter,
 	IMarker,
 	IRegistrResponse,
@@ -152,4 +153,14 @@ export interface IInfo {
 
 export interface IInfoEdit extends IInfo {
 	callback: (data: { label: string; value: string }) => void;
+}
+
+export interface IInfoBlock {
+	onCallbackForSelect: (opt: IItemFilter) => void;
+	filter: IDataFilters | undefined;
+	value: string | number;
+}
+
+export interface IInfoZone {
+	value_info: IDotInfoData;
 }

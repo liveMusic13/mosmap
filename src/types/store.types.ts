@@ -86,3 +86,16 @@ export interface IMapLayersStore {
 	deletePolygon: (id: number) => void;
 	clearPolygon: () => void;
 }
+
+export interface IViewDotInfoStore {
+	isViewDotInfo: boolean;
+	setViewDotInfo: (bol: boolean) => void;
+}
+
+export interface IDotInfoCoordsStore {
+	coords: {
+		lat: number;
+		lng: number;
+	};
+	setCoords: (coords: { lat: number; lng: number }) => void;
+}

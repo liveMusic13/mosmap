@@ -1,8 +1,8 @@
 @use '@st/functions.scss' as func;
 @use '@st/variables.scss' as vars;
-@use '@st/mixins.scss' as mix;
 
 .wrapper_info {
+	max-width: func.adapt(280px, 1920px);
 }
 
 .title {

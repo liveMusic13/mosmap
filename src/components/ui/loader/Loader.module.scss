@@ -3,4 +3,5 @@
 .loader {
 	width: func.adapt(50px, 1920px);
 	height: func.adapt(50px, 1920px);
+	z-index: 1002;
 }

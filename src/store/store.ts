@@ -4,6 +4,7 @@ import {
 	IActiveAddObjectStore,
 	ICenterMapStore,
 	IClearAllFiltersStore,
+	IDotInfoCoordsStore,
 	IFiltersStore,
 	IIdObjectInfoStore,
 	IListOfObjectsStore,
@@ -14,6 +15,7 @@ import {
 	ISelectAreaStore,
 	ITargetObjectStore,
 	IToggleViewAreaStore,
+	IViewDotInfoStore,
 	IZoomLevelStore,
 } from '@/types/store.types';
 
@@ -104,4 +106,17 @@ export const useMapLayersStore = create<IMapLayersStore>(set => ({
 		})),
 	addPolygon: pol =>
 		set(state => ({ arrayPolygons: [...state.arrayPolygons, pol] })),
+}));
+
+export const useViewDotInfoStore = create<IViewDotInfoStore>(set => ({
+	isViewDotInfo: false,
+	setViewDotInfo: bol => set({ isViewDotInfo: bol }),
+}));
+
+export const useDotInfoCoordsStore = create<IDotInfoCoordsStore>(set => ({
+	coords: {
+		lat: 0,
+		lng: 0,
+	},
+	setCoords: coords => set({ coords: coords }),
 }));

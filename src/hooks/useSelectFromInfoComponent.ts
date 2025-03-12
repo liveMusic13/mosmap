@@ -40,7 +40,7 @@ export const useSelectFromInfoComponent = (
 						const value = options?.find(
 							option => option.item_name === field.value,
 						); //HELP: Ищем среди существующих опций определенного селекта, существует установленно ли уже какое значение
-						console.log('step three. value', value);
+						// console.log('step three. value', value);
 						setFormState((prev: any) => ({
 							...prev,
 							[field.name]: value,
@@ -61,7 +61,11 @@ export const useSelectFromInfoComponent = (
 						values:
 							prev.values?.map(opt =>
 								opt.el === 'select'
-									? { ...opt, value: formState[opt.name]?.item_name || '' }
+									? {
+											...opt,
+											value: formState[opt.name]?.item_name || '',
+											id: formState[opt.name]?.item_id.toString() || '',
+										}
 									: opt,
 							) || [],
 						crd: prev.crd ?? null,

@@ -1,0 +1,18 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+@include mix.filter_header();
+
+.block__filter {
+	margin-top: func.adapt(8px, 1920px);
+	max-height: func.adapt(300px, 1920px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-grow: 1;
+	@include mix.scrollbar();
+
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(8px, 1902px);
+}

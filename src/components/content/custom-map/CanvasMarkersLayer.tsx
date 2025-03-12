@@ -4,16 +4,24 @@ import { useMap } from 'react-leaflet';
 
 import { ICanvasMarkersLayer } from '@/types/props.types';
 
+import { useIdObjectInfoStore } from '@/store/store';
+
 import { useClickOnMarker } from '@/hooks/useClickOnMarker';
 
 import { getIconForMarker } from '@/utils/iconForMarker';
 
+import { colors } from '@/app.constants';
+
 const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
+	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+
 	const handleClickOnMarker = useClickOnMarker();
 
 	const map = useMap();
 	const canvasLayerRef = useRef<Canvas | null>(null);
 	const markersLayerRef = useRef<L.LayerGroup | null>(null);
+
+	//TODO: Сделать значок таргета когда тыкаешь на объект или когда он находится в таргете
 
 	useEffect(() => {
 		if (!map) return;
@@ -45,16 +53,38 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 
 				//HELP: Если зум >= 16 и есть полигон то рисуем полигон
 				if (zoomLevelMap >= 16 && marker.polygon && marker.polygon.length > 0) {
+					const color =
+						idObjectInfo === marker.id ? '#000' : `#${marker.color}`;
+					const weight = idObjectInfo === marker.id ? 3 : 2;
+
 					mapObject = L.polygon(marker.polygon, {
-						color: `#${marker.color}`,
-						weight: 2,
+						color: color,
+						weight: weight,
 						// fillColor: marker.color,
 						// fillOpacity: 0.4,
 					}).addTo(markersLayerRef.current!);
 				}
-				//HELP: Если зум 14-15 то рисуем кастомную иконку
-				else if (zoomLevelMap >= 14 && zoomLevelMap < 16) {
-					const svg = getIconForMarker(marker);
+				//HELP: Если зум < или равен 13 то рисуем круглый маркер (CircleMarker)
+				else if (zoomLevelMap <= 13) {
+					const color =
+						idObjectInfo === marker.id ? '#000' : `#${marker.color}`;
+
+					mapObject = L.circleMarker(crd as LatLngExpression, {
+						renderer: canvasLayerRef.current!,
+						radius: 6,
+						color: color,
+						// fillColor: marker.color,
+						// fillOpacity: 1,
+					}).addTo(markersLayerRef.current!);
+				}
+				//HELP: В других случая рисуем кастомную иконку
+				else {
+					const editMarker =
+						idObjectInfo === marker.id
+							? { ...marker, icon: 'target', color: colors.red }
+							: marker;
+					const svg = getIconForMarker(editMarker);
+					// const svg = getIconForMarker(marker);
 					const encodedSvg = encodeURIComponent(svg);
 					const dataUrl = 'data:image/svg+xml,' + encodedSvg;
 					// console.log(svg);
@@ -66,17 +96,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 						markersLayerRef.current!,
 					);
 				}
-				//HELP: Если зум < 14 то рисуем круглый маркер (CircleMarker)
-				else {
-					mapObject = L.circleMarker(crd as LatLngExpression, {
-						renderer: canvasLayerRef.current!,
-						radius: 6,
-						color: `#${marker.color}`,
-						// fillColor: marker.color,
-						// fillOpacity: 1,
-					}).addTo(markersLayerRef.current!);
-				}
-				// Добавляем попап и клик
+				//HELP: Добавляем попап и клик
 				if (mapObject) {
 					mapObject.bindPopup(markerName);
 					mapObject.on('click', () => handleClickOnMarker(marker.id));
@@ -94,7 +114,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 			map.off('moveend', updateMarkers);
 			markersLayerRef.current?.clearLayers();
 		};
-	}, [dataMap, map]);
+	}, [dataMap, map, idObjectInfo]);
 
 	return null;
 };

@@ -5,6 +5,7 @@ import {
 	IDataFilters,
 	IDataMap,
 	IDeleteAndOtherResponses,
+	IDotInfoData,
 	IHelpSearchAddress,
 	IMarker,
 } from '@/types/requestData.types';
@@ -320,6 +321,38 @@ export const mapService = {
 				data: response.data,
 				status: response.status,
 			};
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
+	dotInfo: async (coords: {
+		lat: number;
+		lng: number;
+	}): Promise<
+		IApiResponse<IDotInfoData[] | AxiosError<{ message?: string }> | Error>
+	> => {
+		try {
+			const response = await $axios.get(
+				`/api/dot_info.php?lat=${coords.lat}&lng=${coords.lng}`,
+			);
+
+			return { data: response.data, status: response.status };
 		} catch (err) {
 			//HELP: Типизируем ошибку как AxiosError или Error
 			const error = err as AxiosError<{ message?: string }> | Error;

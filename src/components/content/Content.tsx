@@ -1,7 +1,6 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import dynamic from 'next/dynamic';
 import { CSSProperties, FC, useCallback } from 'react';
@@ -19,9 +18,11 @@ import {
 	usePopupStore,
 	useSearchAddressStore,
 	useSelectAreaStore,
+	useViewDotInfoStore,
 } from '@/store/store';
 
 import { useCheckActiveInfo } from '@/hooks/useCheckActiveInfo';
+import { useCheckDisabledZone } from '@/hooks/useCheckDisabledZone';
 
 import { srcStandard } from '@/utils/pathSvg';
 
@@ -31,6 +32,7 @@ import Loader from '../ui/loader/Loader';
 import SearchAddress from '../ui/search-address/SearchAdress';
 
 import styles from './Content.module.scss';
+import InfoAboutZone from './info-about-zone/InfoAboutZone';
 import ListOfObjects from './list-of-objects/ListOfObjects';
 import ObjectInfo from './object-info/ObjectInfo';
 import Options from './options/Options';
@@ -66,8 +68,10 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	const isSearchAddress = useSearchAddressStore(store => store.isSearchAddress);
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
 	const clearPolygon = useMapLayersStore(store => store.clearPolygon);
+	const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
 
 	useCheckActiveInfo(); //HELP: Для того чтобы отключало показ фильтров при показе информации об объекте или при создании объекта
+	useCheckDisabledZone(); //HELP: Для того чтобы отключать показ информации о клике на пустую зону при активации хоть одного из окон кроме списка объектов
 
 	const handleClickButtonInMap = useCallback((id: number) => {
 		if (id === 0) {
@@ -100,16 +104,20 @@ const Content: FC<IContent> = ({ dataMap }) => {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			{/* TODO: Потом удалить девтулс из зависимостей и тут */}
-			<ReactQueryDevtools initialIsOpen={false} />
 			{/* HELP: Для того чтобы когда глобально вызывается попап, затемнялась область за ним не только в блоке контента, но и во всем приложении */}
 			{isPopup && <BackgroundOpacity />}
 			<div className={styles.wrapper_content}>
 				<h1 className={styles.title}>{dataMap.title}</h1>
 				<Options />
 				<div className={styles.block__content}>
-					{isFilters && !isObjectInfo && <Filters />}
-					{(isActiveAddObject || isObjectInfo) && !isFilters && <ObjectInfo />}
+					{isFilters && !isObjectInfo && !isViewDotInfo && <Filters />}
+					{(isActiveAddObject || isObjectInfo) &&
+						!isFilters &&
+						!isViewDotInfo && <ObjectInfo />}
+					{isViewDotInfo &&
+						!isFilters &&
+						!isObjectInfo &&
+						!isActiveAddObject && <InfoAboutZone />}
 					{isListOfObjects && <ListOfObjects />}
 
 					<DynamicCustomMap />

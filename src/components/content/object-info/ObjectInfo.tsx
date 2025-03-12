@@ -6,7 +6,6 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 import Popup from '@/components/ui/popup/Popup';
-import Select from '@/components/ui/select/Select';
 
 import {
 	IItemFilter,
@@ -16,6 +15,7 @@ import {
 
 import {
 	useActiveAddObjectStore,
+	useDotInfoCoordsStore,
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useObjectInfoStore,
@@ -32,6 +32,7 @@ import { useSaveObject } from '@/hooks/useSaveObject';
 import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
 import styles from './ObjectInfo.module.scss';
+import InfoBlock from './info-block/InfoBlock';
 import InfoEdit from './info-edit/InfoEdit';
 import Info from './info/Info';
 import MenuObject from './menu-object/MenuObject';
@@ -42,6 +43,7 @@ const messageDelete = 'Вы действительно хотите удалит
 
 const ObjectInfo: FC = () => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const setIsFilters = useFiltersStore(store => store.setIsFilters);
 	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
 	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
@@ -71,6 +73,22 @@ const ObjectInfo: FC = () => {
 		isSuccess ? (data as IMarker) : null,
 	);
 
+	///test
+	const { coords, setCoords } = useDotInfoCoordsStore(store => store);
+
+	useEffect(() => {
+		setEditValuesObject(data as IMarker);
+	}, [isSuccess]);
+
+	useEffect(() => {
+		console.log('test', editValuesObject, coords);
+		if (!editValuesObject?.crd && coords.lat) {
+			setEditValuesObject(prev =>
+				prev ? { ...prev, crd: [coords.lat, coords.lng] } : null,
+			);
+		}
+	}, [coords, editValuesObject]);
+
 	useEffect(() => {
 		//HELP: За счет изменения id в глобальном сторе, происходит refetch на получение новых данных по новому id
 		refetch();
@@ -90,57 +108,6 @@ const ObjectInfo: FC = () => {
 		}
 	}, [isSuccess, data, idObjectInfo]);
 
-	/////
-	// const [formState, setFormState] = useState<{
-	// 	[key: string]: IItemFilter | undefined;
-	// }>({});
-	// useEffect(() => {
-	// 	if (isSuccess && data) {
-	// 		// console.log('step zero', (data as IMarker).values);
-
-	// 		(data as IMarker)?.values?.forEach(field => {
-	// 			// console.log('step one. foreach', field);
-
-	// 			if (field.el === 'select') {
-	// 				const filter = dataFilters?.find(
-	// 					filter => filter.name === field.name,
-	// 				);
-
-	// 				// console.log('step two filter', filter);
-
-	// 				if (filter) {
-	// 					const options = filter.items;
-	// 					// console.log('step three. options', options, field, filter);
-	// 					const value = options?.find(
-	// 						option => option.item_name === field.value,
-	// 					);
-	// 					setFormState((prev: any) => ({
-	// 						...prev,
-	// 						[field.name]: value,
-	// 					}));
-	// 					// console.log('result', { [field.name]: [value] });
-	// 				}
-	// 			}
-	// 		});
-	// 	}
-	// }, [idObjectInfo, isSuccess]);
-
-	// useEffect(() => {
-	// 	setEditValuesObject(prev =>
-	// 		prev
-	// 			? {
-	// 					...prev,
-	// 					values:
-	// 						prev.values?.map(opt =>
-	// 							opt.el === 'select'
-	// 								? { ...opt, value: formState[opt.name]?.item_name || '' }
-	// 								: opt,
-	// 						) || [],
-	// 					crd: prev.crd ?? null,
-	// 				}
-	// 			: null,
-	// 	);
-	// }, [formState]);
 	const { setFormState } = useSelectFromInfoComponent(
 		setEditValuesObject,
 		dataFilters,
@@ -148,6 +115,7 @@ const ObjectInfo: FC = () => {
 	//////
 
 	const handleClose = () => {
+		setIdObjectInfo(0); //HELP: Обнуляем чтобы маркер таргета исчезал
 		setIsObjectInfo(false);
 		setIsActiveAddObject(false);
 		setIsFilters(true);
@@ -171,6 +139,21 @@ const ObjectInfo: FC = () => {
 		},
 		[],
 	);
+	// const onCallbackNewValue = useCallback(
+	// 	(data: { label: string; value: string }) => {
+	// 		setEditValuesObject(prev => {
+	// 			if (!prev || !prev.values) return prev; // Защита от null/undefined
+
+	// 			return {
+	// 				...prev,
+	// 				values: prev.values.map(el =>
+	// 					el.label === data.label ? { ...el, value: data.value } : el,
+	// 				),
+	// 			};
+	// 		});
+	// 	},
+	// 	[setEditValuesObject], // Добавьте зависимость
+	// );
 	const resetValue = () => setEditValuesObject(data as IMarker);
 	const handleSaveValues = () => {
 		mutate(editValuesObject as IMarker);
@@ -241,28 +224,6 @@ const ObjectInfo: FC = () => {
 					/>
 				)}
 				<div className={styles.block__info}>
-					{/* {isSuccess &&
-						data &&
-						(data as IMarker)?.values?.map((el, ind) => {
-							if (token) {
-								let value_info_in_state = {} as IValuesObjectInfo;
-								if (editValuesObject?.values) {
-									value_info_in_state =
-										editValuesObject?.values.find(
-											element => element.label === el.label,
-										) || ({} as IValuesObjectInfo);
-								}
-								return (
-									<InfoEdit
-										key={ind}
-										value_info={value_info_in_state}
-										callback={onCallbackNewValue}
-									/>
-								);
-							} else {
-								return <Info key={ind} value_info={el} />;
-							}
-						})} */}
 					{isSuccess &&
 						data &&
 						(data as IMarker)?.values?.map((el, ind) => {
@@ -276,14 +237,12 @@ const ObjectInfo: FC = () => {
 										setFormState(prev => ({ ...prev, [el.name]: opt }));
 									};
 
-									console.log(`in jsx ${el.name}`, el.value);
-
 									return (
-										<Select
+										<InfoBlock
 											key={ind}
-											items={filter?.items || []}
-											handleClick={onCallbackForSelect}
-											forInfo={{ isInfo: true, value: el.value.toString() }}
+											onCallbackForSelect={onCallbackForSelect}
+											filter={filter}
+											value={el.value}
 										/>
 									);
 								} else {

@@ -16,7 +16,9 @@ import { useSelectArea } from '@/hooks/useSelectArea';
 import CanvasMarkersLayer from './CanvasMarkersLayer';
 import styles from './CustomMap.module.scss';
 import FlyToLocation from './FlyToLocation';
+import MapClickHandler from './MapClickHandler';
 import MapResizeHandler from './MapResizeHandler';
+import MarkerEmptyArea from './MarkerEmptyArea';
 import RenderArea from './RenderArea';
 import RenderMarkers from './RenderMarkers';
 import ZoomTracker from './ZoomTracker';
@@ -26,6 +28,8 @@ const CustomMap: FC<ICustomMap> = () => {
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
+
+	//TODO: Сделать чтобы по клику на пустую область на карте там ставился маркер и появлялась информация об этой пустой зоне
 
 	const centerMap = useCenterMapStore(store => store.centerMap);
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
@@ -50,8 +54,10 @@ const CustomMap: FC<ICustomMap> = () => {
 				className={styles.custom_map}
 			>
 				<ZoomTracker />
+				<MapClickHandler />
 				<MapResizeHandler />
 				<TileLayer url={data?.tiles_url || ''} />
+				<MarkerEmptyArea />
 				{data?.canvas_map === 0 ? (
 					data?.clastering === 0 ? (
 						<>

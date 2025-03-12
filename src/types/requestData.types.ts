@@ -104,3 +104,9 @@ export interface IHelpSearchAddress {
 	subname?: string;
 	coords?: LatLngExpression;
 }
+
+export interface IDotInfoData {
+	href: string;
+	name: string;
+	value: string;
+}

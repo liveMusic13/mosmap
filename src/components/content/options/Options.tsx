@@ -26,17 +26,22 @@ const Options: FC = () => {
 	const { isFilters, setIsFilters } = useFiltersStore(store => store);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
-	const isActiveAddObject = useActiveAddObjectStore(
-		store => store.isActiveAddObject,
+	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
+		store => store,
 	);
 
 	const token = Cookies.get(TOKEN);
 
 	const onClick = useCallback((id: number) => {
 		if (id === 2) {
-			useFiltersStore.setState(state => ({
-				isFilters: !state.isFilters,
-			}));
+			useFiltersStore.setState(state => {
+				if (!state.isFilters) {
+					setIsActiveAddObject(false);
+				}
+				return {
+					isFilters: !state.isFilters,
+				};
+			});
 		} else if (id === 3) {
 			useListOfObjectsStore.setState(state => ({
 				isListOfObjects: !state.isListOfObjects,
