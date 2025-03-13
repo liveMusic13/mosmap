@@ -29,8 +29,6 @@ const CustomMap: FC<ICustomMap> = () => {
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
 
-	//TODO: Сделать чтобы по клику на пустую область на карте там ставился маркер и появлялась информация об этой пустой зоне
-
 	const centerMap = useCenterMapStore(store => store.centerMap);
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
 

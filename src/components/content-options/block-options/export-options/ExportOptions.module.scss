@@ -1,0 +1,36 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.block__exportOptions {
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(15px, 1920px);
+	padding: func.adapt(20px, 1920px);
+
+	> button {
+		text-transform: uppercase;
+		width: 100%;
+		height: func.adapt(40px, 1920px);
+		font-size: 1rem;
+		transition:
+			font-size 0.3s ease,
+			width 0.3s ease,
+			height 0.3s ease;
+
+		&:hover {
+			cursor: pointer;
+			width: 101%;
+			height: func.adapt(45px, 1920px);
+			font-size: 1.08rem;
+		}
+	}
+}
+
+@include mix.line();
+
+.block__otherFields {
+	display: flex;
+	align-items: center;
+	gap: func.adapt(20px, 1920px);
+}

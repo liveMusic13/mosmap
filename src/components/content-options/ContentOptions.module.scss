@@ -1,0 +1,30 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_contentOptions {
+	padding: 0px func.adapt(60px, 1920px);
+	width: 100%;
+	height: calc(
+		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(163px, 1920px)}
+	);
+	display: flex;
+	flex-direction: column;
+	position: relative; // HELP: для лоадера
+	// flex-grow: 1;
+}
+
+.title {
+	font-size: 2.71rem;
+	color: vars.$black_hard;
+	text-transform: uppercase;
+	font-family: 'Intro';
+	margin: func.adapt(15px, 1920px) 0;
+}
+
+.block__content {
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

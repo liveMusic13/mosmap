@@ -48,12 +48,7 @@
 	padding: func.adapt(10px, 1920px) func.adapt(8px, 1920px);
 }
 
-@mixin filter_header() {
-	.title {
-		font-weight: 700;
-		font-size: 1rem;
-	}
-
+@mixin line() {
 	.line {
 		margin-top: func.adapt(10px, 1920px);
 		margin-bottom: func.adapt(5px, 1920px);
@@ -61,4 +56,13 @@
 		height: 1px;
 		border-bottom: 1px dotted vars.$grey_lines;
 	}
+}
+
+@mixin filter_header() {
+	.title {
+		font-weight: 700;
+		font-size: 1rem;
+	}
+
+	@include line();
 }

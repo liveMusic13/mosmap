@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, useCallback } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -21,6 +21,8 @@ import { settingsArr, standardArr } from '@/data/options.data';
 
 const Options: FC = () => {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
 
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
 	const { isFilters, setIsFilters } = useFiltersStore(store => store);
@@ -33,7 +35,11 @@ const Options: FC = () => {
 	const token = Cookies.get(TOKEN);
 
 	const onClick = useCallback((id: number) => {
-		if (id === 2) {
+		if (id === 0) {
+			router.push(`/import?map=${map}`);
+		} else if (id === 1) {
+			router.push(`/export?map=${map}`);
+		} else if (id === 2) {
 			useFiltersStore.setState(state => {
 				if (!state.isFilters) {
 					setIsActiveAddObject(false);

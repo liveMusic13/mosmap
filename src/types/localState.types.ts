@@ -13,3 +13,9 @@ export interface IPopupErrorInConfirmPage {
 	status?: string;
 	error?: boolean;
 }
+
+export interface IExportCheckboxData {
+	id: number;
+	name: string;
+	isCheck: boolean;
+}

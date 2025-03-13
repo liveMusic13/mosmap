@@ -7,7 +7,6 @@ import Button from '../button/Button';
 import styles from './Popup.module.scss';
 import { colors } from '@/app.constants';
 
-//TODO: Сделать из этого попапа и для авторизации и для подтверждений, просто через условие. Чтобы не дублировать компоненты попапа
 const Popup: FC<IPopup> = ({
 	message,
 	functions,

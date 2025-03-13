@@ -1,0 +1,58 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_options {
+	padding: func.adapt(25px, 1920px);
+	border-radius: func.adapt(12px, 1920px);
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+	box-shadow: 0px 0px 10px rgba($color: vars.$green_light, $alpha: 0.3);
+}
+
+.block__title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: func.adapt(25px, 1920px);
+
+	> button {
+		text-transform: uppercase;
+		width: func.adapt(125px, 1920px);
+		height: func.adapt(40px, 1920px);
+		font-size: 1rem;
+		transition:
+			font-size 0.3s ease,
+			width 0.3s ease,
+			height 0.3s ease;
+
+		&:hover {
+			font-size: 1.08rem;
+			width: func.adapt(130px, 1920px);
+			height: func.adapt(45px, 1920px);
+		}
+	}
+}
+
+.title {
+	font-size: 1.57rem;
+	font-weight: 700;
+	color: vars.$black_hard;
+}
+
+.line {
+	margin-top: func.adapt(25px, 1920px);
+	margin-bottom: func.adapt(15px, 1920px);
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px dotted vars.$grey_lines;
+}
+
+.block__content {
+	border-radius: func.adapt(11px, 1920px);
+	background-color: vars.$blue_very_light;
+
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-grow: 1;
+	@include mix.scrollbar();
+}

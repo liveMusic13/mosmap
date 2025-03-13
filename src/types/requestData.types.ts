@@ -110,3 +110,21 @@ export interface IDotInfoData {
 	name: string;
 	value: string;
 }
+
+export interface IImportResponse {
+	encoding: string;
+	file_field: string[];
+	list_field: {
+		[key: string]: string;
+	};
+	separator: string;
+	text_field: {
+		[key: string]: string;
+	};
+	uploadfile: string;
+}
+
+export interface IExportResponse {
+	OK: boolean;
+	filename: string;
+}

@@ -164,3 +164,25 @@ export interface IInfoBlock {
 export interface IInfoZone {
 	value_info: IDotInfoData;
 }
+
+export interface IContentOptions {
+	title: string;
+}
+
+export interface IBlockOptions {
+	isImport?: boolean;
+}
+
+export interface IBlockParam {
+	field: string;
+	title: string;
+	select?: {
+		optionsSelect: string[];
+		targetValue: string;
+	};
+	inputValue?: string;
+	functions?: {
+		select?: (el: IItemFilter) => void;
+		input?: (e: ChangeEvent<HTMLInputElement>) => void;
+	};
+}

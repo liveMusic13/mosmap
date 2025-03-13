@@ -21,8 +21,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const canvasLayerRef = useRef<Canvas | null>(null);
 	const markersLayerRef = useRef<L.LayerGroup | null>(null);
 
-	//TODO: Сделать значок таргета когда тыкаешь на объект или когда он находится в таргете
-
 	useEffect(() => {
 		if (!map) return;
 		//HELP: Если слой уже существует, очищаем его

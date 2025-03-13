@@ -11,6 +11,11 @@
 		func.adapt(10px, 1920px) func.adapt(16px, 1920px);
 
 	position: relative;
+
+	@media (max-width: 991.98px) {
+		padding: func.adapt(5px, 1920px) func.adapt(37px, 1920px)
+			func.adapt(5px, 1920px) func.adapt(11px, 1920px);
+	}
 }
 
 .input {
