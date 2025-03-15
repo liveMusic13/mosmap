@@ -11,8 +11,8 @@ import styles from './BlockOptions.module.scss';
 import ExportOptions from './export-options/ExportOptions';
 import ImportDoneOptions from './import-done-options/ImportDoneOptions';
 import ImportOptions from './import-options/ImportOptions';
+import SettingsOptions from './settings-options/SettingsOptions';
 
-//TODO: Доделать опции для импорта
 const BlockOptions: FC<IBlockOptions> = () => {
 	const pathname = usePathname();
 	const router = useRouter();
@@ -23,9 +23,9 @@ const BlockOptions: FC<IBlockOptions> = () => {
 				? 'Выгрузка данных'
 				: pathname === '/import/done'
 					? 'Настройка данных для загрузки на сервер'
-					: '';
-
-	console.log('pathname', pathname);
+					: pathname === '/settings-map'
+						? 'Настройка карты'
+						: '';
 
 	const handleBack = () => router.back();
 
@@ -42,6 +42,7 @@ const BlockOptions: FC<IBlockOptions> = () => {
 				{pathname === '/import' && <ImportOptions />}
 				{pathname === '/export' && <ExportOptions />}
 				{pathname === '/import/done' && <ImportDoneOptions />}
+				{pathname === '/settings-map' && <SettingsOptions />}
 			</div>
 		</div>
 	);

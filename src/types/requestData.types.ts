@@ -92,6 +92,12 @@ export interface INewpassData {
 	token: string;
 }
 
+export interface INewpassClientData {
+	password: string;
+	oldpassword: string;
+	map: string | number;
+}
+
 export interface IRegistrResponse {
 	message: string;
 	status: string;
@@ -127,4 +133,27 @@ export interface IImportResponse {
 export interface IExportResponse {
 	OK: boolean;
 	filename: string;
+}
+
+export interface IImportDoneResponse {
+	add_rows: number;
+	read_rows: number;
+	update_rows: number;
+}
+
+export interface ISaveSettingsMapResponse {
+	autosize: string;
+	clastering: string;
+	descr: string;
+	iconsize: string;
+	radius: string;
+	save_status: string;
+	showanalytic: string;
+	showhouses: string;
+	tiles_id: string;
+	title: string;
+	tiles_list: {
+		name: string;
+		id: string;
+	}[];
 }

@@ -66,6 +66,11 @@ const Options: FC = () => {
 			// }));
 		}
 	}, []);
+	const handleClick = useCallback((id: number) => {
+		if (id === 5) {
+			router.push(`/settings-map?map=${map}`);
+		}
+	}, []);
 
 	const personActiveStyle = (id: number): CSSProperties | undefined => {
 		if (id === 4) {
@@ -136,6 +141,7 @@ const Options: FC = () => {
 							justifyContent: 'center',
 							position: 'relative',
 						}}
+						onClick={() => handleClick(opt.id)}
 					>
 						<svg className={styles.icon_svg} style={{ color: colors.green }}>
 							<use

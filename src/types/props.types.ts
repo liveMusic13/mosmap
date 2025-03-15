@@ -91,6 +91,7 @@ export interface ICheckbox {
 }
 
 export interface ISelect {
+	absoluteOptions?: boolean;
 	items: IItemFilter[];
 	handleClick: (el: IItemFilter) => void;
 	queryName?: string;
@@ -185,4 +186,5 @@ export interface IBlockParam {
 		select?: (el: IItemFilter) => void;
 		input?: (e: ChangeEvent<HTMLInputElement>) => void;
 	};
+	absoluteOptionsForSelect?: boolean;
 }

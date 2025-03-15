@@ -5,6 +5,8 @@ import Button from '@/components/ui/button/Button';
 
 import { IItemFilter } from '@/types/requestData.types';
 
+import { useQueryKeysForGetCacheDataStore } from '@/store/store';
+
 import { useImport } from '@/hooks/useImport';
 
 import { truncateDescription } from '@/utils/editTexts';
@@ -20,6 +22,10 @@ const ImportOptions: FC = () => {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+
+	const setNewCache = useQueryKeysForGetCacheDataStore(
+		store => store.setNewCache,
+	);
 
 	const [separator, setSeparator] = useState<string>(';');
 	const [targetOption, setTargetOption] = useState<string>('UTF-8');
@@ -38,6 +44,7 @@ const ImportOptions: FC = () => {
 	const handleUpload = () => {
 		if (map && selectedFile)
 			mutate({ map, file: selectedFile, separator, encoding: targetOption });
+		setNewCache({ separator, encoding: targetOption });
 	};
 	const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
 		const file = target.files;

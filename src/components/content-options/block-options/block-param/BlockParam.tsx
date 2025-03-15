@@ -6,6 +6,7 @@ import Select from '@/components/ui/select/Select';
 import { IBlockParam } from '@/types/props.types';
 
 import styles from './BlockParam.module.scss';
+import { colors } from '@/app.constants';
 
 const BlockParam: FC<IBlockParam> = ({
 	field,
@@ -13,6 +14,7 @@ const BlockParam: FC<IBlockParam> = ({
 	select,
 	functions,
 	inputValue,
+	absoluteOptionsForSelect,
 }) => {
 	const formatOptions = select?.optionsSelect?.map((el, ind) => ({
 		item_name: el,
@@ -25,6 +27,7 @@ const BlockParam: FC<IBlockParam> = ({
 			<div className={styles.block__filter}>
 				{field === 'select' && functions?.select && (
 					<Select
+						absoluteOptions={absoluteOptionsForSelect}
 						items={formatOptions || []}
 						handleClick={functions.select}
 						forInfo={{ isInfo: true, value: select?.targetValue || '' }}
@@ -38,6 +41,7 @@ const BlockParam: FC<IBlockParam> = ({
 						style={{
 							width: 'calc(300/1920*100vw)',
 							height: 'calc(40/1920*100vw)',
+							backgroundColor: colors.white,
 						}}
 						styleInput={{ height: '100%', fontSize: '1rem' }}
 					/>

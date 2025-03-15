@@ -1,6 +1,6 @@
 import { LatLngExpression } from 'leaflet';
 
-import { IMarker } from './requestData.types';
+import { IImportResponse, IMarker } from './requestData.types';
 
 export interface IListOfObjectsStore {
 	isListOfObjects: boolean;
@@ -98,4 +98,14 @@ export interface IDotInfoCoordsStore {
 		lng: number;
 	};
 	setCoords: (coords: { lat: number; lng: number }) => void;
+}
+
+export interface IQueryKeysForGetCacheDataStore {
+	separator: string;
+	encoding: string;
+	setNewCache: (data: { separator: string; encoding: string }) => void;
+}
+
+export interface IImportResponseStore extends IImportResponse {
+	setImportResponse: (data: IImportResponse) => void;
 }

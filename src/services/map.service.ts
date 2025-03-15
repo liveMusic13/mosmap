@@ -8,6 +8,7 @@ import {
 	IDotInfoData,
 	IHelpSearchAddress,
 	IMarker,
+	ISaveSettingsMapResponse,
 } from '@/types/requestData.types';
 
 import { $axios } from '@/api';
@@ -269,6 +270,39 @@ export const mapService = {
 			};
 		}
 	},
+	save_settings_map: async (): Promise<
+		IApiResponse<
+			ISaveSettingsMapResponse | AxiosError<{ message?: string }> | Error
+		>
+	> => {
+		try {
+			const response: AxiosResponse<ISaveSettingsMapResponse> =
+				await $axios.get(`/api/save_settings.php`);
+
+			return {
+				status: response.status,
+				data: response.data,
+			};
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
 	delete_object: async (
 		id: number | null,
 	): Promise<
@@ -347,6 +381,12 @@ export const mapService = {
 	}): Promise<
 		IApiResponse<IDotInfoData[] | AxiosError<{ message?: string }> | Error>
 	> => {
+		if (coords.lat === 0 && coords.lng === 0)
+			return {
+				status: 500,
+				data: { message: 'Нет координат' } as AxiosError | Error,
+			};
+
 		try {
 			const response = await $axios.get(
 				`/api/dot_info.php?lat=${coords.lat}&lng=${coords.lng}`,

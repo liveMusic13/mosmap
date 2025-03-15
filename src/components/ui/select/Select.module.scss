@@ -70,6 +70,15 @@
 	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
 }
 
+.absoluteOptions {
+	position: absolute;
+	left: 0;
+	top: func.adapt(5px, 1920px);
+	z-index: 20;
+	height: func.adapt(300px, 1920px);
+	margin-top: func.adapt(40px, 1920px);
+}
+
 .option {
 	padding: func.adapt(5px, 1920px) func.adapt(10px, 1920px);
 	font-size: 1rem;

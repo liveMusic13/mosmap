@@ -1,0 +1,44 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_importDoneOptions {
+	padding: func.adapt(20px, 1920px);
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(20px, 1920px);
+
+	> button {
+		text-transform: uppercase;
+		width: 100%;
+		height: func.adapt(40px, 1920px);
+		font-size: 1rem;
+		box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
+
+		transition:
+			font-size 0.3s ease,
+			width 0.3s ease,
+			height 0.3s ease;
+
+		&:hover {
+			cursor: pointer;
+			width: 101%;
+			height: func.adapt(45px, 1920px);
+			font-size: 1.08rem;
+		}
+	}
+}
+
+.block__select {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: func.adapt(15px, 1920px);
+}
+
+.block__id {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+}
+
+@include mix.line();

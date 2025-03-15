@@ -7,10 +7,12 @@ import {
 	IDotInfoCoordsStore,
 	IFiltersStore,
 	IIdObjectInfoStore,
+	IImportResponseStore,
 	IListOfObjectsStore,
 	IMapLayersStore,
 	IObjectInfoStore,
 	IPopupStore,
+	IQueryKeysForGetCacheDataStore,
 	ISearchAddressStore,
 	ISelectAreaStore,
 	ITargetObjectStore,
@@ -119,4 +121,22 @@ export const useDotInfoCoordsStore = create<IDotInfoCoordsStore>(set => ({
 		lng: 0,
 	},
 	setCoords: coords => set({ coords: coords }),
+}));
+///
+export const useQueryKeysForGetCacheDataStore =
+	create<IQueryKeysForGetCacheDataStore>(set => ({
+		encoding: '',
+		separator: '',
+		setNewCache: data => set({ ...data }),
+	}));
+///
+
+export const useImportResponseStore = create<IImportResponseStore>(set => ({
+	encoding: '',
+	file_field: [],
+	list_field: {},
+	separator: '',
+	text_field: {},
+	uploadfile: '',
+	setImportResponse: data => set({ ...data }),
 }));

@@ -24,7 +24,7 @@ const Filters: FC = () => {
 
 	const { isClear, setIsClear } = useClearAllFiltersStore(store => store);
 
-	const { data: dataFilters, isLoading } = useGetFilters(map);
+	const { data: dataFilters, isLoading, isSuccess } = useGetFilters(map);
 
 	useEffect(() => {
 		if (isClear) {
@@ -72,11 +72,17 @@ const Filters: FC = () => {
 						}}
 					/>
 				)}
-				{dataFilters?.map(el => {
-					if (el.type === 'number' || el.type === 'map' || el.type === 'list') {
-						return <FilterBlock key={el.id} filter={el} />;
-					}
-				})}
+				{isSuccess &&
+					typeof dataFilters !== 'string' &&
+					dataFilters?.map(el => {
+						if (
+							el.type === 'number' ||
+							el.type === 'map' ||
+							el.type === 'list'
+						) {
+							return <FilterBlock key={el.id} filter={el} />;
+						}
+					})}
 				{!isLoading && <FilterCalendar />}
 			</div>
 			<Button

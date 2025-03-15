@@ -1,11 +1,13 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import dynamic from 'next/dynamic';
 import { CSSProperties, FC, useCallback } from 'react';
 
 import Filters from '@/components/content/filters/Filters';
+
+import QueryProvider from '@/providers/QueryProvider';
 
 import { IContent } from '@/types/props.types';
 
@@ -103,7 +105,8 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	};
 
 	return (
-		<QueryClientProvider client={queryClient}>
+		// <QueryClientProvider client={queryClient}>
+		<QueryProvider>
 			{/* HELP: Для того чтобы когда глобально вызывается попап, затемнялась область за ним не только в блоке контента, но и во всем приложении */}
 			{isPopup && <BackgroundOpacity />}
 			<div className={styles.wrapper_content}>
@@ -157,7 +160,9 @@ const Content: FC<IContent> = ({ dataMap }) => {
 					</div>
 				</div>
 			</div>
-		</QueryClientProvider>
+		</QueryProvider>
+
+		// </QueryClientProvider>
 	);
 };
 

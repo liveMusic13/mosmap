@@ -3,11 +3,13 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
 import {
+	INewpassClientData,
 	INewpassData,
 	IRegistrationData,
 	IRestoreData,
 } from '@/types/requestData.types';
 
+import { $axios } from '@/api';
 import { ACCESSIBLYMAP, API_URL, TOKEN } from '@/app.constants';
 
 export const authService = {
@@ -77,6 +79,18 @@ export const authService = {
 	newpass: async (data: INewpassData) => {
 		try {
 			const { data: dataResponse } = await axios.post(
+				`${API_URL}/api/newpass.php`,
+				data,
+			);
+			console.log('dataResponse', dataResponse);
+			return dataResponse;
+		} catch (error) {
+			console.log(error);
+		}
+	},
+	newpass_client: async (data: INewpassClientData) => {
+		try {
+			const { data: dataResponse } = await $axios.post(
 				`${API_URL}/api/newpass.php`,
 				data,
 			);

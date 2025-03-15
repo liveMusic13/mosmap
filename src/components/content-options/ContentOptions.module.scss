@@ -8,10 +8,11 @@
 	height: calc(
 		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(163px, 1920px)}
 	);
+	// height: 100%; // Добавить эту строку
+
 	display: flex;
 	flex-direction: column;
 	position: relative; // HELP: для лоадера
-	// flex-grow: 1;
 }
 
 .title {
@@ -23,8 +24,11 @@
 }
 
 .block__content {
-	flex-grow: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	// overflow-x: hidden;
+	overflow: hidden;
+	flex-grow: 1;
 }

@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 import {
 	IApiResponse,
 	IExportResponse,
+	IImportDoneResponse,
 	IImportResponse,
 } from '@/types/requestData.types';
 
@@ -36,6 +37,51 @@ export const dataService = {
 			return {
 				data: response.data,
 				status: response.status,
+			};
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
+	import_done: async (
+		map: number | string,
+		option: { uploadfile: string; separator: string; encoding: string },
+		requestBody: { [key: string]: string },
+	): Promise<
+		IApiResponse<IImportDoneResponse | AxiosError<{ message?: string }> | Error>
+	> => {
+		const { encoding, separator, uploadfile } = option;
+		try {
+			const data = {
+				uploadfile: uploadfile,
+				separator: separator,
+				encoding: encoding,
+				...requestBody,
+			};
+
+			const response = await $axios.post(
+				`/api/import_done.php?map=${map}`,
+				data,
+			);
+
+			return {
+				status: response.status,
+				data: response.data,
 			};
 		} catch (err) {
 			//HELP: Типизируем ошибку как AxiosError или Error

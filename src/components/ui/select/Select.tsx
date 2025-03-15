@@ -9,7 +9,13 @@ import { useClearAllFiltersStore } from '@/store/store';
 
 import styles from './Select.module.scss';
 
-const Select: FC<ISelect> = ({ items, handleClick, queryName, forInfo }) => {
+const Select: FC<ISelect> = ({
+	items,
+	handleClick,
+	queryName,
+	forInfo,
+	absoluteOptions,
+}) => {
 	const searchParams = useSearchParams();
 	const nameSelect = searchParams.get(queryName || '');
 	const isClear = useClearAllFiltersStore(store => store.isClear);
@@ -61,7 +67,13 @@ const Select: FC<ISelect> = ({ items, handleClick, queryName, forInfo }) => {
 				/>
 			</div>
 			{isOptions && (
-				<div className={styles.options}>
+				<div
+					className={
+						absoluteOptions
+							? `${styles.options} ${styles.absoluteOptions}`
+							: `${styles.options}`
+					}
+				>
 					{items.map(el => (
 						<p
 							key={el.item_id}
