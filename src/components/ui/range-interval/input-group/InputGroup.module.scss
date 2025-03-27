@@ -1,0 +1,78 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.wrapper__input-group {
+	display: flex;
+	align-items: center;
+	// gap: func.adapt(5px, 1920px);
+	justify-content: space-between;
+	height: func.adapt(30px, 1920px);
+	width: 100%;
+
+	> button {
+		text-transform: uppercase;
+		color: vars.$black_hard;
+		background-color: transparent;
+		// width: 98%;
+		// height: func.adapt(40px, 1920px);
+		font-size: 1.5rem;
+		// box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
+
+		transition: font-size 0.3s ease;
+		// width 0.3s ease,
+		// height 0.3s ease;
+
+		&:hover {
+			cursor: pointer;
+			// width: 100%;
+			// height: func.adapt(45px, 1920px);
+			font-size: 1.58rem;
+		}
+
+		&:disabled {
+			cursor: default;
+			font-size: 1.5rem;
+		}
+	}
+
+	> span {
+	}
+
+	> input {
+		font-size: 1rem;
+		max-width: 27%;
+		height: func.adapt(30px, 1920px);
+		// flex-grow: 1;
+		border-radius: func.adapt(4px, 1920px);
+		border: 1px solid vars.$grey_middle;
+		background-color: transparent;
+		padding: func.adapt(10px, 1920px) func.adapt(42px, 1920px)
+			func.adapt(10px, 1920px) func.adapt(16px, 1920px);
+		outline: none;
+		position: relative;
+
+		@media (max-width: 991.98px) {
+			padding: func.adapt(5px, 1920px) func.adapt(37px, 1920px)
+				func.adapt(5px, 1920px) func.adapt(11px, 1920px);
+		}
+	}
+}
+
+.color-placeholder {
+	width: func.adapt(59px, 1920px);
+	height: func.adapt(30px, 1920px);
+}
+
+.color {
+	width: func.adapt(59px, 1920px);
+	height: func.adapt(30px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		width: func.adapt(65px, 1920px);
+		height: func.adapt(33px, 1920px);
+	}
+}

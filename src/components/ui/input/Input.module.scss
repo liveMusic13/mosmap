@@ -18,6 +18,12 @@
 	}
 }
 
+.disabled {
+	pointer-events: none;
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
 .input {
 	color: vars.$black;
 	outline: none;

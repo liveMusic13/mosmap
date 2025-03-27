@@ -1,5 +1,7 @@
 import { LatLngExpression } from 'leaflet';
 
+import { IIntervals } from './props.types';
+
 export interface IValuesObjectInfo {
 	disabled: number;
 	el: string;
@@ -156,4 +158,72 @@ export interface ISaveSettingsMapResponse {
 		name: string;
 		id: string;
 	}[];
+}
+
+export interface IMapResponse {
+	id: number;
+	mode: number;
+	name: string;
+	visible: number;
+}
+
+export interface IFieldsResponse {
+	id: number;
+	address: number;
+	name: string;
+	namefield: number;
+	nameonmap: number;
+	type: string;
+	type_name: string;
+}
+
+export interface IListsResponse {
+	id: number;
+	mode: number;
+	name: string;
+	color: number;
+	icon: number;
+}
+
+export interface IIntervalObject {
+	field_id: number;
+	min_value: number;
+	max_value: number;
+	sloi: number;
+	type: number;
+	values?: IIntervals[];
+	//  {
+	// 	color: string;
+	// 	max: number;
+	// 	min: number;
+	// }[];
+}
+
+export interface IModeListObject {
+	field_visible: number;
+	interval_visible: number;
+	id: number;
+	name: string;
+}
+
+export interface INumAndSloiFieldsObject {
+	id: number;
+	name: string;
+}
+
+export interface IColorIntervalResponse {
+	current_field: number | string;
+	current_mode: number | string;
+	current_sloi: number | string;
+	intervals: IIntervalObject[];
+	mode_list: IModeListObject[];
+	num_fields: INumAndSloiFieldsObject[];
+	sloi_fields: INumAndSloiFieldsObject[];
+}
+
+export interface IColorMapResponse {
+	color: string;
+	id: number;
+	name: string;
+	polygon: LatLngExpression[] | LatLngExpression[][] | LatLngExpression[][][];
 }

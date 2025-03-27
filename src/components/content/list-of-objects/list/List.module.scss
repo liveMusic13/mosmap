@@ -10,6 +10,10 @@
 	padding: func.adapt(11px, 1920px);
 	border-bottom: 1px dotted vars.$grey_middle;
 
+	&:hover {
+		background-color: vars.$blue_very_light;
+	}
+
 	> button {
 		&:hover + .hover__text {
 			display: block;

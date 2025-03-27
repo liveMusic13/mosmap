@@ -1,0 +1,13 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_rowDatabaseOptions {
+	display: contents;
+}
+
+.position {
+	grid-column: 1;
+	font-size: 1.42rem;
+	font-weight: 700;
+}

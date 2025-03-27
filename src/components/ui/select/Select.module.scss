@@ -10,6 +10,12 @@
 	max-height: func.adapt(300px, 1920px);
 }
 
+.disabled {
+	pointer-events: none;
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
 .select {
 	width: 100%;
 	// height: 100%;

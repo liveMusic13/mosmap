@@ -17,9 +17,13 @@ const Input: FC<IInput> = ({
 	srcImage,
 	style,
 	callback,
+	disabled,
 }) => {
 	return (
-		<div className={styles.block__input} style={style}>
+		<div
+			className={`${styles.block__input} ${disabled ? styles.disabled : ''}`}
+			style={style}
+		>
 			<input
 				type={type}
 				value={value}
@@ -27,6 +31,7 @@ const Input: FC<IInput> = ({
 				placeholder={placeholder}
 				style={styleInput}
 				className={styles.input}
+				disabled={disabled}
 			/>
 			{srcImage && (
 				<Image

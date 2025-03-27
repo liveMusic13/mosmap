@@ -7,13 +7,18 @@ import {
 } from 'react';
 
 import { IFormAuth } from './data.types';
-import { ICalendarState } from './localState.types';
+import { ICalendarState, IEditableData } from './localState.types';
 import {
 	IDataFilters,
 	IDataMap,
 	IDotInfoData,
+	IFieldsResponse,
+	IIntervalObject,
 	IItemFilter,
+	IListsResponse,
+	IMapResponse,
 	IMarker,
+	INumAndSloiFieldsObject,
 	IRegistrResponse,
 	IValuesObjectInfo,
 } from './requestData.types';
@@ -65,6 +70,7 @@ export interface IInput {
 	heightImage?: number;
 	srcImage?: string;
 	style?: CSSProperties;
+	disabled?: boolean;
 }
 
 export interface IFilterBlock {
@@ -90,7 +96,13 @@ export interface ICheckbox {
 	styleCheckbox?: CSSProperties;
 }
 
+export interface ICheckboxCircle extends ICheckbox {
+	disabled?: boolean;
+}
+
 export interface ISelect {
+	disabled?: boolean;
+	style?: CSSProperties;
 	absoluteOptions?: boolean;
 	items: IItemFilter[];
 	handleClick: (el: IItemFilter) => void;
@@ -187,4 +199,82 @@ export interface IBlockParam {
 		input?: (e: ChangeEvent<HTMLInputElement>) => void;
 	};
 	absoluteOptionsForSelect?: boolean;
+}
+
+export interface IRowDatabaseOptions {
+	data: IFieldsResponse | IMapResponse | IListsResponse;
+	position: number;
+
+	editableData?: IEditableData;
+	onUpdate: (id: number, field: keyof IEditableData, value: any) => void;
+}
+
+export interface IBlockIntervalParam {
+	title: string;
+	options: INumAndSloiFieldsObject[];
+	targetValue: string;
+	absoluteOptionsForSelect: boolean;
+}
+
+export interface IColorPicker {
+	color: string;
+	onClick: () => void;
+	handleColorChange: (color: string) => void;
+}
+
+export interface IInputGroup {
+	index: number;
+	inputValues: {
+		min: string;
+		max: string;
+	}[];
+	interval: {
+		min: number;
+		max: number;
+		color?: string;
+	};
+	disableMin?: boolean;
+	disableMax?: boolean;
+	handleInputChange: (
+		index: number,
+		field: 'min' | 'max',
+		e: ChangeEvent<HTMLInputElement>,
+	) => void;
+	handleInputBlurWrapper: (
+		index: number,
+		field: 'min' | 'max',
+		e: React.FocusEvent<HTMLInputElement>,
+	) => void;
+	setRangeData: Dispatch<SetStateAction<IIntervals[]>>;
+	rangeData: IIntervals[];
+}
+
+export interface IIntervals {
+	min: number;
+	max: number;
+	color: string;
+}
+
+export interface IRangeIntervalProps {
+	// intervals: IIntervals[];
+	// min_value: number;
+	// max_value: number;
+	intervalsObject: IIntervalObject;
+	isViewInputsInterval: boolean;
+	isViewFieldSelect: boolean;
+}
+
+export interface IUseRangeIntervalLogicProps {
+	intervals: IIntervals[];
+	min_value: number;
+	max_value: number;
+}
+
+export interface IUseRangeIntervalLogicReturn {
+	rangeData: IIntervals[];
+	sliderPositions: number[];
+	handleSliderChange: (index: number, newValue: number) => void;
+	handleInputBlur: (index: number, field: 'min' | 'max', value: string) => void;
+	setRangeData: Dispatch<SetStateAction<IIntervals[]>>;
+	handleAddNewInterval: () => void;
 }

@@ -1,0 +1,32 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_colorInterval {
+	width: func.adapt(454px, 1920px);
+	padding: func.adapt(20px, 1920px) func.adapt(16px, 1920px)
+		func.adapt(16px, 1920px);
+	box-shadow: 0px 2px 15px rgba($color: #000000, $alpha: 0.1);
+	border-radius: func.adapt(12px, 1920px);
+	display: flex;
+	flex-direction: column;
+}
+
+.title {
+	font-weight: 700;
+	font-size: 1.57rem;
+}
+
+.block__content {
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(20px, 1920px);
+	margin-top: func.adapt(16px, 1920px);
+
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-grow: 1;
+	@include mix.scrollbar();
+
+	position: relative;
+}

@@ -4,6 +4,7 @@ import {
 	IActiveAddObjectStore,
 	ICenterMapStore,
 	IClearAllFiltersStore,
+	IColorsIntervalStore,
 	IDotInfoCoordsStore,
 	IFiltersStore,
 	IIdObjectInfoStore,
@@ -15,6 +16,7 @@ import {
 	IQueryKeysForGetCacheDataStore,
 	ISearchAddressStore,
 	ISelectAreaStore,
+	ISuccessSaveColorsIntervalStore,
 	ITargetObjectStore,
 	IToggleViewAreaStore,
 	IViewDotInfoStore,
@@ -140,3 +142,17 @@ export const useImportResponseStore = create<IImportResponseStore>(set => ({
 	uploadfile: '',
 	setImportResponse: data => set({ ...data }),
 }));
+
+export const useColorsIntervalStore = create<IColorsIntervalStore>(set => ({
+	isColorInterval: false,
+	setIsColorInterval: bol => set({ isColorInterval: bol }),
+}));
+
+export const useSuccessSaveColorsIntervalStore =
+	create<ISuccessSaveColorsIntervalStore>(set => ({
+		isSuccessSaveColorsInterval: false,
+		ranges_color_map: '',
+		setRanges_color_map: str => set({ ranges_color_map: str }),
+		setIsSuccessSaveColorsInterval: bol =>
+			set({ isSuccessSaveColorsInterval: bol }),
+	}));

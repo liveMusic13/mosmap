@@ -7,6 +7,7 @@ import Line from '@/components/ui/line/Line';
 
 import {
 	useActiveAddObjectStore,
+	useColorsIntervalStore,
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useListOfObjectsStore,
@@ -30,6 +31,9 @@ const Options: FC = () => {
 	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
 	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
 		store => store,
+	);
+	const isColorInterval = useColorsIntervalStore(
+		store => store.isColorInterval,
 	);
 
 	const token = Cookies.get(TOKEN);
@@ -61,14 +65,17 @@ const Options: FC = () => {
 			} else {
 				router.push('/auth');
 			}
-			// useFiltersStore.setState(state => ({
-			// 	isFilters: !state.isFilters,
-			// }));
+		} else if (id === 7) {
+			useColorsIntervalStore.setState(state => ({
+				isColorInterval: !state.isColorInterval,
+			}));
 		}
 	}, []);
 	const handleClick = useCallback((id: number) => {
 		if (id === 5) {
 			router.push(`/settings-map?map=${map}`);
+		} else if (id === 6) {
+			router.push(`/settings-database?map=${map}`);
 		}
 	}, []);
 
@@ -76,6 +83,10 @@ const Options: FC = () => {
 		if (id === 4) {
 			return {
 				color: isActiveAddObject ? colors.red : colors.green,
+			};
+		} else if (id === 7) {
+			return {
+				color: isColorInterval ? colors.red : colors.green,
 			};
 		} else {
 			return { color: colors.green };

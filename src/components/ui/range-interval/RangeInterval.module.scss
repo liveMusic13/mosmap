@@ -1,0 +1,102 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.range_wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: func.adapt(5px, 1920px);
+	// padding: 0 func.adapt(20px, 1920px);
+}
+
+.range-container {
+	position: relative;
+	height: func.adapt(70px, 1920px);
+	width: 100%;
+	padding: func.adapt(5px, 1920px) 0;
+	touch-action: none;
+	display: flex;
+	justify-content: space-between;
+}
+
+.range-track {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: rgba($color: vars.$grey_lines, $alpha: 0.6);
+	transform: translateY(-50%);
+	border-radius: 2px;
+}
+
+.range-thumb {
+	position: absolute;
+	width: func.adapt(14px, 1920px);
+	height: func.adapt(14px, 1920px);
+	background: vars.$white;
+	border: 1px solid vars.$green;
+	border-radius: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+	z-index: 2;
+	transition: transform 0.2s;
+
+	&:hover {
+		transform: translate(-50%, -50%) scale(1.1);
+	}
+}
+
+.range-value {
+	position: absolute;
+	bottom: 50%; /*HELP: распологаем над ползунком */
+	left: 50%;
+	transform: translate(-50%, -8px);
+	background: vars.$white;
+	padding: 2px 4px;
+	border-radius: 2px;
+	font-size: 0.75rem;
+	color: vars.$green;
+	white-space: nowrap;
+	box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+}
+
+.range-values-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(5px, 1920px);
+}
+
+.block__buttons {
+	margin-top: func.adapt(20px, 1920px);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(10px, 1920px);
+
+	> button {
+		width: 98%;
+		height: func.adapt(40px, 1920px);
+		font-size: 1rem;
+		box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
+
+		transition:
+			font-size 0.3s ease,
+			width 0.3s ease,
+			height 0.3s ease;
+
+		&:hover {
+			cursor: pointer;
+			width: 100%;
+			height: func.adapt(45px, 1920px);
+			font-size: 1.08rem;
+		}
+
+		&:disabled {
+			cursor: default;
+			font-size: 1rem;
+		}
+	}
+}

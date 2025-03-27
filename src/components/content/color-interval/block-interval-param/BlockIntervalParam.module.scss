@@ -1,0 +1,9 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+@include mix.filter_header();
+
+.title {
+	margin-bottom: func.adapt(15px, 1920px);
+}

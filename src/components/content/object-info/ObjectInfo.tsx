@@ -216,10 +216,10 @@ const ObjectInfo: FC = () => {
 						style={{
 							width: 'calc(50/1920*100vw)',
 							height: 'calc(50/1920*100vw)',
-							position: 'absolute',
-							top: '50%',
-							left: '50%',
-							transform: 'translate(-50%, -50%)',
+							// position: 'absolute',
+							// top: '50%',
+							// left: '50%',
+							// transform: 'translate(-50%, -50%)',
 						}}
 					/>
 				)}

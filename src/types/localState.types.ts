@@ -19,3 +19,17 @@ export interface IExportCheckboxData {
 	name: string;
 	isCheck: boolean;
 }
+
+export interface IEditableData {
+	id: number;
+	name?: string;
+	namefield?: number;
+	nameonmap?: number;
+	address?: number;
+	mode?: number;
+	color?: number;
+	icon?: number;
+	visible?: number;
+	type?: string;
+	type_object: string;
+}

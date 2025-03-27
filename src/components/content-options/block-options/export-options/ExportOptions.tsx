@@ -1,13 +1,13 @@
 import { useSearchParams } from 'next/navigation';
-import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import Checkbox from '@/components/ui/checkbox/Checkbox';
 
-import { IExportCheckboxData } from '@/types/localState.types';
-import { IExportResponse, IItemFilter } from '@/types/requestData.types';
+import { IExportResponse } from '@/types/requestData.types';
 
 import { useExport } from '@/hooks/useExport';
+import { useImportExport } from '@/hooks/useImportExport';
 
 import BlockParam from '../block-param/BlockParam';
 
@@ -15,26 +15,21 @@ import styles from './ExportOptions.module.scss';
 import { API_URL } from '@/app.constants';
 
 const dataEncoding = ['UTF-8', 'Windows-1251'];
-//TODO: Сделать хук для импорта и экспорта со всеми функциями и состояниями
+
 const ExportOptions: FC = () => {
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
 
-	const [separator, setSeparator] = useState<string>(';');
-	const [targetOption, setTargetOption] = useState<string>('UTF-8');
-	const [nameFile, setNameFile] = useState<string>('test.csv');
-	const [checkboxData, setCheckboxData] = useState<IExportCheckboxData[]>([
-		{
-			id: 1,
-			name: 'Добавить координаты',
-			isCheck: false,
-		},
-		{
-			id: 2,
-			name: 'Добавить ID дома',
-			isCheck: false,
-		},
-	]);
+	const {
+		separator,
+		targetOption,
+		nameFile,
+		checkboxData,
+		onCallbackInputName,
+		onCallbackInput,
+		onCallbackSelect,
+		handleCheckboxClick,
+	} = useImportExport();
 
 	const dataForRequest = {
 		separator: separator,
@@ -55,24 +50,6 @@ const ExportOptions: FC = () => {
 		}
 	}, [data]);
 
-	const onCallbackInputName = useCallback(
-		(e: ChangeEvent<HTMLInputElement>) => setNameFile(e.target.value),
-		[],
-	);
-	const onCallbackSelect = useCallback((el: IItemFilter) => {
-		setTargetOption(el.item_name);
-	}, []);
-	const onCallbackInput = useCallback(
-		(e: ChangeEvent<HTMLInputElement>) => setSeparator(e.target.value),
-		[],
-	);
-	const handleCheckboxClick = (el: IExportCheckboxData) => {
-		setCheckboxData(prevData =>
-			prevData.map(item =>
-				item.id === el.id ? { ...item, isCheck: !item.isCheck } : item,
-			),
-		);
-	};
 	const handleExport = () => refetch();
 
 	return (

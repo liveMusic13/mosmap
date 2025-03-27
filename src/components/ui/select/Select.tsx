@@ -15,6 +15,8 @@ const Select: FC<ISelect> = ({
 	queryName,
 	forInfo,
 	absoluteOptions,
+	disabled,
+	style,
 }) => {
 	const searchParams = useSearchParams();
 	const nameSelect = searchParams.get(queryName || '');
@@ -50,12 +52,16 @@ const Select: FC<ISelect> = ({
 	};
 
 	return (
-		<div className={styles.wrapper_select}>
+		<div
+			className={`${styles.wrapper_select} ${disabled ? styles.disabled : ''}`}
+			style={style}
+		>
 			<div
 				className={styles.select}
-				onClick={() => {
-					setIsOptions(!isOptions);
-				}}
+				// onClick={() => {
+				// 	setIsOptions(!isOptions);
+				// }}
+				onClick={disabled ? undefined : () => setIsOptions(!isOptions)}
 			>
 				<p className={styles.name}>{target}</p>
 				<Image

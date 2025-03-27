@@ -1,0 +1,51 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_dataBaseOptions {
+	padding: func.adapt(20px, 1920px);
+	display: flex;
+	flex-direction: column;
+	gap: func.adapt(15px, 1920px);
+
+	> button {
+		align-self: flex-end;
+
+		width: func.adapt(190px, 1920px);
+		height: func.adapt(40px, 1920px);
+		font-size: 1rem;
+		box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
+
+		transition:
+			font-size 0.3s ease,
+			width 0.3s ease,
+			height 0.3s ease;
+
+		&:hover {
+			cursor: pointer;
+			width: func.adapt(200px, 1920px);
+			height: func.adapt(45px, 1920px);
+			font-size: 1.08rem;
+		}
+	}
+}
+
+.block__dataBaseOptions {
+	display: grid;
+	grid-template-columns: 1.42rem repeat(9, 1fr) 1.42rem;
+	gap: func.adapt(15px, 1920px);
+}
+
+.block__titles {
+	display: contents;
+}
+
+.title {
+	font-size: 1.28rem;
+	font-weight: 700;
+	grid-column: span 1;
+}
+
+.isCheckbox {
+	text-align: center;
+}

@@ -10,12 +10,15 @@ import { IRenderMarkers } from '@/types/props.types';
 import { useIdObjectInfoStore, useZoomLevelStore } from '@/store/store';
 
 import { useClickOnMarker } from '@/hooks/useClickOnMarker';
+import { useGetSizeMarker } from '@/hooks/useGetSizeMarkers';
 
 import { colors } from '@/app.constants';
 
 const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 	const zoomLevel = useZoomLevelStore(state => state.zoomLevel);
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+
+	const sizeMarker = useGetSizeMarker();
 
 	const handleClickOnMarker = useClickOnMarker();
 
@@ -45,21 +48,21 @@ const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 			if (idObjectInfo === mark.id) {
 				customMarkerIcon = divIcon({
 					className: 'my-custom-icon',
-					iconSize: [22, 22],
+					iconSize: sizeMarker,
 					html: renderToStaticMarkup(
 						<IconMarker
 							key={mark.id}
 							mark={{ ...mark, icon: 'target', color: colors.red }}
-							size={[22, 22]}
+							size={sizeMarker}
 						/>,
 					),
 				});
 			} else {
 				customMarkerIcon = divIcon({
 					className: 'my-custom-icon',
-					iconSize: [22, 22],
+					iconSize: sizeMarker,
 					html: renderToStaticMarkup(
-						<IconMarker key={mark.id} mark={mark} size={[22, 22]} />,
+						<IconMarker key={mark.id} mark={mark} size={sizeMarker} />,
 					),
 				});
 			}

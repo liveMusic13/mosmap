@@ -19,5 +19,6 @@ export const colors = {
 	orange: '#f39f21',
 	blue: '#215cf3',
 	blue_hard: '#0d2e57',
+	blue_very_light: '#f9fafd',
 	red: '#741411',
 };

@@ -2,11 +2,14 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import {
 	IApiResponse,
+	IColorIntervalResponse,
+	IColorMapResponse,
 	IDataFilters,
 	IDataMap,
 	IDeleteAndOtherResponses,
 	IDotInfoData,
 	IHelpSearchAddress,
+	IIntervalObject,
 	IMarker,
 	ISaveSettingsMapResponse,
 } from '@/types/requestData.types';
@@ -393,6 +396,118 @@ export const mapService = {
 			);
 
 			return { data: response.data, status: response.status };
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
+	color_interval: async (
+		map: string | number | null,
+	): Promise<
+		IApiResponse<
+			IColorIntervalResponse | AxiosError<{ message?: string }> | Error
+		>
+	> => {
+		if (!map) throw new Error('Номер карты не найден');
+
+		try {
+			const response = await $axios.get(`/api/color_interval.php?map=${map}`);
+			return {
+				status: response.status,
+				data: response.data,
+			};
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
+	color_interval_save: async (
+		map: string | number | null,
+		data: IIntervalObject,
+	): Promise<
+		IApiResponse<
+			IColorIntervalResponse | AxiosError<{ message?: string }> | Error
+		>
+	> => {
+		if (!map) throw new Error('Номер карты не найден');
+
+		try {
+			const response = await $axios.post(
+				`/api/color_interval.php?map=${map}`,
+				data,
+			);
+			return {
+				status: response.status,
+				data: response.data,
+			};
+		} catch (err) {
+			//HELP: Типизируем ошибку как AxiosError или Error
+			const error = err as AxiosError<{ message?: string }> | Error;
+			let statusCode = 500;
+			let errorMessage = 'Произошла ошибка при получении данных.';
+
+			//HELP: Проверяем тип ошибки
+			if (axios.isAxiosError(error)) {
+				statusCode = error.response?.status || 500;
+				errorMessage = error.response?.data?.message || errorMessage;
+			} else if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+
+			return {
+				status: statusCode,
+				data: error,
+			};
+		}
+	},
+	color_map: async (
+		map: string | number | null,
+		sloi: string,
+		mode: string,
+		field_id: string,
+	): Promise<
+		IApiResponse<IColorMapResponse[] | AxiosError<{ message?: string }> | Error>
+	> => {
+		if (!map) throw new Error('Номер карты не найден');
+
+		try {
+			const response = await $axios.get(
+				`/api/color_map.php?map=${map}&sloi=${sloi}&mode=${mode}&field_id=${field_id}`,
+			);
+			return {
+				status: response.status,
+				data: response.data,
+			};
 		} catch (err) {
 			//HELP: Типизируем ошибку как AxiosError или Error
 			const error = err as AxiosError<{ message?: string }> | Error;

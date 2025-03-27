@@ -1,10 +1,17 @@
 import { useSearchParams } from 'next/navigation';
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import {
+	ChangeEvent,
+	FC,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 
 import Input from '@/components/ui/input/Input';
 import Loader from '@/components/ui/loader/Loader';
 
-import { useMapLayersStore } from '@/store/store';
+import { useIdObjectInfoStore, useMapLayersStore } from '@/store/store';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
@@ -22,7 +29,13 @@ const ListOfObjects: FC = () => {
 	const { arrayPolygons, indexTargetPolygon } = useMapLayersStore(
 		store => store,
 	);
+	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 
+	//HELP: Ref для хранения ID таймера
+	const timeoutId = useRef<NodeJS.Timeout | null>(null);
+	const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+	const [searchValue, setSearchValue] = useState<string>('');
 	const [value, setValue] = useState<string>('');
 
 	const objects =
@@ -32,10 +45,27 @@ const ListOfObjects: FC = () => {
 					isMarkerInsidePolygon(marker, arrayPolygons[indexTargetPolygon || 0]),
 				);
 
-	//HELP: Ref для хранения ID таймера
-	const timeoutId = useRef<NodeJS.Timeout | null>(null);
+	useEffect(() => {
+		if (!idObjectInfo || !objects) return;
 
-	const [searchValue, setSearchValue] = useState<string>('');
+		// Получаем отфильтрованный список с учетом поиска
+		const filteredObjects = objects.filter(el =>
+			(el.name || '').toLowerCase().includes(searchValue.toLowerCase()),
+		);
+
+		// Проверяем, есть ли элемент в текущем списке
+		const elementExists = filteredObjects.some(el => el.id === idObjectInfo);
+		if (!elementExists) return;
+
+		// Прокручиваем к элементу, если он существует в DOM
+		const element = refs.current[idObjectInfo];
+		if (element) {
+			element.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+			});
+		}
+	}, [idObjectInfo, objects, searchValue]);
 
 	//HELP: Функция для обработки ввода
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +85,12 @@ const ListOfObjects: FC = () => {
 			500,
 		);
 	};
+	const handleRef = useCallback(
+		(id: string) => (node: HTMLDivElement | null) => {
+			refs.current[id] = node;
+		},
+		[],
+	);
 
 	return (
 		<div className={styles.wrapper_listOfObjects}>
@@ -120,7 +156,14 @@ const ListOfObjects: FC = () => {
 									.toLowerCase()
 									.includes(searchValue.toLowerCase()),
 							)
-							.map(el => <List key={el.id} el={el} />)
+							.map(el => (
+								<List
+									key={el.id}
+									el={el}
+									ref={handleRef(el.id.toString())}
+									isTarget={idObjectInfo === el.id}
+								/>
+							))
 				}
 			</div>
 		</div>

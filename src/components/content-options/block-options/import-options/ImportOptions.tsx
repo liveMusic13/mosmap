@@ -1,13 +1,12 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 
 import Button from '@/components/ui/button/Button';
-
-import { IItemFilter } from '@/types/requestData.types';
 
 import { useQueryKeysForGetCacheDataStore } from '@/store/store';
 
 import { useImport } from '@/hooks/useImport';
+import { useImportExport } from '@/hooks/useImportExport';
 
 import { truncateDescription } from '@/utils/editTexts';
 
@@ -27,10 +26,15 @@ const ImportOptions: FC = () => {
 		store => store.setNewCache,
 	);
 
-	const [separator, setSeparator] = useState<string>(';');
-	const [targetOption, setTargetOption] = useState<string>('UTF-8');
-	const [nameFile, setNameFile] = useState<string>('');
-	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const {
+		separator,
+		selectedFile,
+		targetOption,
+		handleFileChange,
+		nameFileImport: nameFile,
+		onCallbackInput,
+		onCallbackSelect,
+	} = useImportExport();
 
 	const { mutate, data, isSuccess } = useImport();
 
@@ -38,7 +42,6 @@ const ImportOptions: FC = () => {
 		if (isSuccess && data && data.status >= 200 && data.status < 300) {
 			router.push(`${pathname}/done?map=${map}`);
 		}
-		console.log('data', data);
 	}, [data]);
 
 	const handleUpload = () => {
@@ -46,20 +49,6 @@ const ImportOptions: FC = () => {
 			mutate({ map, file: selectedFile, separator, encoding: targetOption });
 		setNewCache({ separator, encoding: targetOption });
 	};
-	const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-		const file = target.files;
-		if (file) {
-			setSelectedFile(file[0]);
-			setNameFile(file[0].name);
-		}
-	};
-	const onCallbackSelect = useCallback((el: IItemFilter) => {
-		setTargetOption(el.item_name);
-	}, []);
-	const onCallbackInput = useCallback(
-		(e: ChangeEvent<HTMLInputElement>) => setSeparator(e.target.value),
-		[],
-	);
 
 	return (
 		<div className={styles.block__importOptions}>

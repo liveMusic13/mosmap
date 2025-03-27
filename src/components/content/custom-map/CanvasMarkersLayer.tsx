@@ -7,6 +7,7 @@ import { ICanvasMarkersLayer } from '@/types/props.types';
 import { useIdObjectInfoStore } from '@/store/store';
 
 import { useClickOnMarker } from '@/hooks/useClickOnMarker';
+import { useGetSizeMarker } from '@/hooks/useGetSizeMarkers';
 
 import { getIconForMarker } from '@/utils/iconForMarker';
 
@@ -14,6 +15,8 @@ import { colors } from '@/app.constants';
 
 const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+
+	const sizeMarker = useGetSizeMarker();
 
 	const handleClickOnMarker = useClickOnMarker();
 
@@ -81,14 +84,14 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 						idObjectInfo === marker.id
 							? { ...marker, icon: 'target', color: colors.red }
 							: marker;
-					const svg = getIconForMarker(editMarker);
+					const svg = getIconForMarker(editMarker, sizeMarker);
 					// const svg = getIconForMarker(marker);
 					const encodedSvg = encodeURIComponent(svg);
 					const dataUrl = 'data:image/svg+xml,' + encodedSvg;
 					// console.log(svg);
 					const icon = L.icon({
 						iconUrl: dataUrl,
-						iconSize: [20, 20],
+						iconSize: sizeMarker,
 					});
 					mapObject = L.marker(crd as LatLngExpression, { icon }).addTo(
 						markersLayerRef.current!,
@@ -112,7 +115,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 			map.off('moveend', updateMarkers);
 			markersLayerRef.current?.clearLayers();
 		};
-	}, [dataMap, map, idObjectInfo]);
+	}, [dataMap, map, idObjectInfo, sizeMarker]);
 
 	return null;
 };

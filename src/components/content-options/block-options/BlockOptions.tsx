@@ -8,6 +8,7 @@ import Button from '@/components/ui/button/Button';
 import { IBlockOptions } from '@/types/props.types';
 
 import styles from './BlockOptions.module.scss';
+import DatabaseOptions from './database-options/DataBaseOptions';
 import ExportOptions from './export-options/ExportOptions';
 import ImportDoneOptions from './import-done-options/ImportDoneOptions';
 import ImportOptions from './import-options/ImportOptions';
@@ -25,7 +26,9 @@ const BlockOptions: FC<IBlockOptions> = () => {
 					? 'Настройка данных для загрузки на сервер'
 					: pathname === '/settings-map'
 						? 'Настройка карты'
-						: '';
+						: pathname === '/settings-database'
+							? 'Настройка базы данных'
+							: '';
 
 	const handleBack = () => router.back();
 
@@ -43,6 +46,7 @@ const BlockOptions: FC<IBlockOptions> = () => {
 				{pathname === '/export' && <ExportOptions />}
 				{pathname === '/import/done' && <ImportDoneOptions />}
 				{pathname === '/settings-map' && <SettingsOptions />}
+				{pathname === '/settings-database' && <DatabaseOptions />}
 			</div>
 		</div>
 	);

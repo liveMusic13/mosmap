@@ -109,3 +109,15 @@ export interface IQueryKeysForGetCacheDataStore {
 export interface IImportResponseStore extends IImportResponse {
 	setImportResponse: (data: IImportResponse) => void;
 }
+
+export interface IColorsIntervalStore {
+	isColorInterval: boolean;
+	setIsColorInterval: (bol: boolean) => void;
+}
+
+export interface ISuccessSaveColorsIntervalStore {
+	isSuccessSaveColorsInterval: boolean;
+	ranges_color_map: string;
+	setRanges_color_map: (str: string) => void;
+	setIsSuccessSaveColorsInterval: (bol: boolean) => void;
+}

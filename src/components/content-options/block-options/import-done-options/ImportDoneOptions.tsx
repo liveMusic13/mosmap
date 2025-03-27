@@ -19,7 +19,6 @@ import BlockParam from '../block-param/BlockParam';
 import styles from './ImportDoneOptions.module.scss';
 import { colors } from '@/app.constants';
 
-//TODO: разобраться почему хоть и делаю рефетч, данные не обновляются на главной пока я не перезагружу страницу
 const ImportDoneOptions: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();

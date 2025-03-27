@@ -13,6 +13,7 @@ import { IContent } from '@/types/props.types';
 
 import {
 	useActiveAddObjectStore,
+	useColorsIntervalStore,
 	useFiltersStore,
 	useListOfObjectsStore,
 	useMapLayersStore,
@@ -34,6 +35,7 @@ import Loader from '../ui/loader/Loader';
 import SearchAddress from '../ui/search-address/SearchAdress';
 
 import styles from './Content.module.scss';
+import ColorInterval from './color-interval/ColorInterval';
 import InfoAboutZone from './info-about-zone/InfoAboutZone';
 import ListOfObjects from './list-of-objects/ListOfObjects';
 import ObjectInfo from './object-info/ObjectInfo';
@@ -71,6 +73,9 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
 	const clearPolygon = useMapLayersStore(store => store.clearPolygon);
 	const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
+	const isColorInterval = useColorsIntervalStore(
+		store => store.isColorInterval,
+	);
 
 	useCheckActiveInfo(); //HELP: Для того чтобы отключало показ фильтров при показе информации об объекте или при создании объекта
 	useCheckDisabledZone(); //HELP: Для того чтобы отключать показ информации о клике на пустую зону при активации хоть одного из окон кроме списка объектов
@@ -105,7 +110,6 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	};
 
 	return (
-		// <QueryClientProvider client={queryClient}>
 		<QueryProvider>
 			{/* HELP: Для того чтобы когда глобально вызывается попап, затемнялась область за ним не только в блоке контента, но и во всем приложении */}
 			{isPopup && <BackgroundOpacity />}
@@ -122,6 +126,7 @@ const Content: FC<IContent> = ({ dataMap }) => {
 						!isObjectInfo &&
 						!isActiveAddObject && <InfoAboutZone />}
 					{isListOfObjects && <ListOfObjects />}
+					{isColorInterval && <ColorInterval />}
 
 					<DynamicCustomMap />
 					{isSearchAddress && <SearchAddress />}
@@ -161,8 +166,6 @@ const Content: FC<IContent> = ({ dataMap }) => {
 				</div>
 			</div>
 		</QueryProvider>
-
-		// </QueryClientProvider>
 	);
 };
 

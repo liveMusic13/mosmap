@@ -20,6 +20,7 @@ import MapClickHandler from './MapClickHandler';
 import MapResizeHandler from './MapResizeHandler';
 import MarkerEmptyArea from './MarkerEmptyArea';
 import RenderArea from './RenderArea';
+import RenderColorMap from './RenderColorMap';
 import RenderMarkers from './RenderMarkers';
 import ZoomTracker from './ZoomTracker';
 
@@ -75,6 +76,7 @@ const CustomMap: FC<ICustomMap> = () => {
 					</>
 				)}
 				<FlyToLocation />
+				<RenderColorMap />
 				{isSelectArea && (
 					<FeatureGroup>
 						<EditControl
