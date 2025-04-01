@@ -6,4 +6,15 @@
 	font-family: 'Intro';
 	margin: func.adapt(15px, 1920px) 0;
 	margin-left: func.adapt(60px, 1920px);
+
+	@media (max-width: 767.98px) {
+		font-size: 0.928rem;
+		margin: func.adapt(15px, 480px) func.adapt(10px, 480px)
+			func.adapt(5px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		margin: func.adapt(15px, 360px) func.adapt(10px, 360px)
+			func.adapt(5px, 360px);
+	}
 }

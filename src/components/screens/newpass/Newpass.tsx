@@ -29,6 +29,8 @@ const Newpass: FC = () => {
 				title_bot='Войти'
 				link_bot='/auth'
 				handleCallback={handleCallback}
+				mobile_link='/auth'
+				mobile_title='Войти'
 			/>
 			{popup.isPopup && (
 				<>

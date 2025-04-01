@@ -10,6 +10,7 @@ import { IHeader } from '@/types/props.types';
 
 import { useMenuDropdown } from '@/hooks/useMenuDropdown';
 
+import Burger from '../ui/burger/Burger';
 import Button from '../ui/button/Button';
 import Line from '../ui/line/Line';
 
@@ -46,9 +47,12 @@ const Header: FC<IHeader> = ({ style }) => {
 		}
 	};
 
+	const [testBurger, setTestBurger] = useState(false);
+
 	return (
 		<header className={styles.header} style={style}>
 			<div className={styles.block__logo}>
+				<Burger />
 				<Image
 					src={'/images/icons/logo.svg'}
 					alt='logo'
@@ -57,7 +61,11 @@ const Header: FC<IHeader> = ({ style }) => {
 					className={styles.image_logo}
 					priority={true} //HELP: чтобы первым отрисовывалось
 				/>
-				<Line style={{ backgroundColor: colors.black_hard }} />
+
+				<Line
+					style={{ backgroundColor: colors.black_hard }}
+					className={'line_mobile'}
+				/>
 				<h1 className={styles.title}>геоаналитика</h1>
 			</div>
 			<div className={styles.block__menu}>
@@ -66,6 +74,7 @@ const Header: FC<IHeader> = ({ style }) => {
 						return (
 							<Button
 								key={el.id}
+								className='button_mobile_header'
 								style={{
 									width: 'calc(86/1920*100vw)',
 									height: 'calc(39/1920*100vw)',

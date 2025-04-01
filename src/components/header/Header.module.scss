@@ -15,24 +15,57 @@
 
 	position: relative;
 	z-index: 10;
+
+	@media (max-width: 767.98px) {
+		height: func.adapt(40px, 480px);
+		padding: 0px func.adapt(10px, 480px);
+		background-image: url('/images/header_image_mobile.png');
+	}
+
+	@media (max-width: 479.98px) {
+		height: func.adapt(40px, 361px);
+		padding: 0px func.adapt(10px, 361px);
+	}
 }
 
 .block__logo {
 	display: flex;
 	align-items: center;
 	gap: func.adapt(24px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(11px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(11px, 361px);
+	}
 }
 
 .image_logo {
 	width: func.adapt(178px, 1920px);
 	height: func.adapt(39px, 1920px);
 	margin-bottom: func.adapt(-10px, 1920px);
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(78px, 480px);
+		height: func.adapt(17px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(78px, 361px);
+		height: func.adapt(17px, 480px);
+	}
 }
 
 .title {
 	font-size: 0.8rem;
 	font-weight: 900;
 	text-transform: uppercase;
+
+	@media (max-width: 767.98px) {
+		display: none;
+	}
 }
 
 .block__menu {
@@ -41,15 +74,17 @@
 	gap: func.adapt(35px, 1920px);
 
 	> button {
-		transition:
-			width 0.3s ease,
-			height 0.3s ease,
-			font-size 0.3s ease;
+		@media (min-width: 767.98px) {
+			transition:
+				width 0.3s ease,
+				height 0.3s ease,
+				font-size 0.3s ease;
 
-		&:hover {
-			width: func.adapt(96px, 1920px) !important;
-			height: func.adapt(44px, 1920px) !important ;
-			font-size: 1.2rem !important;
+			&:hover {
+				width: func.adapt(96px, 1920px) !important;
+				height: func.adapt(44px, 1920px) !important ;
+				font-size: 1.2rem !important;
+			}
 		}
 	}
 }
@@ -59,6 +94,10 @@
 	align-items: center;
 	gap: func.adapt(6px, 1920px);
 	position: relative;
+
+	@media (max-width: 767.98px) {
+		display: none;
+	}
 }
 
 .link,
@@ -71,6 +110,10 @@
 	&:hover {
 		font-size: 1.2rem;
 	}
+
+	@media (max-width: 767.98px) {
+		display: none;
+	}
 }
 
 .menu__links {
@@ -80,8 +123,6 @@
 }
 
 .image_arrow {
-	// width: func.adapt(8px, 1920px);
-	// height: func.adapt(6px, 1920px);
 	margin-top: func.adapt(4px, 1920px);
 }
 

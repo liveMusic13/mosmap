@@ -121,3 +121,8 @@ export interface ISuccessSaveColorsIntervalStore {
 	setRanges_color_map: (str: string) => void;
 	setIsSuccessSaveColorsInterval: (bol: boolean) => void;
 }
+
+export interface IBurgerMenuStore {
+	isBurgerMenu: boolean;
+	setIsBurgerMenu: (bol: boolean) => void;
+}

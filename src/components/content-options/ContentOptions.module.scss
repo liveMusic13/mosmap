@@ -21,6 +21,10 @@
 	text-transform: uppercase;
 	font-family: 'Intro';
 	margin: func.adapt(15px, 1920px) 0;
+
+	@media (max-width: 767.98px) {
+		font-size: 0.928rem;
+	}
 }
 
 .block__content {

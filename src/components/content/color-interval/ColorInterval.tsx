@@ -140,13 +140,13 @@ const ColorInterval: FC = () => {
 							// 	)?.name || (data as IColorIntervalResponse).sloi_fields[0].name
 							// }
 							targetValue={
-								(data as IColorIntervalResponse).sloi_fields.find(
+								(data as IColorIntervalResponse)?.sloi_fields.find(
 									el =>
 										Number(el.id) ===
-										Number((data as IColorIntervalResponse).current_sloi),
+										Number((data as IColorIntervalResponse)?.current_sloi),
 								)?.name || 'Выберите значение'
 							}
-							options={(data as IColorIntervalResponse).sloi_fields || []}
+							options={(data as IColorIntervalResponse)?.sloi_fields || []}
 						/>
 						<BlockIntervalParam
 							title='Способ раскраски'
@@ -159,13 +159,13 @@ const ColorInterval: FC = () => {
 							// 	)?.name || (data as IColorIntervalResponse).mode_list[0].name
 							// }
 							targetValue={
-								(data as IColorIntervalResponse).mode_list.find(
+								(data as IColorIntervalResponse)?.mode_list.find(
 									el =>
 										Number(el.id) ===
-										Number((data as IColorIntervalResponse).current_mode),
+										Number((data as IColorIntervalResponse)?.current_mode),
 								)?.name || 'Выберите значение'
 							}
-							options={(data as IColorIntervalResponse).mode_list || []}
+							options={(data as IColorIntervalResponse)?.mode_list || []}
 						/>
 						{isViewFieldSelect && (
 							<BlockIntervalParam
@@ -179,13 +179,13 @@ const ColorInterval: FC = () => {
 								// 	)?.name || (data as IColorIntervalResponse).num_fields[0].name
 								// }
 								targetValue={
-									(data as IColorIntervalResponse).num_fields.find(
+									(data as IColorIntervalResponse)?.num_fields.find(
 										el =>
 											Number(el.id) ===
-											Number((data as IColorIntervalResponse).current_field),
+											Number((data as IColorIntervalResponse)?.current_field),
 									)?.name || 'Выберите значение'
 								}
-								options={(data as IColorIntervalResponse).num_fields || []}
+								options={(data as IColorIntervalResponse)?.num_fields || []}
 							/>
 						)}
 						{isValidTargetValues && intervalsObject && (

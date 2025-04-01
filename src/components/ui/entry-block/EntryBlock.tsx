@@ -29,6 +29,8 @@ const EntryBlock: FC<IEntryBlock> = ({
 	title_block,
 	handleCallback,
 	setIsLoading,
+	mobile_link,
+	mobile_title,
 }) => {
 	const isAuth = title_block === 'Авторизация';
 	const isRegistr = title_block === 'Регистрация';
@@ -110,19 +112,6 @@ const EntryBlock: FC<IEntryBlock> = ({
 		setViewPass(!viewPass);
 	};
 	const onClickButton = async () => {
-		// if (isAuth) {
-		// 	const response = await handleAuth();
-		// 	if (handleCallback) handleCallback(response);
-		// } else if (isRestore) {
-		// 	const response = await handleRestore(dataRestore());
-		// 	if (handleCallback) handleCallback(response);
-		// } else if (isNewpass) {
-		// 	const response = await handleNewpass(dataNewPass);
-		// 	if (handleCallback) handleCallback(response);
-		// } else {
-		// 	const response = await handleRegistr(dataRegistr);
-		// 	if (handleCallback) handleCallback(response);
-		// }
 		try {
 			if (setIsLoading) setIsLoading(true);
 			if (isAuth) {
@@ -273,6 +262,12 @@ const EntryBlock: FC<IEntryBlock> = ({
 					</>
 				)}
 			</div>
+			<Link
+				href={mobile_link}
+				className={`${styles.link} ${styles.link_mobile}`}
+			>
+				{mobile_title}
+			</Link>
 		</div>
 	);
 };

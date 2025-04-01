@@ -22,3 +22,6 @@ export const colors = {
 	blue_very_light: '#f9fafd',
 	red: '#741411',
 };
+
+export const MOBILE_WIDTH = 767;
+export const TABLET_WIDTH = 991;

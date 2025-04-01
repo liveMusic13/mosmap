@@ -14,14 +14,68 @@
 	align-items: center;
 	justify-content: space-between;
 
+	@media (max-width: 767.98px) {
+		height: func.adapt(50px, 480px);
+		border-radius: none;
+		// box-shadow: none;
+		padding: none;
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+
+	@media (max-width: 479.98px) {
+		height: func.adapt(50px, 360px);
+		// border-radius: none;
+		// box-shadow: none;
+		// padding: none;
+	}
+
 	> .one,
 	.two {
 		> button {
+			@media (max-width: 767.98px) {
+				width: func.adapt(45px, 480px) !important;
+				height: func.adapt(43px, 480px) !important;
+				border-radius: func.adapt(6px, 480px) !important;
+				border: none !important;
+
+				&:hover {
+					border: 1px solid vars.$grey_middle !important;
+				}
+			}
+
+			@media (max-width: 479.98px) {
+				width: func.adapt(45px, 360px) !important;
+				height: func.adapt(43px, 360px) !important;
+				border-radius: func.adapt(6px, 360px) !important;
+			}
+
 			&:hover {
 				> .hover__text {
 					display: block;
 				}
 			}
+		}
+	}
+}
+.one {
+	> div:nth-child(7) {
+		@media (max-width: 767.98px) {
+			margin-left: func.adapt(3px, 480px) !important;
+			margin-right: func.adapt(2px, 480px) !important;
+		}
+
+		@media (max-width: 479.98px) {
+			margin-left: func.adapt(3px, 360px) !important;
+			margin-right: func.adapt(2px, 360px) !important;
+		}
+	}
+}
+
+.two {
+	> div {
+		@media (max-width: 767.98px) {
+			display: none;
 		}
 	}
 }
@@ -33,9 +87,21 @@
 		width 0.3s ease,
 		height 0.3s ease;
 
+	@media (max-width: 767.98px) {
+		width: func.adapt(27px, 480px);
+		height: func.adapt(27px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(27px, 360px);
+		height: func.adapt(27px, 360px);
+	}
+
 	&:hover {
-		width: func.adapt(30px, 1920px);
-		height: func.adapt(30px, 1920px);
+		@media (min-width: 767.98px) {
+			width: func.adapt(30px, 1920px);
+			height: func.adapt(30px, 1920px);
+		}
 	}
 }
 

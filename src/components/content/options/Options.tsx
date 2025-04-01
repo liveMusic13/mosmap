@@ -11,7 +11,6 @@ import {
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useListOfObjectsStore,
-	useObjectInfoStore,
 } from '@/store/store';
 
 import { srcStandard } from '@/utils/pathSvg';
@@ -26,9 +25,8 @@ const Options: FC = () => {
 	const map = searchParams.get('map');
 
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
-	const { isFilters, setIsFilters } = useFiltersStore(store => store);
+	const isFilters = useFiltersStore(store => store.isFilters);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
-	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
 	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
 		store => store,
 	);

@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { FC } from 'react';
 
 import Content from '@/components/content/Content';
@@ -7,8 +7,17 @@ import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 
+import { API_URL } from '@/app.constants';
 import NotFound from '@/app/not-found/page';
 import { mapService } from '@/services/map.service';
+
+async function getServerSidePath() {
+	const res = await fetch(`${API_URL}/api/path`, {
+		headers: {
+			cookie: (await headers()).get('cookie') || '',
+		},
+	});
+}
 
 export const revalidate = 200;
 

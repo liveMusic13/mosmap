@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 import {
 	IActiveAddObjectStore,
+	IBurgerMenuStore,
 	ICenterMapStore,
 	IClearAllFiltersStore,
 	IColorsIntervalStore,
@@ -156,3 +157,8 @@ export const useSuccessSaveColorsIntervalStore =
 		setIsSuccessSaveColorsInterval: bol =>
 			set({ isSuccessSaveColorsInterval: bol }),
 	}));
+
+export const useBurgerMenuStore = create<IBurgerMenuStore>(set => ({
+	isBurgerMenu: false,
+	setIsBurgerMenu: bol => set({ isBurgerMenu: bol }),
+}));

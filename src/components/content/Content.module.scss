@@ -19,6 +19,15 @@
 	text-transform: uppercase;
 	font-family: 'Intro';
 	margin: func.adapt(15px, 1920px) 0;
+
+	@media (max-width: 767.98px) {
+		font-size: 0.928rem;
+		margin: func.adapt(15px, 480px) 0px func.adapt(5px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		margin: func.adapt(15px, 360px) 0px func.adapt(5px, 360px);
+	}
 }
 
 // HELP: Порядок вычета высоты для .block__content следующий: вся высота минус шапка, минус название карты и отступы от него, минус футер и минус блок опций. Нужно для того чтобы высота элементов учитывалась и это блок не выталкивал другие элементы за границы экрана и не вызывал скрола.

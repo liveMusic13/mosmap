@@ -102,6 +102,36 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 	};
 
 	/**
+	 * Обработчик начала перетаскивания ползунка касанием (touch).
+	 */
+	const onTouchStart = (index: number, e: React.TouchEvent<HTMLDivElement>) => {
+		const touch = e.touches[0];
+		const startX = touch.clientX;
+		if (!trackRef.current) return;
+		const trackRect = trackRef.current.getBoundingClientRect();
+		const sliderStartValue = sliderPositions[index];
+
+		const onTouchMove = (moveEvent: TouchEvent) => {
+			//HELP: Если нужно предотвратить прокрутку страницы, можно вызвать moveEvent.preventDefault();
+			moveEvent.preventDefault();
+			const moveTouch = moveEvent.touches[0];
+			const deltaX = moveTouch.clientX - startX;
+			const trackWidth = trackRect.width;
+			const valueDelta = (max_value - min_value) * (deltaX / trackWidth);
+			const newValue = sliderStartValue + valueDelta;
+			handleSliderChange(index, newValue);
+		};
+
+		const onTouchEnd = () => {
+			document.removeEventListener('touchmove', onTouchMove);
+			document.removeEventListener('touchend', onTouchEnd);
+		};
+
+		document.addEventListener('touchmove', onTouchMove, { passive: false });
+		document.addEventListener('touchend', onTouchEnd);
+	};
+
+	/**
 	 * Обработчик изменения текста в инпутах.
 	 */
 	const handleInputChange = (
@@ -156,6 +186,10 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 									onMouseDown={e => {
 										e.preventDefault();
 										onMouseDown(index, e);
+									}}
+									onTouchStart={e => {
+										e.preventDefault();
+										onTouchStart(index, e);
 									}}
 								>
 									<span className={styles['range-value']}>

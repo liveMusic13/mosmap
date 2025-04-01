@@ -1,0 +1,46 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+
+.burger {
+	display: none;
+
+	@media (max-width: 767.98px) {
+		display: inline-block;
+		// display: flex;
+		// flex-direction: column;
+		// align-items: center;
+		// justify-content: center;
+		cursor: pointer;
+		background: transparent;
+		border: none;
+		// padding: 10px;
+		// width: func.adapt(24px, 480px);
+		// height: func.adapt(24px, 480px);
+		position: relative;
+		z-index: 10;
+
+		span {
+			display: block;
+			width: func.adapt(24px, 480px);
+			height: func.adapt(3px, 480px);
+			margin: func.adapt(5px, 480px) 0;
+			background-color: vars.$green;
+			border-radius: func.adapt(3px, 480px);
+			transition:
+				transform 0.4s ease,
+				opacity 0.4s ease;
+		}
+
+		&.active {
+			span:nth-child(1) {
+				transform: translateY(func.adapt(8px, 480px)) rotate(45deg);
+			}
+			span:nth-child(2) {
+				opacity: 0;
+			}
+			span:nth-child(3) {
+				transform: translateY(func.adapt(-8px, 480px)) rotate(-45deg);
+			}
+		}
+	}
+}

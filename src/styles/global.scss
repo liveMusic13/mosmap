@@ -64,17 +64,22 @@ body {
 		font-size: 9px;
 	}
 
-	// @media (max-width: 991.98px) {
-	// 	font-size: 13px;
-	// }
+	@media (max-width: 991.98px) {
+		font-size: 8px;
+	}
 
-	// @media (max-width: 767.98px) {
-	// 	font-size: 14px;
-	// }
+	@media (max-width: 767.98px) {
+		font-size: 16px;
+		height: auto;
+	}
 
-	// @media (max-width: 479.98px) {
-	// 	font-size: 10px;
-	// }
+	@media (max-width: 479.98px) {
+		font-size: 15px;
+	}
+
+	@media (max-width: 360.98px) {
+		font-size: vars.$fz_standart;
+	}
 }
 
 //HELP:убираем логотип с украинским флагом

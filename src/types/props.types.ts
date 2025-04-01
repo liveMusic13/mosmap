@@ -27,10 +27,12 @@ export interface IButton extends PropsWithChildren {
 	onClick?: () => void;
 	style?: CSSProperties;
 	disabled?: boolean;
+	className?: string;
 }
 
 export interface ILine {
 	style?: CSSProperties;
+	className?: string;
 }
 
 export interface IContent {
@@ -126,6 +128,8 @@ export interface IEntryBlock {
 	title_block: string;
 	handleCallback?: (data: IRegistrResponse) => void;
 	setIsLoading?: Dispatch<SetStateAction<boolean>>;
+	mobile_link: string;
+	mobile_title: string;
 }
 
 export interface ILayout extends PropsWithChildren {

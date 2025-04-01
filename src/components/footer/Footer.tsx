@@ -15,7 +15,10 @@ const Footer: FC<IFooter> = ({ style }) => {
 			<div className={styles.block__one}>
 				<div className={styles.block__title}>
 					<h2 className={styles.title}>mosmap</h2>
-					<Line style={{ backgroundColor: colors.white }} />
+					<Line
+						style={{ backgroundColor: colors.white }}
+						className='line_mobile'
+					/>
 					<h2 className={styles.title__two}>геоаналитика</h2>
 				</div>
 				<div className={styles.block__menu}>

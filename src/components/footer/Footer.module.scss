@@ -8,6 +8,12 @@
 	background-color: vars.$green;
 	position: relative;
 	z-index: 10;
+
+	@media (max-width: 767.98px) {
+		height: auto;
+		position: static !important;
+		padding: func.adapt(22px, 480px) func.adapt(10px, 480px);
+	}
 }
 
 .block__one {
@@ -15,6 +21,17 @@
 	align-items: center;
 	justify-content: space-between;
 	height: func.adapt(120px, 1920px);
+
+	@media (max-width: 767.98px) {
+		flex-direction: column;
+		height: auto;
+		align-items: flex-start;
+		gap: func.adapt(22px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(22px, 360px);
+	}
 }
 
 .block__title {
@@ -27,17 +44,35 @@
 	color: vars.$white;
 	font-size: 2.82rem;
 	text-transform: uppercase;
+
+	@media (max-width: 767.98px) {
+		font-size: 1.85rem;
+	}
 }
 
 .title__two {
 	color: vars.$white;
 	font-size: 1.42rem;
+
+	@media (max-width: 767.98px) {
+		display: none;
+	}
 }
 
 .block__menu {
 	display: flex;
 	align-items: center;
 	gap: func.adapt(35px, 1920px);
+
+	@media (max-width: 767.98px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: func.adapt(8px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(8px, 360px);
+	}
 }
 
 .link {
@@ -49,12 +84,25 @@
 	&:hover {
 		font-size: 1.2rem;
 	}
+
+	@media (max-width: 767.98px) {
+		font-weight: 400;
+		color: rgba($color: vars.$white, $alpha: 0.61);
+	}
 }
 
 .block__contacts {
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(9px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(8px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(8px, 360px);
+	}
 }
 
 .contact {
@@ -72,6 +120,13 @@
 	width: 100%;
 	height: 1px;
 	background-color: rgba($color: vars.$grey_middle, $alpha: 0.3);
+
+	@media (max-width: 767.98px) {
+		margin: func.adapt(18px, 480px) 0px;
+	}
+	@media (max-width: 479.98px) {
+		margin: func.adapt(18px, 360px) 0px;
+	}
 }
 
 .block__two {
@@ -79,6 +134,12 @@
 	align-items: center;
 	justify-content: space-between;
 	height: func.adapt(40px, 1920px);
+
+	@media (max-width: 767.98px) {
+		height: auto;
+		flex-direction: column;
+		align-items: flex-start;
+	}
 }
 
 .paragraph {

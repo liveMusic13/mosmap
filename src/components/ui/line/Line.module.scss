@@ -3,4 +3,16 @@
 .line {
 	width: 1px;
 	height: func.adapt(36px, 1920px);
+
+	@media (max-width: 767.98px) {
+		height: func.adapt(36px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		height: func.adapt(36px, 360px);
+	}
+}
+
+.line_mobile {
+	display: none;
 }

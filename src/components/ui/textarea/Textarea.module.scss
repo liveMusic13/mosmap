@@ -18,4 +18,17 @@
 		color: vars.$grey_hard;
 		font-size: 1rem;
 	}
+
+	@media (max-width: 767.98px) {
+		width: 100%;
+		height: func.adapt(150px, 480px);
+		border-radius: func.adapt(10px, 480px);
+		padding: func.adapt(10px, 480px) func.adapt(16px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		height: func.adapt(150px, 360px);
+		border-radius: func.adapt(10px, 360px);
+		padding: func.adapt(10px, 360px) func.adapt(16px, 360px);
+	}
 }
