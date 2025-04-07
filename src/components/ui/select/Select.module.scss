@@ -6,8 +6,19 @@
 	width: func.adapt(248px, 1920px);
 	// height: func.adapt(40px, 1920px);
 	position: relative;
-	// overflow: visible; // Разрешаем выход за границы
 	max-height: func.adapt(300px, 1920px);
+
+	@media (max-width: 767.98px) {
+		width: 100%;
+		max-height: func.adapt(300px, 480px);
+		// height: auto;
+		// max-height: clamp(150px, 20vw, 300px);
+	}
+
+	@media (max-width: 479.98px) {
+		max-height: func.adapt(300px, 360px);
+		// max-height: clamp(150px, 20vw, 300px);
+	}
 }
 
 .disabled {
@@ -28,6 +39,17 @@
 	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
 	border-radius: func.adapt(4px, 1920px);
 
+	@media (max-width: 767.98px) {
+		height: func.adapt(40px, 480px);
+		padding: func.adapt(11px, 480px) func.adapt(10px, 480px);
+		border-radius: func.adapt(4px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		height: func.adapt(40px, 360px);
+		padding: func.adapt(11px, 360px) func.adapt(10px, 360px);
+		border-radius: func.adapt(4px, 360px);
+	}
+
 	&:hover {
 		cursor: pointer;
 
@@ -38,6 +60,15 @@
 		> .image {
 			width: func.adapt(10px, 1920px);
 			height: func.adapt(20px, 1920px);
+
+			@media (max-width: 767.98px) {
+				width: func.adapt(10px, 480px);
+				height: func.adapt(20px, 480px);
+			}
+			@media (max-width: 479.98px) {
+				width: func.adapt(10px, 360px);
+				height: func.adapt(20px, 360px);
+			}
 		}
 	}
 }
@@ -51,10 +82,18 @@
 .image {
 	width: func.adapt(8px, 1920px);
 	height: func.adapt(16px, 1920px);
-
 	transition:
 		width 0.3s ease,
 		height 0.3s ease;
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(8px, 480px);
+		height: func.adapt(16px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(8px, 360px);
+		height: func.adapt(16px, 360px);
+	}
 }
 
 .options {
@@ -68,12 +107,19 @@
 	margin-top: func.adapt(5px, 1920px);
 	border-radius: func.adapt(4px, 1920px);
 	// max-height: func.adapt(300px, 1920px);
-
 	overflow-y: auto;
 	overflow-x: hidden;
 	@include mix.scrollbar();
-
 	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+
+	@media (max-width: 767.98px) {
+		margin-top: func.adapt(5px, 480px);
+		border-radius: func.adapt(4px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-top: func.adapt(5px, 360px);
+		border-radius: func.adapt(4px, 360px);
+	}
 }
 
 .absoluteOptions {
@@ -83,12 +129,30 @@
 	z-index: 20;
 	height: func.adapt(300px, 1920px);
 	margin-top: func.adapt(40px, 1920px);
+
+	@media (max-width: 767.98px) {
+		top: func.adapt(5px, 480px);
+		height: func.adapt(150px, 480px);
+		margin-top: func.adapt(40px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		top: func.adapt(5px, 360px);
+		height: func.adapt(150px, 360px);
+		margin-top: func.adapt(40px, 360px);
+	}
 }
 
 .option {
 	padding: func.adapt(5px, 1920px) func.adapt(10px, 1920px);
 	font-size: 1rem;
 	transition: font-size 0.3s ease;
+
+	@media (max-width: 767.98px) {
+		padding: func.adapt(5px, 480px) func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(5px, 360px) func.adapt(10px, 360px);
+	}
 
 	&:hover {
 		cursor: pointer;

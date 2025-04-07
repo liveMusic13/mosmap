@@ -33,8 +33,9 @@ export const authService = {
 			console.log('auth', data);
 
 			return data;
-		} catch (error) {
-			console.log(error);
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	registration: async (data: IRegistrationData) => {
@@ -47,8 +48,9 @@ export const authService = {
 			console.log('dataResponse', dataResponse);
 
 			return dataResponse;
-		} catch (error) {
-			console.log(error);
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	confirm: async (data: { token: string }) => {
@@ -59,8 +61,9 @@ export const authService = {
 			);
 			console.log('dataResponse', dataResponse);
 			return dataResponse;
-		} catch (error) {
-			console.log(error);
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	restore: async (data: IRestoreData) => {
@@ -71,8 +74,9 @@ export const authService = {
 			);
 			console.log('dataResponse', dataResponse);
 			return dataResponse;
-		} catch (error) {
-			console.log(error);
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	newpass: async (data: INewpassData) => {
@@ -83,8 +87,9 @@ export const authService = {
 			);
 			console.log('dataResponse', dataResponse);
 			return dataResponse;
-		} catch (error) {
-			console.log(error);
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	newpass_client: async (data: INewpassClientData) => {
@@ -95,8 +100,9 @@ export const authService = {
 			);
 			console.log('dataResponse', dataResponse);
 			return dataResponse;
-		} catch (error) {
-			console.log(error);
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 };

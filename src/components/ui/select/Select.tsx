@@ -58,9 +58,6 @@ const Select: FC<ISelect> = ({
 		>
 			<div
 				className={styles.select}
-				// onClick={() => {
-				// 	setIsOptions(!isOptions);
-				// }}
 				onClick={disabled ? undefined : () => setIsOptions(!isOptions)}
 			>
 				<p className={styles.name}>{target}</p>

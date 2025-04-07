@@ -12,7 +12,11 @@ const Popup: FC<IPopup> = ({
 	functions,
 	isHtmlMessage,
 	isConfirm,
+	soloButtonText = 'Закрыть',
+	confirmButtonText = 'Подтвердить',
+	cancelButtonText = 'Отменить',
 }) => {
+	console.log('isConfirm', isConfirm);
 	return (
 		<div className={styles.block__popup}>
 			{isHtmlMessage ? (
@@ -32,7 +36,7 @@ const Popup: FC<IPopup> = ({
 						}}
 						onClick={functions?.confirm}
 					>
-						Подтвердить
+						{confirmButtonText}
 					</Button>
 					<Button
 						style={{
@@ -45,7 +49,7 @@ const Popup: FC<IPopup> = ({
 						}}
 						onClick={functions?.cancel}
 					>
-						Отменить
+						{cancelButtonText}
 					</Button>
 				</div>
 			) : (
@@ -60,7 +64,7 @@ const Popup: FC<IPopup> = ({
 					}}
 					onClick={functions?.onClick}
 				>
-					Закрыть
+					{soloButtonText}
 				</Button>
 			)}
 		</div>

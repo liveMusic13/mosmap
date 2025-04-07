@@ -1,5 +1,6 @@
 import { LatLngExpression } from 'leaflet';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Ref, forwardRef, memo } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -13,6 +14,7 @@ import {
 	useObjectInfoStore,
 } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetObjectInfo } from '@/hooks/useGetObjectInfo';
 
 import styles from './List.module.scss';
@@ -24,6 +26,12 @@ const List = memo(
 			{ el, isTarget }: { el: IMarker; isTarget: boolean },
 			ref: Ref<HTMLDivElement>,
 		) => {
+			const router = useRouter();
+			const searchParams = useSearchParams();
+			const map = searchParams.get('map');
+			const windowSize = useCheckWidth();
+			const isMobile = windowSize <= 767;
+
 			const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 			const setIdObjectInfo = useIdObjectInfoStore(
 				store => store.setIdObjectInfo,
@@ -36,8 +44,14 @@ const List = memo(
 			const { refetch, data, isSuccess } = useGetObjectInfo(el.id);
 
 			const onClick = (el: IMarker) => {
-				if (el.crd) setCenterMap(el.crd as LatLngExpression);
-				setIdObjectInfo(el.id);
+				if (isMobile) {
+					router.push(`/?map=${map}`);
+					if (el.crd) setCenterMap(el.crd as LatLngExpression);
+					setIdObjectInfo(el.id);
+				} else {
+					if (el.crd) setCenterMap(el.crd as LatLngExpression);
+					setIdObjectInfo(el.id);
+				}
 			};
 			const handleClickInfo = () => {
 				//HELP: Добавляем id объекта для взятия из кэша данных об объекте. Отключаем видимость фильтров и включаем видимость блока информации об объекте. После этого запускаем запрос

@@ -8,6 +8,15 @@
 	gap: func.adapt(15px, 1920px);
 	padding: func.adapt(20px, 1920px);
 
+	@media (max-width: 767.98px) {
+		gap: func.adapt(15px, 480px);
+		padding: func.adapt(12px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(15px, 360px);
+		padding: func.adapt(12px, 360px);
+	}
+
 	> button {
 		text-transform: uppercase;
 		width: 100%;
@@ -25,6 +34,23 @@
 			width: 101%;
 			height: func.adapt(45px, 1920px);
 			font-size: 1.08rem;
+
+			@media (max-width: 767.98px) {
+				height: func.adapt(40px, 480px);
+			}
+			@media (max-width: 479.98px) {
+				height: func.adapt(40px, 360px);
+			}
+		}
+
+		@media (max-width: 767.98px) {
+			height: func.adapt(40px, 480px);
+			border-radius: func.adapt(8px, 480px);
+			box-shadow: 0px 0px 22px rgba($color: vars.$green, $alpha: 0.44);
+		}
+		@media (max-width: 479.98px) {
+			height: func.adapt(40px, 360px);
+			border-radius: func.adapt(8px, 360px);
 		}
 	}
 }
@@ -48,6 +74,17 @@
 		&:hover {
 			cursor: pointer;
 		}
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(175px, 480px);
+			height: func.adapt(40px, 480px);
+			border-radius: func.adapt(8px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(145px, 360px);
+			height: func.adapt(40px, 360px);
+			border-radius: func.adapt(8px, 360px);
+		}
 	}
 }
 
@@ -63,6 +100,15 @@
 		height: func.adapt(45px, 1920px);
 		font-size: 1.08rem;
 		cursor: pointer;
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(175px, 480px);
+			height: func.adapt(40px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(145px, 360px);
+			height: func.adapt(40px, 360px);
+		}
 	}
 
 	&:hover {
@@ -79,6 +125,22 @@
 	font-size: 1rem;
 	min-width: func.adapt(300px, 1920px);
 	height: func.adapt(40px, 1920px);
+
+	@media (max-width: 767.98px) {
+		min-width: func.adapt(160px, 480px);
+		border-radius: func.adapt(4px, 480px);
+		padding: func.adapt(5px, 480px);
+		height: func.adapt(40px, 480px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		white-space: nowrap; /* Запрещает перенос строк */
+		overflow: hidden; /* Скрывает выходящий за границы текст */
+		text-overflow: ellipsis; /* Добавляет троеточие */
+	}
+	@media (max-width: 479.98px) {
+		height: func.adapt(40px, 360px);
+	}
 }
 
 @include mix.line();
@@ -87,4 +149,10 @@
 	display: flex;
 	align-items: center;
 	gap: func.adapt(20px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(20px, 480px);
+		flex-direction: column;
+		justify-content: center;
+	}
 }

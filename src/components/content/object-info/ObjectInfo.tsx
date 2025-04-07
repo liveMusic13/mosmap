@@ -15,11 +15,13 @@ import {
 
 import {
 	useActiveAddObjectStore,
+	useCenterMapStore,
 	useDotInfoCoordsStore,
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useObjectInfoStore,
 	usePopupStore,
+	useRemoveMarkerCrdStore,
 	useTargetObjectStore,
 	useToggleViewAreaStore,
 } from '@/store/store';
@@ -29,6 +31,7 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useGetFilters } from '@/hooks/useGetFilters';
 import { useGetObjectInfo } from '@/hooks/useGetObjectInfo';
 import { useSaveObject } from '@/hooks/useSaveObject';
+import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemoveMarker';
 import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
 import styles from './ObjectInfo.module.scss';
@@ -40,6 +43,10 @@ import { TOKEN, colors } from '@/app.constants';
 
 const messageSave = 'Вы действительно хотите сохранить?';
 const messageDelete = 'Вы действительно хотите удалить?';
+const messageMarker = 'Вы хотите удалить или переместить маркер?';
+const messageRemoveMarker =
+	'Выберите любое место на карте и нажмите на него. Когда установите, нажмите правой кнопкой мыши в любое место чтобы закончить смену координат для маркера.';
+// const messageCancelRemoveMarker = 'Действие по перемещению маркера отменено.';
 
 const ObjectInfo: FC = () => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
@@ -51,14 +58,18 @@ const ObjectInfo: FC = () => {
 	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
 		store => store,
 	);
+	const { setIsRemoveMarker } = useRemoveMarkerCrdStore(store => store);
 	const { isPopup, setIsPopup, setMessageInPopup, messageInPopup } =
 		usePopupStore(store => store);
+	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
-	const { refetch: refetch_getDataMap } = useGetDataMap(queryString);
+
+	const { refetch: refetch_getDataMap, data: data_getDataMap } =
+		useGetDataMap(queryString);
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
 	);
@@ -68,20 +79,24 @@ const ObjectInfo: FC = () => {
 		useGetFilters(map);
 
 	const token = Cookies.get(TOKEN);
+	const findTargetObject = data_getDataMap?.points.find(
+		el => el.id === idObjectInfo,
+	); //HELP: Находим объект таргета
 
 	const [editValuesObject, setEditValuesObject] = useState<IMarker | null>( //HELP: Записываем в стейт данные, чтобы можно было изменять при активной авторизации. А после спокойно отправлять весь объект
 		isSuccess ? (data as IMarker) : null,
 	);
 
+	useSaveUpdateAfterRemoveMarker(isSuccess_save);
+
 	///test
-	const { coords, setCoords } = useDotInfoCoordsStore(store => store);
+	const coords = useDotInfoCoordsStore(store => store.coords);
 
 	useEffect(() => {
 		setEditValuesObject(data as IMarker);
 	}, [isSuccess]);
 
 	useEffect(() => {
-		console.log('test', editValuesObject, coords);
 		if (!editValuesObject?.crd && coords.lat) {
 			setEditValuesObject(prev =>
 				prev ? { ...prev, crd: [coords.lat, coords.lng] } : null,
@@ -139,21 +154,6 @@ const ObjectInfo: FC = () => {
 		},
 		[],
 	);
-	// const onCallbackNewValue = useCallback(
-	// 	(data: { label: string; value: string }) => {
-	// 		setEditValuesObject(prev => {
-	// 			if (!prev || !prev.values) return prev; // Защита от null/undefined
-
-	// 			return {
-	// 				...prev,
-	// 				values: prev.values.map(el =>
-	// 					el.label === data.label ? { ...el, value: data.value } : el,
-	// 				),
-	// 			};
-	// 		});
-	// 	},
-	// 	[setEditValuesObject], // Добавьте зависимость
-	// );
 	const resetValue = () => setEditValuesObject(data as IMarker);
 	const handleSaveValues = () => {
 		mutate(editValuesObject as IMarker);
@@ -184,6 +184,21 @@ const ObjectInfo: FC = () => {
 		setMessageInPopup(messageDelete);
 	};
 	const cancelPopup = () => setIsPopup(false);
+	const handleDeleteCrd = () => {
+		if (findTargetObject && findTargetObject.crd) {
+			mutate({ ...findTargetObject, crd: [null, null] }); //TODO: Возможно проблема с тем что при удалении карты переключается в случайное место здесь. Т.к. приходит null вместо координат и возможно в этом и есть проблема. Позже надо будет разобраться.
+			setIsPopup(false);
+		}
+	};
+	const handleRemoveMarker = () => {
+		setMessageInPopup(
+			'Выберите любое место на карте и нажмите на него. Когда установите, нажмите правой кнопкой мыши в любое место чтобы закончить смену координат для маркера.',
+		);
+	};
+	const closePopupRemoveMarker = () => {
+		setIsRemoveMarker(true); //HELP: Включаем состояния при активации которого каждый клик на карту будет сохранятся для этого объекта как новые координаты, пока не отключишь это состояние правой кнопкой мыши.
+		setIsPopup(false);
+	};
 
 	return (
 		<div className={styles.wrapper_objectInfo}>
@@ -216,10 +231,6 @@ const ObjectInfo: FC = () => {
 						style={{
 							width: 'calc(50/1920*100vw)',
 							height: 'calc(50/1920*100vw)',
-							// position: 'absolute',
-							// top: '50%',
-							// left: '50%',
-							// transform: 'translate(-50%, -50%)',
 						}}
 					/>
 				)}
@@ -271,12 +282,24 @@ const ObjectInfo: FC = () => {
 			{isPopup && (
 				<Popup
 					message={messageInPopup}
-					isConfirm={true}
+					isConfirm={messageInPopup === messageRemoveMarker ? false : true}
 					functions={{
 						confirm:
-							messageSave === messageInPopup ? handleSaveValues : deleteObject,
-						cancel: cancelPopup,
+							messageSave === messageInPopup
+								? handleSaveValues
+								: messageMarker === messageInPopup
+									? handleRemoveMarker
+									: deleteObject,
+						cancel:
+							messageMarker === messageInPopup ? handleDeleteCrd : cancelPopup,
+						onClick: closePopupRemoveMarker,
 					}}
+					cancelButtonText={
+						messageMarker === messageInPopup ? 'Удалить' : undefined
+					}
+					confirmButtonText={
+						messageMarker === messageInPopup ? 'Переместить' : undefined
+					}
 				/>
 			)}
 

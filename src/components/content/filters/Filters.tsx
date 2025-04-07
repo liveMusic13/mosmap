@@ -87,7 +87,6 @@ const Filters: FC = () => {
 			</div>
 			<Button
 				onClick={() => {
-					// router.push(window.location.href);
 					refetch();
 				}}
 				style={{

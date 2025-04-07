@@ -8,13 +8,21 @@
 	flex-direction: column;
 	gap: func.adapt(20px, 1920px);
 
+	@media (max-width: 767.98px) {
+		gap: func.adapt(15px, 480px);
+		padding: func.adapt(12px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(15px, 360px);
+		padding: func.adapt(12px, 360px);
+	}
+
 	> button {
 		text-transform: uppercase;
 		width: 100%;
 		height: func.adapt(40px, 1920px);
 		font-size: 1rem;
 		box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
-
 		transition:
 			font-size 0.3s ease,
 			width 0.3s ease,
@@ -25,6 +33,22 @@
 			width: 101%;
 			height: func.adapt(45px, 1920px);
 			font-size: 1.08rem;
+
+			@media (max-width: 767.98px) {
+				height: func.adapt(40px, 480px);
+			}
+			@media (max-width: 479.98px) {
+				height: func.adapt(40px, 360px);
+			}
+		}
+
+		@media (max-width: 767.98px) {
+			height: func.adapt(40px, 480px);
+			border-radius: func.adapt(8px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			height: func.adapt(40px, 360px);
+			border-radius: func.adapt(8px, 360px);
 		}
 	}
 }
@@ -33,12 +57,24 @@
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: func.adapt(15px, 1920px);
+
+	@media (max-width: 767.98px) {
+		grid-template-columns: repeat(2, 1fr);
+		gap: func.adapt(5px, 480px);
+		row-gap: func.adapt(10px, 480px);
+	}
 }
 
 .block__id {
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-between;
+
+	@media (max-width: 767.98px) {
+		flex-direction: column;
+		gap: func.adapt(20px, 480px);
+		align-items: flex-start;
+	}
 }
 
 @include mix.line();

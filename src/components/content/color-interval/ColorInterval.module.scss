@@ -10,6 +10,16 @@
 	border-radius: func.adapt(12px, 1920px);
 	display: flex;
 	flex-direction: column;
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(15px, 480px);
+		padding: func.adapt(12px, 480px);
+		width: 100%;
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(15px, 360px);
+		padding: func.adapt(12px, 360px);
+	}
 }
 
 .title {
@@ -27,6 +37,9 @@
 	overflow-x: hidden;
 	flex-grow: 1;
 	@include mix.scrollbar();
-
 	position: relative;
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(20px, 480px);
+	}
 }

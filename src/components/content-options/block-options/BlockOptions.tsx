@@ -37,7 +37,9 @@ const BlockOptions: FC<IBlockOptions> = () => {
 			<div className={styles.block__title}>
 				<h2 className={styles.title}>{title_text}</h2>
 				<Button onClick={handleBack}>
-					{pathname === '/import/done' ? 'Назад' : 'На карту'}
+					{pathname === '/import/done' || pathname === '/settings-map'
+						? 'Назад'
+						: 'На карту'}
 				</Button>
 			</div>
 			<div className={styles.line}></div>

@@ -14,6 +14,13 @@
 		background-color: vars.$blue_very_light;
 	}
 
+	@media (max-width: 767.98px) {
+		padding: func.adapt(11px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(11px, 360px);
+	}
+
 	> button {
 		&:hover + .hover__text {
 			display: block;
@@ -40,9 +47,27 @@
 		width 0.3s ease,
 		height 0.3s ease;
 
+	@media (max-width: 767.98px) {
+		width: func.adapt(20px, 480px);
+		height: func.adapt(20px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(20px, 360px);
+		height: func.adapt(20px, 360px);
+	}
+
 	&:hover {
 		width: func.adapt(23px, 1920px);
 		height: func.adapt(23px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(20px, 480px);
+			height: func.adapt(20px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(20px, 360px);
+			height: func.adapt(20px, 360px);
+		}
 	}
 }
 

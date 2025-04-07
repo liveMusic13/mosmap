@@ -5,6 +5,14 @@
 	display: flex;
 	align-items: center;
 	gap: func.adapt(5px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(18px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(18px, 360px);
+	}
 }
 
 .range-container {
@@ -15,6 +23,13 @@
 	touch-action: none;
 	display: flex;
 	justify-content: space-between;
+
+	@media (max-width: 767.98px) {
+		height: func.adapt(70px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(5px, 360px) 0;
+	}
 }
 
 .range-track {
@@ -26,6 +41,10 @@
 	background: rgba($color: vars.$grey_lines, $alpha: 0.6);
 	transform: translateY(-50%);
 	border-radius: 2px;
+
+	@media (max-width: 767.98px) {
+		border-radius: func.adapt(2px, 360px);
+	}
 }
 
 .range-active {
@@ -52,6 +71,15 @@
 
 	&:hover {
 		transform: translate(-50%, -50%) scale(1.1);
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(30px, 480px);
+		height: func.adapt(30px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(30px, 360px);
+		height: func.adapt(30px, 360px);
 	}
 }
 

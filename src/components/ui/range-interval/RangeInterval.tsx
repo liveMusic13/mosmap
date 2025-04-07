@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 import { IRangeIntervalProps } from '@/types/props.types';
@@ -7,6 +7,7 @@ import { IRangeIntervalProps } from '@/types/props.types';
 import { useSuccessSaveColorsIntervalStore } from '@/store/store';
 
 import { useCheckSaveColorInterval } from '@/hooks/useCheckSaveColorInterval';
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useRangeIntervalLogic } from '@/hooks/useRangeIntervalLogic';
 import { useSaveColorInterval } from '@/hooks/useSaveColorInterval';
 
@@ -21,10 +22,14 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 	isViewInputsInterval,
 	isViewFieldSelect,
 }) => {
+	const router = useRouter();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+	const params = Object.fromEntries(searchParams.entries());
 	const { values: intervals, min_value, max_value } = intervalsObject;
 	const token = Cookies.get(TOKEN);
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
 
 	const setRanges_color_map = useSuccessSaveColorsIntervalStore(
 		store => store.setRanges_color_map,

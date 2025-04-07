@@ -4,8 +4,8 @@ import Export from '@/components/screens/export/Export';
 import Import from '@/components/screens/import/Import';
 
 // export default function DynamicPage({ params }: { params: { slug: string } }) {
-export default function DynamicPage({ params }: any) {
-	const { slug } = params;
+export default async function DynamicPage({ params }: any) {
+	const { slug } = await params;
 
 	if (slug === 'export') {
 		return <Export />;

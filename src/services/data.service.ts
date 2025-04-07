@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
 import {
 	IApiResponse,
@@ -38,24 +38,9 @@ export const dataService = {
 				data: response.data,
 				status: response.status,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	import_done: async (
@@ -83,24 +68,9 @@ export const dataService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	export: async (
@@ -132,24 +102,9 @@ export const dataService = {
 				data: response.data,
 				status: response.status,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 };

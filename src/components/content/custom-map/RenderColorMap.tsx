@@ -11,14 +11,19 @@ import {
 
 import { useGetColorMap } from '@/hooks/useGetColorMap';
 
+//TODO: Я сделал чтобы при переходе на главную колор мап отправлялся, теперь осталось придумать как будет отображаться. Т.к. в пк версии логика в том что пока активно окно закраски, отображается закраска районов, а при закрытии окна выключается. А на мобильной версии у меня отображается на отдельной странице окно закраски, поэтому надо придумать логику для мобильной версии по которой будет отображаться закраска районов
+
 const RenderColorMap: FC = () => {
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+	const sloiValue = searchParams.get('Слой карты');
+	const modeValue = searchParams.get('Способ раскраски');
+	const numFieldValue = searchParams.get('Числовое поле');
 
 	const [queryParams, setQueryParams] = useState({
-		sloi: '',
-		mode: '',
-		field_id: '',
+		sloi: sloiValue || '',
+		mode: modeValue || '',
+		field_id: numFieldValue || '',
 	});
 
 	const { isSuccessSaveColorsInterval, ranges_color_map } =
@@ -28,9 +33,6 @@ const RenderColorMap: FC = () => {
 	);
 
 	useEffect(() => {
-		const sloiValue = searchParams.get('Слой карты');
-		const modeValue = searchParams.get('Способ раскраски');
-		const numFieldValue = searchParams.get('Числовое поле');
 		if (sloiValue && modeValue && numFieldValue) {
 			setQueryParams({
 				sloi: sloiValue,
@@ -41,7 +43,6 @@ const RenderColorMap: FC = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log('isSuccessSaveColorsInterval', isSuccessSaveColorsInterval);
 		if (isSuccessSaveColorsInterval) {
 			refetch();
 		}

@@ -1,3 +1,4 @@
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -19,6 +20,10 @@ import RowDatabaseOptions from './row-database-options/RowDatabaseOptions';
 import { arrColumn } from '@/data/database.data';
 
 const DatabaseOptions: FC = () => {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
+
 	const { query_fields, query_lists, query_maps, query_icons } =
 		useGetDatabaseSettings();
 
@@ -89,6 +94,7 @@ const DatabaseOptions: FC = () => {
 			prev.map(item => (item.id === id ? { ...item, [field]: value } : item)),
 		);
 	};
+	const handleSettingsMap = () => router.push(`/settings-map?map=${map}`);
 
 	return (
 		<div className={styles.wrapper_dataBaseOptions}>
@@ -134,6 +140,9 @@ const DatabaseOptions: FC = () => {
 				))}
 			</div>
 			<Button>Добавить новое поле</Button>
+			<Button style={{ alignSelf: 'flex-start' }} onClick={handleSettingsMap}>
+				Настройка карты
+			</Button>
 		</div>
 	);
 };

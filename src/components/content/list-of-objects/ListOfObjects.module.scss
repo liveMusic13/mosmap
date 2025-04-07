@@ -10,11 +10,25 @@
 	border-radius: func.adapt(12px, 1920px);
 	display: flex;
 	flex-direction: column;
+
+	@media (max-width: 767.98px) {
+		width: 100%;
+		flex-grow: 1;
+		padding: func.adapt(10px, 480px);
+		border-radius: none;
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(10px, 360px);
+	}
 }
 
 .title {
 	font-weight: 700;
 	font-size: 1.57rem;
+
+	@media (max-width: 767.98px) {
+		font-size: 1.28rem;
+	}
 }
 
 .block__counts {
@@ -22,6 +36,15 @@
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(5px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-top: func.adapt(16px, 480px);
+		gap: func.adapt(5px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-top: func.adapt(16px, 360px);
+		gap: func.adapt(5px, 360px);
+	}
 }
 
 .block__description {
@@ -45,6 +68,15 @@
 	background-color: vars.$grey_lines;
 	margin-top: func.adapt(8px, 1920px);
 	margin-bottom: func.adapt(8px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-top: func.adapt(8px, 480px);
+		margin-bottom: func.adapt(8px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-top: func.adapt(8px, 360px);
+		margin-bottom: func.adapt(8px, 360px);
+	}
 }
 
 .block__list {
@@ -56,52 +88,20 @@
 	overflow-x: hidden;
 	flex-grow: 1;
 	padding-top: func.adapt(11px, 1920px);
-
 	position: relative;
+	display: flex;
+	flex-direction: column;
 
 	@include mix.scrollbar();
-}
 
-.block__name {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	position: relative;
-	padding: func.adapt(11px, 1920px);
-	border-bottom: 1px dotted vars.$grey_middle;
-
-	> button {
-		&:hover + .hover__text {
-			display: block;
-		}
+	@media (max-width: 767.98px) {
+		border-top-left-radius: func.adapt(12px, 480px);
+		border-top-right-radius: func.adapt(12px, 480px);
+		padding-top: func.adapt(11px, 1920px);
 	}
-}
-
-.name {
-	font-weight: 500;
-	font-size: 1.42rem;
-	color: vars.$green;
-	transition: font-size 0.3s ease;
-
-	&:hover {
-		cursor: pointer;
-		font-size: 1.5rem;
+	@media (max-width: 479.98px) {
+		border-top-left-radius: func.adapt(12px, 360px);
+		border-top-right-radius: func.adapt(12px, 360px);
+		padding-top: func.adapt(11px, 360px);
 	}
-}
-
-.icon_svg {
-	width: func.adapt(20px, 1920px);
-	height: func.adapt(20px, 1920px);
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
-
-	&:hover {
-		width: func.adapt(23px, 1920px);
-		height: func.adapt(23px, 1920px);
-	}
-}
-
-.hover__text {
-	@include mix.hover_text();
 }

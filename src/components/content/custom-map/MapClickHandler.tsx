@@ -7,6 +7,7 @@ import {
 	useFiltersStore,
 	useIdObjectInfoStore,
 	useObjectInfoStore,
+	useRemoveMarkerCrdStore,
 	useViewDotInfoStore,
 } from '@/store/store';
 
@@ -16,11 +17,13 @@ const MapClickHandler: FC = () => {
 	const { coords, setCoords } = useDotInfoCoordsStore(store => store);
 	const setIsFilters = useFiltersStore(store => store.setIsFilters);
 	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
+
 	const setIsActiveAddObject = useActiveAddObjectStore(
 		store => store.setIsActiveAddObject,
 	);
 	const setViewDotInfo = useViewDotInfoStore(store => store.setViewDotInfo);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
+	const isRemoveMarker = useRemoveMarkerCrdStore(store => store.isRemoveMarker);
 
 	const { refetch } = useDotInfo(coords);
 
@@ -35,7 +38,10 @@ const MapClickHandler: FC = () => {
 			setIsActiveAddObject(false);
 			setCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
 			setViewDotInfo(true);
-			setIdObjectInfo(0); //HELP: Сбрасываем на 0 для того чтобы исчезал значок таргета у маркера на карте при клике на пустую область
+			if (!isRemoveMarker) {
+				//HELP: Если режим смены координат маркера, то не убираем таргет
+				setIdObjectInfo(0); //HELP: Сбрасываем на 0 для того чтобы исчезал значок таргета у маркера на карте при клике на пустую область
+			}
 		},
 	});
 

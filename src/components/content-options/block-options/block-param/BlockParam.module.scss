@@ -4,6 +4,26 @@
 
 @include mix.filter_header();
 
+.wrapper_filterBlock {
+	@media (max-width: 767.98px) {
+		width: 100%;
+	}
+}
+
 .title {
 	margin-bottom: func.adapt(15px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-bottom: func.adapt(15px, 480px);
+	}
+}
+
+.block__filter {
+	@media (max-width: 767.98px) {
+		width: 100%;
+
+		> div {
+			width: 100% !important;
+		}
+	}
 }

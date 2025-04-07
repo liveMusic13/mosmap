@@ -1,17 +1,17 @@
 import { LatLngExpression } from 'leaflet';
 import { useSearchParams } from 'next/navigation';
-import { CSSProperties, FC, memo, useEffect } from 'react';
+import { CSSProperties, FC, memo } from 'react';
 
 import Button from '@/components/ui/button/Button';
 
 import {
 	useCenterMapStore,
 	useIdObjectInfoStore,
+	usePopupStore,
 	useToggleViewAreaStore,
 } from '@/store/store';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
-import { useSaveObject } from '@/hooks/useSaveObject';
 
 import styles from './MenuObject.module.scss';
 import { colors } from '@/app.constants';
@@ -25,40 +25,26 @@ const MenuObject: FC = memo(() => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 	const { isViewArea, setIsViewArea } = useToggleViewAreaStore(store => store);
+	const { setIsPopup, setMessageInPopup } = usePopupStore(store => store);
 
-	const { refetch: refetch_getDataMap, data } = useGetDataMap(queryString);
-	const { mutate, isSuccess: isSuccess_save } = useSaveObject();
+	const { data } = useGetDataMap(queryString);
 
 	const findTargetObject = data?.points.find(el => el.id === idObjectInfo); //HELP: Находим объект таргета
-
-	useEffect(() => {
-		if (isSuccess_save) {
-			refetch_getDataMap();
-
-			const timeoutId = setTimeout(() => {
-				setCenterMap([55.7522, 37.6156]); //TODO: Почему-то центр перемещается в случайное место на карте после обновления данных о маркерах в refetch_getDataMap. Поэтому это временное решение пока не найду в чем проблема
-			}, 700);
-			return () => clearTimeout(timeoutId);
-		}
-	}, [isSuccess_save]);
 
 	const handleViewInMap = () => {
 		//HELP: Изменяем центр карты, устанавливая центром координаты объекта таргета, тем самым находя его на карте
 		if (findTargetObject && findTargetObject.crd)
 			setCenterMap(findTargetObject?.crd as LatLngExpression);
 	};
-	const handleSetNewCrd = () => {
-		if (findTargetObject && findTargetObject.crd) {
-			mutate({ ...findTargetObject, crd: [null, null] });
-		}
-	};
+
 	const handleViewArea = () => setIsViewArea(!isViewArea);
 	const onClick = (id: number) => {
 		if (id === 0) {
 			handleViewInMap();
 			console.log('handleViewInMap');
 		} else if (id === 1) {
-			handleSetNewCrd();
+			setMessageInPopup('Вы хотите удалить или переместить маркер?');
+			setIsPopup(true);
 		} else if (id === 2) {
 			handleViewArea();
 		}

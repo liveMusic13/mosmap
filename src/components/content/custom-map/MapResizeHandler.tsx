@@ -17,19 +17,6 @@ const MapResizeHandler = () => {
 		}
 	}, [map, isListOfObjects]);
 
-	// useEffect(() => {
-	// 	console.log('use');
-
-	// 	if (map) {
-	// 		console.log('yes');
-	// 		map.invalidateSize();
-	// 	}
-	// }, [
-	// 	// isViewAllObjects,
-	// 	map,
-	// 	isListOfObjects,
-	// ]);
-
 	return null;
 };
 

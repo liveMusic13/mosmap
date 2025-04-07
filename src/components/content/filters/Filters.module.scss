@@ -11,13 +11,31 @@
 	display: flex;
 	flex-direction: column;
 
+	@media (max-width: 767.98px) {
+		width: 100%;
+		padding: func.adapt(10px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		padding: func.adapt(10px, 360px);
+	}
+
 	> button {
 		min-height: func.adapt(44px, 1920px);
-
 		transition:
 			width 0.3s ease,
 			height 0.3s ease,
 			font-size 0.3s ease;
+
+		@media (max-width: 767.98px) {
+			min-height: func.adapt(44px, 480px);
+			border-radius: func.adapt(6px, 480px);
+		}
+
+		@media (max-width: 479.98px) {
+			min-height: func.adapt(44px, 360px);
+			border-radius: func.adapt(6px, 360px);
+		}
 
 		&:hover {
 			width: 102% !important;
@@ -36,12 +54,28 @@
 .title {
 	font-weight: 700;
 	font-size: 1.57rem;
+
+	@media (max-width: 767.98px) {
+		font-size: 1.28rem;
+	}
 }
 
 .image_title {
 	width: func.adapt(9px, 1920px);
 	height: func.adapt(9px, 1920px);
 	margin-right: func.adapt(5px, 1920px);
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(9px, 480px);
+		height: func.adapt(9px, 480px);
+		margin-right: func.adapt(5px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(9px, 360px);
+		height: func.adapt(9px, 360px);
+		margin-right: func.adapt(5px, 360px);
+	}
 }
 
 .block__filters {
@@ -56,4 +90,14 @@
 	@include mix.scrollbar();
 
 	position: relative;
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(20px, 480px);
+		margin-top: func.adapt(16px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(20px, 360px);
+		margin-top: func.adapt(16px, 360px);
+	}
 }

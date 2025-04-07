@@ -126,3 +126,8 @@ export interface IBurgerMenuStore {
 	isBurgerMenu: boolean;
 	setIsBurgerMenu: (bol: boolean) => void;
 }
+
+export interface IRemoveMarkerCrdStore {
+	isRemoveMarker: boolean;
+	setIsRemoveMarker: (bol: boolean) => void;
+}

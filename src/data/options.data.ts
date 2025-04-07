@@ -38,14 +38,19 @@ export const standardArr: IOptionsData[] = [
 ];
 
 export const settingsArr: IOptionsData[] = [
-	{
-		id: 6,
-		src_active: 'database-settings',
-		hover_text: 'Настройка базы данных',
-	},
+	// {
+	// 	id: 6,
+	// 	src_active: 'database-settings',
+	// 	hover_text: 'Настройка базы данных',
+	// },
+	// {
+	// 	id: 5,
+	// 	src_active: 'gear',
+	// 	hover_text: 'Настройка карты',
+	// },
 	{
 		id: 5,
 		src_active: 'gear',
-		hover_text: 'Настройка карты',
+		hover_text: 'Настройка базы данных',
 	},
 ];

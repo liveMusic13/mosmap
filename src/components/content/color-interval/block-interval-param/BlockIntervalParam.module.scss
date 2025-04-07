@@ -6,4 +6,8 @@
 
 .title {
 	margin-bottom: func.adapt(15px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-bottom: func.adapt(15px, 480px);
+	}
 }

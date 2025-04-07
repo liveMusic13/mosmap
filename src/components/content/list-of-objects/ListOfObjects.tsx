@@ -13,6 +13,7 @@ import Loader from '@/components/ui/loader/Loader';
 
 import { useIdObjectInfoStore, useMapLayersStore } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { isMarkerInsidePolygon } from '@/utils/markersInsidePolygon';
@@ -21,6 +22,8 @@ import styles from './ListOfObjects.module.scss';
 import List from './list/List';
 
 const ListOfObjects: FC = () => {
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
 	const searchParams = useSearchParams();
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
@@ -129,23 +132,42 @@ const ListOfObjects: FC = () => {
 					widthImage={16}
 					heightImage={16}
 					placeholder='Поиск'
-					style={{
-						width: 'calc(386/1920*100vw)',
-						height: 'calc(40/1920*100vw)',
-						borderRadius: 'calc(6/1920*100vw)',
-						marginLeft: 'calc(11/1920*100vw)',
-					}}
+					style={
+						isMobile
+							? {
+									width: '100%',
+									height: 'calc(40/480*100vw)',
+									borderRadius: 'calc(6/480*100vw)',
+									// marginLeft: 'calc(11/480*100vw)',
+								}
+							: {
+									width: 'calc(386/1920*100vw)',
+									height: 'calc(40/1920*100vw)',
+									borderRadius: 'calc(6/1920*100vw)',
+									marginLeft: 'calc(11/1920*100vw)',
+								}
+					}
 					styleInput={{
 						outline: 'none',
 						fontSize: '1.14rem',
 					}}
-					styleImage={{
-						right: 'calc(12/1920*100vw)',
-						width: 'calc(16/1920*100vw)',
-						height: 'calc(16/1920*100vw)',
-						top: '50%',
-						transform: 'translateY(-50%)',
-					}}
+					styleImage={
+						isMobile
+							? {
+									right: 'calc(12/480*100vw)',
+									width: 'calc(16/480*100vw)',
+									height: 'calc(16/480*100vw)',
+									top: '50%',
+									transform: 'translateY(-50%)',
+								}
+							: {
+									right: 'calc(12/1920*100vw)',
+									width: 'calc(16/1920*100vw)',
+									height: 'calc(16/1920*100vw)',
+									top: '50%',
+									transform: 'translateY(-50%)',
+								}
+					}
 				/>
 				{
 					// data?.points //HELP:Предложить вывод ограниченного количества объектов и подгружать их при скроле. Т.к. все равно же есть фильтрация в новой версии

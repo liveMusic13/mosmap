@@ -13,6 +13,8 @@ import {
 	useListOfObjectsStore,
 } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
+
 import { srcStandard } from '@/utils/pathSvg';
 
 import styles from './Options.module.scss';
@@ -23,6 +25,7 @@ const Options: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+	const windowSize = useCheckWidth();
 
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
 	const isFilters = useFiltersStore(store => store.isFilters);
@@ -42,18 +45,26 @@ const Options: FC = () => {
 		} else if (id === 1) {
 			router.push(`/export?map=${map}`);
 		} else if (id === 2) {
-			useFiltersStore.setState(state => {
-				if (!state.isFilters) {
-					setIsActiveAddObject(false);
-				}
-				return {
-					isFilters: !state.isFilters,
-				};
-			});
+			if (windowSize <= 767) {
+				router.push(`/mobile-filters/filters/?map=${map}`);
+			} else {
+				useFiltersStore.setState(state => {
+					if (!state.isFilters) {
+						setIsActiveAddObject(false);
+					}
+					return {
+						isFilters: !state.isFilters,
+					};
+				});
+			}
 		} else if (id === 3) {
-			useListOfObjectsStore.setState(state => ({
-				isListOfObjects: !state.isListOfObjects,
-			}));
+			if (windowSize <= 767) {
+				router.push(`/mobile-filters/list-of-objects/?map=${map}`);
+			} else {
+				useListOfObjectsStore.setState(state => ({
+					isListOfObjects: !state.isListOfObjects,
+				}));
+			}
 		} else if (id === 4) {
 			if (token) {
 				useActiveAddObjectStore.setState(state => ({
@@ -64,15 +75,17 @@ const Options: FC = () => {
 				router.push('/auth');
 			}
 		} else if (id === 7) {
-			useColorsIntervalStore.setState(state => ({
-				isColorInterval: !state.isColorInterval,
-			}));
+			if (windowSize <= 767) {
+				router.push(`/mobile-filters/color-interval?map=${map}`);
+			} else {
+				useColorsIntervalStore.setState(state => ({
+					isColorInterval: !state.isColorInterval,
+				}));
+			}
 		}
 	}, []);
 	const handleClick = useCallback((id: number) => {
 		if (id === 5) {
-			router.push(`/settings-map?map=${map}`);
-		} else if (id === 6) {
 			router.push(`/settings-database?map=${map}`);
 		}
 	}, []);

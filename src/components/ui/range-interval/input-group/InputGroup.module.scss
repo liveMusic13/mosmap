@@ -4,28 +4,27 @@
 .wrapper__input-group {
 	display: flex;
 	align-items: center;
-	// gap: func.adapt(5px, 1920px);
 	justify-content: space-between;
 	height: func.adapt(30px, 1920px);
 	width: 100%;
+
+	@media (max-width: 767.98px) {
+		height: func.adapt(30px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		height: func.adapt(30px, 360px);
+	}
 
 	> button {
 		text-transform: uppercase;
 		color: vars.$black_hard;
 		background-color: transparent;
-		// width: 98%;
-		// height: func.adapt(40px, 1920px);
 		font-size: 1.5rem;
-		// box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
 
 		transition: font-size 0.3s ease;
-		// width 0.3s ease,
-		// height 0.3s ease;
 
 		&:hover {
 			cursor: pointer;
-			// width: 100%;
-			// height: func.adapt(45px, 1920px);
 			font-size: 1.58rem;
 		}
 
@@ -42,7 +41,6 @@
 		font-size: 1rem;
 		max-width: 27%;
 		height: func.adapt(30px, 1920px);
-		// flex-grow: 1;
 		border-radius: func.adapt(4px, 1920px);
 		border: 1px solid vars.$grey_middle;
 		background-color: transparent;
@@ -55,12 +53,30 @@
 			padding: func.adapt(5px, 1920px) func.adapt(37px, 1920px)
 				func.adapt(5px, 1920px) func.adapt(11px, 1920px);
 		}
+
+		@media (max-width: 767.98px) {
+			height: func.adapt(30px, 480px);
+			border-radius: func.adapt(4px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			height: func.adapt(30px, 360px);
+			border-radius: func.adapt(4px, 360px);
+		}
 	}
 }
 
 .color-placeholder {
 	width: func.adapt(59px, 1920px);
 	height: func.adapt(30px, 1920px);
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(59px, 480px);
+		height: func.adapt(30px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(59px, 360px);
+		height: func.adapt(30px, 360px);
+	}
 }
 
 .color {
@@ -74,5 +90,23 @@
 		cursor: pointer;
 		width: func.adapt(65px, 1920px);
 		height: func.adapt(33px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(59px, 480px);
+			height: func.adapt(30px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(59px, 360px);
+			height: func.adapt(30px, 360px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(59px, 480px);
+		height: func.adapt(30px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(59px, 360px);
+		height: func.adapt(30px, 360px);
 	}
 }

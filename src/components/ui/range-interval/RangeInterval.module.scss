@@ -6,7 +6,10 @@
 	flex-direction: column;
 	align-items: center;
 	gap: func.adapt(5px, 1920px);
-	// padding: 0 func.adapt(20px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(5px, 480px);
+	}
 }
 
 .range-container {
@@ -17,6 +20,15 @@
 	touch-action: none;
 	display: flex;
 	justify-content: space-between;
+
+	@media (max-width: 767.98px) {
+		height: func.adapt(70px, 480px);
+		padding: func.adapt(5px, 480px) 0;
+	}
+	@media (max-width: 479.98px) {
+		height: func.adapt(70px, 360px);
+		padding: func.adapt(5px, 360px) 0;
+	}
 }
 
 .range-track {
@@ -46,6 +58,15 @@
 	&:hover {
 		transform: translate(-50%, -50%) scale(1.1);
 	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(14px, 480px);
+		height: func.adapt(14px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(14px, 360px);
+		height: func.adapt(14px, 360px);
+	}
 }
 
 .range-value {
@@ -60,6 +81,10 @@
 	color: vars.$green;
 	white-space: nowrap;
 	box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+
+	@media (max-width: 767.98px) {
+		transform: translate(-50%, -12px);
+	}
 }
 
 .range-values-container {
@@ -67,6 +92,13 @@
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(5px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(5px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(5px, 360px);
+	}
 }
 
 .block__buttons {
@@ -75,6 +107,15 @@
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(10px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-top: func.adapt(20px, 480px);
+		gap: func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-top: func.adapt(20px, 360px);
+		gap: func.adapt(10px, 360px);
+	}
 
 	> button {
 		width: 98%;
@@ -92,11 +133,27 @@
 			width: 100%;
 			height: func.adapt(45px, 1920px);
 			font-size: 1.08rem;
+
+			@media (max-width: 767.98px) {
+				height: func.adapt(40px, 480px);
+			}
+			@media (max-width: 479.98px) {
+				height: func.adapt(40px, 360px);
+			}
 		}
 
 		&:disabled {
 			cursor: default;
 			font-size: 1rem;
+		}
+
+		@media (max-width: 767.98px) {
+			height: func.adapt(40px, 480px);
+			border-radius: func.adapt(8px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			height: func.adapt(40px, 360px);
+			border-radius: func.adapt(8px, 360px);
 		}
 	}
 }

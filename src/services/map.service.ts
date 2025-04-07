@@ -217,24 +217,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	save_object: async (
@@ -253,24 +238,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	save_settings_map: async (): Promise<
@@ -286,24 +256,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	delete_object: async (
@@ -322,24 +277,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	getHelpSearchAddress: async (
@@ -358,24 +298,9 @@ export const mapService = {
 				data: response.data,
 				status: response.status,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	dotInfo: async (coords: {
@@ -396,24 +321,9 @@ export const mapService = {
 			);
 
 			return { data: response.data, status: response.status };
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	color_interval: async (
@@ -431,24 +341,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	color_interval_save: async (
@@ -470,24 +365,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 	color_map: async (
@@ -508,24 +388,9 @@ export const mapService = {
 				status: response.status,
 				data: response.data,
 			};
-		} catch (err) {
-			//HELP: Типизируем ошибку как AxiosError или Error
-			const error = err as AxiosError<{ message?: string }> | Error;
-			let statusCode = 500;
-			let errorMessage = 'Произошла ошибка при получении данных.';
-
-			//HELP: Проверяем тип ошибки
-			if (axios.isAxiosError(error)) {
-				statusCode = error.response?.status || 500;
-				errorMessage = error.response?.data?.message || errorMessage;
-			} else if (error instanceof Error) {
-				errorMessage = error.message;
-			}
-
-			return {
-				status: statusCode,
-				data: error,
-			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
 };

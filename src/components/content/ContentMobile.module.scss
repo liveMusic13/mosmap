@@ -1,0 +1,47 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+//TODO: После адаптива фильтров, списка и закрашивания районов проверить здесь стили, если вдруг надо будет что подправить
+
+.wrapper_content {
+	padding: 0px func.adapt(10px, 480px);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	position: relative; // HELP: для лоадера
+	height: auto;
+
+	@media (max-width: 479.98px) {
+		// padding: 0px func.adapt(10px, 360px);
+		padding: 0px;
+	}
+}
+
+.title {
+	color: vars.$black_hard;
+	text-transform: uppercase;
+	font-family: 'Intro';
+	font-size: 0.928rem;
+	margin: func.adapt(15px, 480px) func.adapt(10px, 480px) func.adapt(5px, 480px);
+
+	@media (max-width: 479.98px) {
+		margin: func.adapt(15px, 360px) func.adapt(10px, 480px)
+			func.adapt(5px, 360px);
+	}
+}
+
+.block__content {
+	padding: func.adapt(20px, 480px) 0px;
+	height: auto;
+	flex-grow: 1;
+	width: 100%;
+	display: flex;
+	gap: func.adapt(20px, 480px);
+	position: relative;
+
+	@media (max-width: 479.98px) {
+		padding: func.adapt(10px, 360px) 0px;
+		gap: func.adapt(10px, 360px);
+	}
+}

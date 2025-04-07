@@ -12,6 +12,15 @@
 	overflow-x: hidden;
 	@include mix.scrollbar();
 	max-height: 100%; //HELP: Ограничить максимальную высоту, чтобы когда компонент не помещается по высоте , то появлялся скролбар. А когда в компоненте мало контента, то он просто стоял маленький по центру экрана.
+
+	@media (max-width: 767.98px) {
+		padding: func.adapt(20px, 480px);
+		border-radius: func.adapt(12px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(20px, 360px);
+		border-radius: func.adapt(12px, 360px);
+	}
 }
 
 .block__title {
@@ -35,6 +44,10 @@
 			width: func.adapt(130px, 1920px);
 			height: func.adapt(45px, 1920px);
 		}
+
+		@media (max-width: 767.98px) {
+			display: none;
+		}
 	}
 }
 
@@ -42,6 +55,10 @@
 	font-size: 1.57rem;
 	font-weight: 700;
 	color: vars.$black_hard;
+
+	@media (max-width: 767.98px) {
+		font-size: 2.28rem;
+	}
 }
 
 .line {
@@ -50,9 +67,23 @@
 	width: 100%;
 	height: 1px;
 	border-bottom: 1px dotted vars.$grey_lines;
+
+	@media (max-width: 767.98px) {
+		margin: func.adapt(16px, 480px) 0px;
+	}
+	@media (max-width: 479.98px) {
+		margin: func.adapt(16px, 360px) 0px;
+	}
 }
 
 .block__content {
 	border-radius: func.adapt(11px, 1920px);
 	background-color: vars.$blue_very_light;
+
+	@media (max-width: 767.98px) {
+		border-radius: func.adapt(11px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(11px, 360px);
+	}
 }

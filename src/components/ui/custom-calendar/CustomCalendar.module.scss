@@ -5,13 +5,23 @@
 .calendar {
 	display: flex;
 	flex-direction: column;
-	// border: 1px solid #ddd;
 	border-radius: func.adapt(6px, 1920px);
 	padding: func.adapt(12px, 1920px);
 	max-width: func.adapt(290px, 1920px);
 	background-color: vars.$white;
-	// box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+
+	@media (max-width: 767.98px) {
+		max-width: 100%;
+		width: 100%;
+		border-radius: func.adapt(6px, 480px);
+		padding: func.adapt(12px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(6px, 360px);
+		padding: func.adapt(12px, 360px);
+	}
 }
 
 .header {
@@ -19,6 +29,13 @@
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: func.adapt(12px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-bottom: func.adapt(12px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-bottom: func.adapt(12px, 360px);
+	}
 }
 
 .navButton {
@@ -40,11 +57,40 @@
 		width: func.adapt(35px, 1920px);
 		height: func.adapt(35px, 1920px);
 
+		@media (max-width: 767.98px) {
+			width: func.adapt(35px, 480px);
+			height: func.adapt(35px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(35px, 360px);
+			height: func.adapt(35px, 360px);
+		}
+
 		> .prevMonth,
 		.nextMonth {
 			width: func.adapt(15px, 1920px);
 			height: func.adapt(15px, 1920px);
+
+			@media (max-width: 767.98px) {
+				width: func.adapt(12px, 480px);
+				height: func.adapt(12px, 480px);
+			}
+			@media (max-width: 479.98px) {
+				width: func.adapt(12px, 360px);
+				height: func.adapt(12px, 360px);
+			}
 		}
+	}
+
+	@media (max-width: 767.98px) {
+		border-radius: func.adapt(4px, 480px);
+		width: func.adapt(32px, 480px);
+		height: func.adapt(32px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(4px, 360px);
+		width: func.adapt(32px, 360px);
+		height: func.adapt(32px, 360px);
 	}
 }
 
@@ -52,6 +98,15 @@
 .nextMonth {
 	width: func.adapt(12px, 1920px);
 	height: func.adapt(12px, 1920px);
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(12px, 480px);
+		height: func.adapt(12px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(12px, 360px);
+		height: func.adapt(12px, 360px);
+	}
 }
 
 .prevMonth {
@@ -84,12 +139,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	// padding: func.adapt(4px, 1920px) 0;
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(44px, 480px);
+		height: func.adapt(40px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(44px, 360px);
+		height: func.adapt(40px, 360px);
+	}
 }
 
 .day {
-	width: func.adapt(36px, 1920px);
-	height: func.adapt(32px, 1920px);
+	width: func.adapt(44px, 1920px);
+	height: func.adapt(40px, 1920px);
 	font-weight: 500;
 	font-size: 0.875rem;
 	display: flex;
@@ -100,6 +163,17 @@
 
 	&:hover {
 		cursor: pointer;
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(44px, 480px);
+		height: func.adapt(40px, 480px);
+		border-radius: func.adapt(4px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(44px, 360px);
+		height: func.adapt(40px, 360px);
+		border-radius: func.adapt(4px, 360px);
 	}
 }
 
@@ -131,12 +205,17 @@
 	display: flex;
 	justify-content: space-between;
 	margin-top: func.adapt(12px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-top: func.adapt(12px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-top: func.adapt(12px, 360px);
+	}
 }
 
 .cancelButton,
 .applyButton {
-	// padding: 8px 16px;
-	// border: none;
 	border-radius: func.adapt(4px, 1920px);
 	font-size: 1rem;
 	font-weight: 600;
@@ -146,6 +225,13 @@
 
 	@media (max-width: 1320px) {
 		font-size: 0.85rem;
+	}
+
+	@media (max-width: 767.98px) {
+		border-radius: func.adapt(4px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(4px, 360px);
 	}
 }
 
@@ -159,6 +245,16 @@
 		cursor: pointer;
 		width: func.adapt(115px, 1920px);
 		height: func.adapt(45px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(105px, 480px);
+			height: func.adapt(45px, 480px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(105px, 480px);
+		// height: func.adapt(45px, 480px);
 	}
 }
 
@@ -173,5 +269,15 @@
 		cursor: pointer;
 		width: func.adapt(143px, 1920px);
 		height: func.adapt(45px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(143px, 480px);
+			height: func.adapt(40px, 480px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(143px, 480px);
+		height: func.adapt(40px, 480px);
 	}
 }

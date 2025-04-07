@@ -17,4 +17,14 @@
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(8px, 1902px);
+
+	@media (max-width: 767.98px) {
+		max-height: func.adapt(300px, 480px);
+		gap: func.adapt(8px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		max-height: func.adapt(300px, 360px);
+		gap: func.adapt(8px, 360px);
+	}
 }

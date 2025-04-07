@@ -162,6 +162,9 @@ export interface IPopup {
 		confirm?: () => void;
 		cancel?: () => void;
 	};
+	soloButtonText?: string;
+	confirmButtonText?: string;
+	cancelButtonText?: string;
 }
 
 export interface IInfo {

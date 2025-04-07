@@ -8,11 +8,37 @@
 	height: calc(
 		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(163px, 1920px)}
 	);
-	// height: 100%; // Добавить эту строку
-
 	display: flex;
 	flex-direction: column;
 	position: relative; // HELP: для лоадера
+
+	@media (max-width: 767.98px) {
+		height: auto;
+		padding: 0px func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		padding: 0px func.adapt(10px, 360px);
+	}
+
+	> button {
+		display: none;
+
+		@media (max-width: 767.98px) {
+			display: block;
+			text-transform: uppercase;
+			width: 100%;
+			height: func.adapt(40px, 480px);
+			font-size: 1rem;
+			border-radius: func.adapt(8px, 480px);
+			margin-bottom: func.adapt(10px, 480px);
+			box-shadow: 0px 0px 22px rgba($color: vars.$green, $alpha: 0.44);
+		}
+		@media (max-width: 479.98px) {
+			height: func.adapt(40px, 360px);
+			border-radius: func.adapt(8px, 360px);
+			margin-bottom: func.adapt(10px, 360px);
+		}
+	}
 }
 
 .title {
@@ -24,6 +50,11 @@
 
 	@media (max-width: 767.98px) {
 		font-size: 0.928rem;
+		margin: func.adapt(15px, 480px) 0;
+	}
+
+	@media (max-width: 479.98px) {
+		margin: func.adapt(15px, 360px) 0;
 	}
 }
 

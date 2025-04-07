@@ -15,6 +15,7 @@ import {
 	IObjectInfoStore,
 	IPopupStore,
 	IQueryKeysForGetCacheDataStore,
+	IRemoveMarkerCrdStore,
 	ISearchAddressStore,
 	ISelectAreaStore,
 	ISuccessSaveColorsIntervalStore,
@@ -161,4 +162,9 @@ export const useSuccessSaveColorsIntervalStore =
 export const useBurgerMenuStore = create<IBurgerMenuStore>(set => ({
 	isBurgerMenu: false,
 	setIsBurgerMenu: bol => set({ isBurgerMenu: bol }),
+}));
+
+export const useRemoveMarkerCrdStore = create<IRemoveMarkerCrdStore>(set => ({
+	isRemoveMarker: false,
+	setIsRemoveMarker: bol => set({ isRemoveMarker: bol }),
 }));
