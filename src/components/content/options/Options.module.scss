@@ -16,7 +16,9 @@
 
 	@media (max-width: 767.98px) {
 		height: func.adapt(50px, 480px);
-		border-radius: none;
+		// border-radius: none;
+		border-radius: func.adapt(11px, 480px);
+
 		// box-shadow: none;
 		padding: none;
 		overflow-y: hidden;
@@ -25,6 +27,8 @@
 
 	@media (max-width: 479.98px) {
 		height: func.adapt(50px, 360px);
+		border-radius: func.adapt(11px, 360px);
+
 		// height: auto;
 		// border-radius: none;
 		// box-shadow: none;

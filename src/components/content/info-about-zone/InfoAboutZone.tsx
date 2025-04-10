@@ -18,6 +18,7 @@ import {
 	useViewDotInfoStore,
 } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDotInfo } from '@/hooks/useDotInfo';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSaveObject } from '@/hooks/useSaveObject';
@@ -29,10 +30,12 @@ import { TOKEN, colors } from '@/app.constants';
 
 //TODO: Проверить смогу ли я сюда попап добавить из информации об объекте, чтобы он выводился при сохранении новых координат
 const InfoAboutZone: FC = () => {
+	const windowSize = useCheckWidth();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
 	const token = Cookies.get(TOKEN);
+	const isMobile = windowSize <= 767;
 
 	const setIsRemoveMarker = useRemoveMarkerCrdStore(
 		store => store.setIsRemoveMarker,
@@ -42,7 +45,7 @@ const InfoAboutZone: FC = () => {
 	const setIsActiveAddObject = useActiveAddObjectStore(
 		store => store.setIsActiveAddObject,
 	);
-	const setViewDotInfo = useViewDotInfoStore(store => store.setViewDotInfo);
+	const { isViewDotInfo, setViewDotInfo } = useViewDotInfoStore(store => store);
 	const { isPopup, messageInPopup, setIsPopup } = usePopupStore(store => store);
 
 	//HELP: Преобразование searchParams в строку
@@ -94,6 +97,7 @@ const InfoAboutZone: FC = () => {
 			<div className={styles.block__objectInfo}>
 				<div className={styles.block__title}>
 					<h2 className={styles.title}>Просмотр объекта</h2>
+
 					<Button
 						style={{
 							backgroundColor: 'transparent',
@@ -103,13 +107,23 @@ const InfoAboutZone: FC = () => {
 						}}
 						onClick={handleClose}
 					>
-						<Image
-							src='/images/icons/exit.svg'
-							alt='exit'
-							width={9}
-							height={9}
-							className={styles.image_title}
-						/>
+						{isMobile ? (
+							<Image
+								src={'/images/icons/arrow_viewObject_mobile.svg'}
+								alt='arrow'
+								width={19}
+								height={19}
+								style={isViewDotInfo ? { transform: 'rotate(-180deg)' } : {}}
+							/>
+						) : (
+							<Image
+								src='/images/icons/exit.svg'
+								alt='exit'
+								width={9}
+								height={9}
+								className={styles.image_title}
+							/>
+						)}
 					</Button>
 				</div>
 			</div>

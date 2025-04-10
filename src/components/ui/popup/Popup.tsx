@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import { IPopup } from '@/types/props.types';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
+
 import Button from '../button/Button';
 
 import styles from './Popup.module.scss';
@@ -16,7 +18,9 @@ const Popup: FC<IPopup> = ({
 	confirmButtonText = 'Подтвердить',
 	cancelButtonText = 'Отменить',
 }) => {
-	console.log('isConfirm', isConfirm);
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
+
 	return (
 		<div className={styles.block__popup}>
 			{isHtmlMessage ? (
@@ -28,8 +32,8 @@ const Popup: FC<IPopup> = ({
 				<div className={styles.block__buttons}>
 					<Button
 						style={{
-							width: 'calc(170/1920*100vw)',
-							height: 'calc(40/1920*100vw)',
+							width: `calc(170/${isMobile ? 480 : 1920}*100vw)`,
+							height: `calc(40/${isMobile ? 480 : 1920}*100vw)`,
 							boxShadow: `0px 0px 10px ${colors.green_light}`,
 							color: colors.white,
 							fontSize: '1.14rem',
@@ -40,8 +44,8 @@ const Popup: FC<IPopup> = ({
 					</Button>
 					<Button
 						style={{
-							width: 'calc(170/1920*100vw)',
-							height: 'calc(40/1920*100vw)',
+							width: `calc(170/${isMobile ? 480 : 1920}*100vw)`,
+							height: `calc(40/${isMobile ? 480 : 1920}*100vw)`,
 							boxShadow: `0px 0px 10px ${colors.green_light}`,
 							backgroundColor: 'transparent',
 							color: colors.red,
@@ -55,8 +59,8 @@ const Popup: FC<IPopup> = ({
 			) : (
 				<Button
 					style={{
-						width: 'calc(170/1920*100vw)',
-						height: 'calc(40/1920*100vw)',
+						width: `calc(170/${isMobile ? 480 : 1920}*100vw)`,
+						height: `calc(40/${isMobile ? 480 : 1920}*100vw)`,
 						boxShadow: `0px 0px 10px ${colors.green_light}`,
 						backgroundColor: colors.white,
 						color: colors.green,

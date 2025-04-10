@@ -7,6 +7,13 @@
 	align-items: center;
 	gap: func.adapt(3px, 1920px);
 
+	@media (max-width: 767.98px) {
+		gap: func.adapt(3px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(3px, 360px);
+	}
+
 	> button {
 		&:hover {
 			> .hover__text {
@@ -26,6 +33,24 @@
 	&:hover {
 		width: func.adapt(25px, 1920px);
 		height: func.adapt(25px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(22px, 480px);
+			height: func.adapt(22px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(22px, 360px);
+			height: func.adapt(22px, 360px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(22px, 480px);
+		height: func.adapt(22px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(22px, 360px);
+		height: func.adapt(22px, 360px);
 	}
 }
 

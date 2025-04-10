@@ -11,6 +11,7 @@ import {
 	useToggleViewAreaStore,
 } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import styles from './MenuObject.module.scss';
@@ -18,6 +19,9 @@ import { colors } from '@/app.constants';
 import { arrMenuObject } from '@/data/menuObject.data';
 
 const MenuObject: FC = memo(() => {
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
+	const isMobile_mini = windowSize <= 481;
 	const searchParams = useSearchParams();
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
@@ -66,9 +70,17 @@ const MenuObject: FC = memo(() => {
 				<Button
 					key={el.id}
 					style={{
-						width: 'calc(47/1920*100vw)',
-						height: 'calc(38/1920*100vw)',
-						boxShadow: `0px 2px calc(15/1920*100vw) ${colors.grey_middle}`,
+						width: isMobile_mini
+							? 'calc(64/360*100vw)'
+							: isMobile
+								? 'calc(64/480*100vw)'
+								: 'calc(47/1920*100vw)',
+						height: isMobile_mini
+							? 'calc(42/360*100vw)'
+							: isMobile
+								? 'calc(42/480*100vw)'
+								: 'calc(38/1920*100vw)',
+						boxShadow: `0px 2px calc(15/${isMobile_mini ? 360 : isMobile ? 480 : 1920}*100vw) ${colors.grey_middle}`,
 						backgroundColor: 'transparent',
 						display: 'flex',
 						alignItems: 'center',

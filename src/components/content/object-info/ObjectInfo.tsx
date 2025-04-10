@@ -15,7 +15,6 @@ import {
 
 import {
 	useActiveAddObjectStore,
-	useCenterMapStore,
 	useDotInfoCoordsStore,
 	useFiltersStore,
 	useIdObjectInfoStore,
@@ -26,6 +25,7 @@ import {
 	useToggleViewAreaStore,
 } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDeleteObject } from '@/hooks/useDeleteObject';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useGetFilters } from '@/hooks/useGetFilters';
@@ -46,13 +46,15 @@ const messageDelete = 'Вы действительно хотите удалит
 const messageMarker = 'Вы хотите удалить или переместить маркер?';
 const messageRemoveMarker =
 	'Выберите любое место на карте и нажмите на него. Когда установите, нажмите правой кнопкой мыши в любое место чтобы закончить смену координат для маркера.';
-// const messageCancelRemoveMarker = 'Действие по перемещению маркера отменено.';
 
 const ObjectInfo: FC = () => {
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
+
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const setIsFilters = useFiltersStore(store => store.setIsFilters);
-	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
+	const { isObjectInfo, setIsObjectInfo } = useObjectInfoStore(store => store);
 	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
 	const { setMarker, clearMarker } = useTargetObjectStore(store => store);
 	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
@@ -61,7 +63,6 @@ const ObjectInfo: FC = () => {
 	const { setIsRemoveMarker } = useRemoveMarkerCrdStore(store => store);
 	const { isPopup, setIsPopup, setMessageInPopup, messageInPopup } =
 		usePopupStore(store => store);
-	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
@@ -216,13 +217,27 @@ const ObjectInfo: FC = () => {
 						}}
 						onClick={handleClose}
 					>
-						<Image
-							src='/images/icons/exit.svg'
-							alt='exit'
-							width={9}
-							height={9}
-							className={styles.image_title}
-						/>
+						{isMobile ? (
+							<Image
+								src={'/images/icons/arrow_viewObject_mobile.svg'}
+								alt='arrow'
+								width={19}
+								height={19}
+								style={
+									isObjectInfo || isActiveAddObject
+										? { transform: 'rotate(-180deg)' }
+										: {}
+								}
+							/>
+						) : (
+							<Image
+								src='/images/icons/exit.svg'
+								alt='exit'
+								width={9}
+								height={9}
+								className={styles.image_title}
+							/>
+						)}
 					</Button>
 				</div>
 				{!isActiveAddObject && !isLoading && <MenuObject />}

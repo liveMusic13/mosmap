@@ -3,17 +3,23 @@
 @use '@st/mixins.scss' as mix;
 
 .wrapper_objectInfo {
-	// flex-grow: 1;
-	// position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(8px, 1920px);
-	// height: 100vh;
-	// height: auto;
 	overflow-y: auto;
 	overflow-x: hidden;
 	@include mix.scrollbar();
 	padding-bottom: func.adapt(16px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(8px, 480px);
+		padding-bottom: func.adapt(16px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(8px, 3600px);
+		padding-bottom: func.adapt(16px, 3600px);
+	}
 }
 
 .block__objectInfo {
@@ -26,7 +32,18 @@
 	flex-direction: column;
 	gap: func.adapt(16px, 1920px);
 
-	// position: relative;
+	@media (max-width: 767.98px) {
+		width: 100%;
+		padding: func.adapt(20px, 480px) func.adapt(10px, 480px);
+		border-radius: func.adapt(12px, 480px);
+		gap: func.adapt(16px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		padding: func.adapt(20px, 360px) func.adapt(10px, 360px);
+		border-radius: func.adapt(12px, 360px);
+		gap: func.adapt(16px, 360px);
+	}
 }
 
 .block__title {
@@ -50,6 +67,24 @@
 	&:hover {
 		width: func.adapt(19px, 1920px);
 		height: func.adapt(19px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(16px, 480px);
+			height: func.adapt(16px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(16px, 360px);
+			height: func.adapt(16px, 360px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(16px, 480px);
+		height: func.adapt(16px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(16px, 360px);
+		height: func.adapt(16px, 360px);
 	}
 }
 
@@ -62,6 +97,13 @@
 	overflow-x: hidden;
 	flex-grow: 1;
 	@include mix.scrollbar();
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(10px, 360px);
+	}
 }
 
 .block__buttons {
@@ -85,6 +127,28 @@
 			width: func.adapt(92px, 1920px);
 			height: func.adapt(41px, 1920px);
 			font-size: 1.02rem;
+
+			@media (max-width: 767.98px) {
+				width: func.adapt(90px, 480px);
+				height: func.adapt(40px, 480px);
+			}
+			@media (max-width: 479.98px) {
+				width: func.adapt(90px, 360px);
+				height: func.adapt(40px, 360px);
+			}
+		}
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(90px, 480px);
+			margin-top: func.adapt(10px, 480px);
+			height: func.adapt(40px, 480px);
+			border-radius: func.adapt(8px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(90px, 360px);
+			margin-top: func.adapt(10px, 360px);
+			height: func.adapt(40px, 360px);
+			border-radius: func.adapt(8px, 360px);
 		}
 	}
 }

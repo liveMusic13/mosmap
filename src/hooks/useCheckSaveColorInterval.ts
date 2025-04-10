@@ -7,7 +7,10 @@ import {
 	IColorIntervalResponse,
 } from '@/types/requestData.types';
 
-import { useSuccessSaveColorsIntervalStore } from '@/store/store';
+import {
+	useColorsIntervalStore,
+	useSuccessSaveColorsIntervalStore,
+} from '@/store/store';
 
 import { useCheckWidth } from './useCheckWidth';
 
@@ -23,6 +26,9 @@ export const useCheckSaveColorInterval = (
 ) => {
 	const setIsSuccessSaveColorsInterval = useSuccessSaveColorsIntervalStore(
 		store => store.setIsSuccessSaveColorsInterval,
+	);
+	const setIsColorIntervalMobile = useColorsIntervalStore(
+		store => store.setIsColorIntervalMobile,
 	);
 
 	///
@@ -45,6 +51,8 @@ export const useCheckSaveColorInterval = (
 					new URLSearchParams(params).toString(),
 				);
 				router.push(`/?${newParam}`);
+				//HELP: Для мобильной версии включаем чтобы можно было отобразить закраску на телефоне
+				setIsColorIntervalMobile(true);
 			}
 			////
 

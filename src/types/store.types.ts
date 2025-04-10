@@ -112,6 +112,8 @@ export interface IImportResponseStore extends IImportResponse {
 
 export interface IColorsIntervalStore {
 	isColorInterval: boolean;
+	isColorIntervalMobile: boolean;
+	setIsColorIntervalMobile: (bol: boolean) => void;
 	setIsColorInterval: (bol: boolean) => void;
 }
 
@@ -130,4 +132,11 @@ export interface IBurgerMenuStore {
 export interface IRemoveMarkerCrdStore {
 	isRemoveMarker: boolean;
 	setIsRemoveMarker: (bol: boolean) => void;
+}
+
+export interface IViewObjectAndAreaInfoStore {
+	isViewObjectInfo: boolean;
+	setIsViewObjectInfo: (bol: boolean) => void;
+	isViewAreaInfo: boolean;
+	setIsViewAreaInfo: (bol: boolean) => void;
 }

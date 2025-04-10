@@ -5,6 +5,13 @@
 .title {
 	font-weight: 700;
 	margin-bottom: func.adapt(8px, 1920px);
+
+	@media (max-width: 767.98px) {
+		margin-bottom: func.adapt(8px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		margin-bottom: func.adapt(8px, 360px);
+	}
 }
 
 .description {
@@ -16,4 +23,13 @@
 	width: 100%;
 	outline: none;
 	font-size: 1rem;
+
+	@media (max-width: 767.98px) {
+		padding: func.adapt(11px, 480px) func.adapt(14px, 480px);
+		border-radius: func.adapt(4px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(11px, 360px) func.adapt(14px, 360px);
+		border-radius: func.adapt(4px, 360px);
+	}
 }

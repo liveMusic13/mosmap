@@ -22,6 +22,7 @@ import {
 	ITargetObjectStore,
 	IToggleViewAreaStore,
 	IViewDotInfoStore,
+	IViewObjectAndAreaInfoStore,
 	IZoomLevelStore,
 } from '@/types/store.types';
 
@@ -147,6 +148,8 @@ export const useImportResponseStore = create<IImportResponseStore>(set => ({
 
 export const useColorsIntervalStore = create<IColorsIntervalStore>(set => ({
 	isColorInterval: false,
+	isColorIntervalMobile: false,
+	setIsColorIntervalMobile: bol => set({ isColorIntervalMobile: bol }),
 	setIsColorInterval: bol => set({ isColorInterval: bol }),
 }));
 
@@ -168,3 +171,11 @@ export const useRemoveMarkerCrdStore = create<IRemoveMarkerCrdStore>(set => ({
 	isRemoveMarker: false,
 	setIsRemoveMarker: bol => set({ isRemoveMarker: bol }),
 }));
+
+export const useViewObjectAbdAreaInfoStore =
+	create<IViewObjectAndAreaInfoStore>(set => ({
+		isViewAreaInfo: false,
+		setIsViewAreaInfo: bol => set({ isViewAreaInfo: bol }),
+		isViewObjectInfo: false,
+		setIsViewObjectInfo: bol => set({ isViewObjectInfo: bol }),
+	}));

@@ -28,8 +28,8 @@ const RenderColorMap: FC = () => {
 
 	const { isSuccessSaveColorsInterval, ranges_color_map } =
 		useSuccessSaveColorsIntervalStore(store => store);
-	const isColorInterval = useColorsIntervalStore(
-		store => store.isColorInterval,
+	const { isColorInterval, isColorIntervalMobile } = useColorsIntervalStore(
+		store => store,
 	);
 
 	useEffect(() => {
@@ -57,7 +57,7 @@ const RenderColorMap: FC = () => {
 	);
 
 	return (
-		isColorInterval &&
+		(isColorInterval || isColorIntervalMobile) &&
 		isSuccess &&
 		(data as IColorMapResponse[]).length > 0 &&
 		(data as IColorMapResponse[]).map((el, ind) => (

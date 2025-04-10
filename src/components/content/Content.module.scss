@@ -47,6 +47,12 @@
 	display: flex;
 	gap: func.adapt(20px, 1920px);
 	position: relative;
+
+	@media (max-width: 767.98px) {
+		padding: func.adapt(20px, 480px) 0px;
+		flex-direction: column;
+		height: auto;
+	}
 }
 
 .block__buttons_map {
@@ -58,13 +64,23 @@
 	align-items: center;
 	gap: func.adapt(10px, 1920px);
 
+	@media (max-width: 767.98px) {
+		right: func.adapt(10px, 480px);
+		top: func.adapt(30px, 480px);
+		gap: func.adapt(10px, 480px);
+	}
+
 	> button {
-		box-shadow: rgba($color: vars.$green_light, $alpha: 0.5);
+		box-shadow: 0px 2px 15px rgba($color: vars.$green_light, $alpha: 0.5);
 
 		&:hover {
 			> .hover__text {
 				display: block;
 			}
+		}
+
+		@media (max-width: 767.98px) {
+			border-radius: func.adapt(6px, 480px);
 		}
 	}
 }
@@ -79,6 +95,16 @@
 	&:hover {
 		width: func.adapt(30px, 1920px);
 		height: func.adapt(30px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(29px, 480px);
+			height: func.adapt(29px, 480px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(29px, 480px);
+		height: func.adapt(29px, 480px);
 	}
 }
 

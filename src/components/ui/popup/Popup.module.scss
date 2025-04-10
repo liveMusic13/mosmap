@@ -8,7 +8,8 @@
 	justify-content: center;
 	flex-direction: column;
 	gap: func.adapt(44px, 1920px);
-	position: absolute;
+	// position: absolute;
+	position: fixed;
 	z-index: 1002; //HELP: Для того чтобы перекрывал карту и кнопки изменения масштаба, если вызывается на главной
 	top: 50%;
 	left: 50%;
@@ -18,11 +19,27 @@
 	height: func.adapt(480px, 1920px);
 	background-color: vars.$white;
 
+	@media (max-width: 767.98px) {
+		border-radius: func.adapt(12px, 480px);
+		width: 100%;
+		height: func.adapt(480px, 480px);
+		gap: func.adapt(44px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(12px, 360px);
+		gap: func.adapt(44px, 360px);
+		height: func.adapt(480px, 360px);
+	}
+
 	> p {
 		font-weight: 700;
 		text-align: center;
 		font-size: 1.71rem;
 		width: func.adapt(708px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: 100%;
+		}
 	}
 
 	> button {
@@ -35,6 +52,11 @@
 			width: func.adapt(180px, 1920px) !important;
 			height: func.adapt(45px, 1920px) !important;
 			font-size: 1.2rem !important;
+
+			@media (max-width: 767.98px) {
+				width: 100% !important;
+				height: func.adapt(40px, 480px) !important;
+			}
 		}
 	}
 }
@@ -44,6 +66,10 @@
 	align-items: center;
 	gap: func.adapt(30px, 1920px);
 
+	@media (max-width: 767.98px) {
+		gap: func.adapt(30px, 480px);
+	}
+
 	> button {
 		transition:
 			width 0.3s ease,
@@ -54,6 +80,15 @@
 			width: func.adapt(180px, 1920px) !important;
 			height: func.adapt(45px, 1920px) !important;
 			font-size: 1.2rem !important;
+
+			@media (max-width: 767.98px) {
+				width: func.adapt(170px, 480px) !important;
+				height: func.adapt(40px, 480px) !important;
+			}
+		}
+
+		@media (max-width: 767.98px) {
+			border-radius: func.adapt(6px, 480px);
 		}
 	}
 }

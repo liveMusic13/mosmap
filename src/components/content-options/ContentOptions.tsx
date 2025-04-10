@@ -7,6 +7,11 @@ import QueryProvider from '@/providers/QueryProvider';
 
 import { IContentOptions } from '@/types/props.types';
 
+import { useBurgerMenuStore } from '@/store/store';
+
+import { useCheckWidth } from '@/hooks/useCheckWidth';
+
+import BurgerMenu from '../burger-menu/BurgerMenu';
 import Button from '../ui/button/Button';
 
 import styles from './ContentOptions.module.scss';
@@ -17,20 +22,28 @@ const ContentOptions: FC<IContentOptions> = ({ title }) => {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
+
+	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
 
 	const handleBack = () => router.push(`/?map=${map}`);
 
 	return (
 		<QueryProvider>
-			<div className={styles.wrapper_contentOptions}>
-				<h1 className={styles.title}>{title}</h1>
-				<Button onClick={handleBack}>
-					{pathname === '/import/done' ? 'Назад' : 'На карту'}
-				</Button>
-				<div className={styles.block__content}>
-					<BlockOptions />
+			{isBurgerMenu && isMobile ? (
+				<BurgerMenu />
+			) : (
+				<div className={styles.wrapper_contentOptions}>
+					<h1 className={styles.title}>{title}</h1>
+					<Button onClick={handleBack}>
+						{pathname === '/import/done' ? 'Назад' : 'На карту'}
+					</Button>
+					<div className={styles.block__content}>
+						<BlockOptions />
+					</div>
 				</div>
-			</div>
+			)}
 		</QueryProvider>
 	);
 };

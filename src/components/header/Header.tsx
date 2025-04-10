@@ -3,7 +3,7 @@
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 
 import { IHeader } from '@/types/props.types';
@@ -19,6 +19,12 @@ import { TOKEN, colors } from '@/app.constants';
 import { arrMenuHeader } from '@/data/header.data';
 
 const Header: FC<IHeader> = ({ style }) => {
+	const searchParams = useSearchParams();
+	const params = Object.fromEntries(searchParams.entries());
+	const paramsToString = new URLSearchParams(params).toString();
+	console.log('paramsToString', paramsToString);
+
+	//HELP: Преобразование searchParams в строку
 	const router = useRouter();
 	const {
 		isHovered,
@@ -47,20 +53,20 @@ const Header: FC<IHeader> = ({ style }) => {
 		}
 	};
 
-	const [testBurger, setTestBurger] = useState(false);
-
 	return (
 		<header className={styles.header} style={style}>
 			<div className={styles.block__logo}>
 				<Burger />
-				<Image
-					src={'/images/icons/logo.svg'}
-					alt='logo'
-					width={178} //HELP: минимальный размер для оптимизации
-					height={39} //HELP: должен быть в тех же пропорциях, что и изображение
-					className={styles.image_logo}
-					priority={true} //HELP: чтобы первым отрисовывалось
-				/>
+				<Link href={`/?${paramsToString}`}>
+					<Image
+						src={'/images/icons/logo.svg'}
+						alt='logo'
+						width={178} //HELP: минимальный размер для оптимизации
+						height={39} //HELP: должен быть в тех же пропорциях, что и изображение
+						className={styles.image_logo}
+						priority={true} //HELP: чтобы первым отрисовывалось
+					/>
+				</Link>
 
 				<Line
 					style={{ backgroundColor: colors.black_hard }}

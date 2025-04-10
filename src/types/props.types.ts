@@ -285,3 +285,7 @@ export interface IUseRangeIntervalLogicReturn {
 	setRangeData: Dispatch<SetStateAction<IIntervals[]>>;
 	handleAddNewInterval: () => void;
 }
+
+export interface IViewObjectInfoProps {
+	area: boolean;
+}
