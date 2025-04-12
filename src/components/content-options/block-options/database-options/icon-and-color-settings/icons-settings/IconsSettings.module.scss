@@ -1,0 +1,71 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.block__iconsSettings {
+	display: grid;
+	grid-template-columns: 1.42rem func.adapt(400px, 1920px) repeat(2, 1fr);
+	gap: func.adapt(15px, 1920px);
+	padding: func.adapt(20px, 1920px);
+
+	@media (max-width: 767.98px) {
+		grid-template-columns: 1.42rem func.adapt(140px, 480px) repeat(2, 1fr);
+		gap: func.adapt(10px, 480px);
+		padding: func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		grid-template-columns: 1.42rem func.adapt(140px, 360px) repeat(2, 1fr);
+		gap: func.adapt(10px, 360px);
+		padding: func.adapt(10px, 360px);
+	}
+}
+
+.block__titles_table {
+	display: contents;
+}
+
+.title_table {
+	font-size: 1.28rem;
+	font-weight: 700;
+	grid-column: span 1;
+	display: flex;
+	align-items: center;
+
+	@media (max-width: 767.98px) {
+		font-size: 0.857rem;
+	}
+}
+
+.table__body {
+	display: contents;
+}
+
+.icon_svg {
+	width: func.adapt(27px, 1920px);
+	height: func.adapt(27px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(27px, 480px);
+		height: func.adapt(27px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(27px, 360px);
+		height: func.adapt(27px, 360px);
+	}
+
+	&:hover {
+		@media (min-width: 767.98px) {
+			cursor: pointer;
+			width: func.adapt(30px, 1920px);
+			height: func.adapt(30px, 1920px);
+		}
+	}
+}
+
+.block__icons {
+	position: relative;
+}

@@ -4,10 +4,89 @@
 
 .wrapper_rowDatabaseOptions {
 	display: contents;
+
+	@media (max-width: 767.98px) {
+		display: none;
+	}
 }
 
 .position {
 	grid-column: 1;
 	font-size: 1.42rem;
 	font-weight: 700;
+}
+
+.wrapper_rowDatabaseOptions_mobile {
+	display: none;
+
+	@media (max-width: 767.98px) {
+		display: flex;
+		flex-direction: column;
+		background-color: vars.$white_middle;
+		border-radius: func.adapt(11px, 480px);
+		padding: func.adapt(14px, 480px) func.adapt(10px, 480px);
+		gap: func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(11px, 360px);
+		padding: func.adapt(14px, 360px) func.adapt(10px, 360px);
+		gap: func.adapt(10px, 360px);
+	}
+}
+
+.block__generalOptions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.block__elem {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(8px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(8px, 360px);
+	}
+}
+
+.title__elem {
+	font-weight: 500;
+	font-size: 0.857rem;
+	display: flex;
+	align-items: center;
+	gap: func.adapt(8px, 480px);
+
+	@media (max-width: 479.98px) {
+		gap: func.adapt(8px, 360px);
+	}
+}
+
+.icon_svg {
+	width: func.adapt(27px, 1920px);
+	height: func.adapt(27px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(27px, 480px);
+		height: func.adapt(27px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(27px, 360px);
+		height: func.adapt(27px, 360px);
+	}
+
+	&:hover {
+		@media (min-width: 767.98px) {
+			cursor: pointer;
+			width: func.adapt(30px, 1920px);
+			height: func.adapt(30px, 1920px);
+		}
+	}
 }

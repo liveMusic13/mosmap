@@ -22,7 +22,6 @@ const Header: FC<IHeader> = ({ style }) => {
 	const searchParams = useSearchParams();
 	const params = Object.fromEntries(searchParams.entries());
 	const paramsToString = new URLSearchParams(params).toString();
-	console.log('paramsToString', paramsToString);
 
 	//HELP: Преобразование searchParams в строку
 	const router = useRouter();

@@ -1,0 +1,83 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_colorSettings {
+	display: grid;
+	grid-template-columns: 1.42rem func.adapt(400px, 1920px) repeat(2, 1fr);
+	gap: func.adapt(15px, 1920px);
+	padding: func.adapt(20px, 1920px);
+
+	@media (max-width: 767.98px) {
+		grid-template-columns: 1.42rem func.adapt(140px, 480px) repeat(2, 1fr);
+		gap: func.adapt(10px, 480px);
+		padding: func.adapt(10px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		grid-template-columns: 1.42rem func.adapt(140px, 360px) repeat(2, 1fr);
+		gap: func.adapt(10px, 360px);
+		padding: func.adapt(10px, 360px);
+	}
+}
+
+.block__titles_table {
+	display: contents;
+}
+
+.title_table {
+	font-size: 1.28rem;
+	font-weight: 700;
+	grid-column: span 1;
+	display: flex;
+	align-items: center;
+	// justify-content: center;
+
+	@media (max-width: 767.98px) {
+		font-size: 0.857rem;
+	}
+}
+
+.table__body {
+	display: contents;
+}
+
+.block__icons {
+	position: relative;
+}
+
+.color {
+	width: func.adapt(25px, 1920px);
+	height: func.adapt(25px, 1920px);
+	border-radius: func.adapt(4px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		width: func.adapt(28px, 1920px);
+		height: func.adapt(28px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(27px, 480px);
+			height: func.adapt(27px, 480px);
+		}
+
+		@media (max-width: 479.98px) {
+			width: func.adapt(27px, 360px);
+			height: func.adapt(27px, 360px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(27px, 480px);
+		height: func.adapt(27px, 480px);
+		border-radius: func.adapt(4px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(27px, 360px);
+		height: func.adapt(27px, 360px);
+		border-radius: func.adapt(4px, 360px);
+	}
+}

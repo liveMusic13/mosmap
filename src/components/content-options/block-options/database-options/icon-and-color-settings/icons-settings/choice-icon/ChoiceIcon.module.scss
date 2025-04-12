@@ -2,20 +2,35 @@
 @use '@st/variables.scss' as vars;
 @use '@st/mixins.scss' as mix;
 
-.wrapper_dataBaseOptions {
-	padding: func.adapt(20px, 1920px);
+.block__choiceIcon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 2002;
+	padding: func.adapt(35px, 1920px);
+	border-radius: func.adapt(12px, 1920px);
+	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
+	box-shadow: 0px 0px 10px rgba($color: vars.$green_light, $alpha: 0.3);
+	background-color: vars.$white;
 	display: flex;
 	flex-direction: column;
-	gap: func.adapt(15px, 1920px);
+	gap: func.adapt(20px, 1920px);
 
 	@media (max-width: 767.98px) {
-		background-color: vars.$white;
-		gap: func.adapt(15px, 480px);
+		padding: func.adapt(14px, 480px);
+		border-radius: func.adapt(12px, 480px);
+		gap: func.adapt(10px, 480px);
+		transform: translateX(20%);
+	}
+	@media (max-width: 479.98px) {
+		padding: func.adapt(14px, 360px);
+		border-radius: func.adapt(12px, 360px);
+		gap: func.adapt(10px, 360px);
 	}
 
 	> button {
-		align-self: flex-end;
-		width: func.adapt(190px, 1920px);
+		align-self: center;
+		width: 99%;
 		height: func.adapt(40px, 1920px);
 		font-size: 1rem;
 		box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
@@ -27,21 +42,18 @@
 
 		&:hover {
 			cursor: pointer;
-			width: func.adapt(200px, 1920px);
+			width: 100%;
 			height: func.adapt(45px, 1920px);
 			font-size: 1.08rem;
 
 			@media (max-width: 767.98px) {
-				width: 100%;
 				height: func.adapt(40px, 480px);
 			}
 			@media (max-width: 479.98px) {
 				height: func.adapt(40px, 360px);
 			}
 		}
-
 		@media (max-width: 767.98px) {
-			width: 100%;
 			height: func.adapt(40px, 480px);
 			border-radius: func.adapt(8px, 480px);
 		}
@@ -52,40 +64,40 @@
 	}
 }
 
-.block__dataBaseOptions {
-	display: grid;
-	grid-template-columns: 1.42rem repeat(9, 1fr) 1.42rem;
-	gap: func.adapt(15px, 1920px);
-
-	@media (max-width: 767.98px) {
-		display: flex;
-		flex-direction: column;
-		gap: func.adapt(15px, 1920px);
-	}
-	@media (max-width: 479.98px) {
-		gap: func.adapt(15px, 360px);
-	}
-}
-
-.block__titles {
-	display: contents;
-
-	@media (max-width: 767.98px) {
-		display: none;
-	}
+.block__title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .title {
-	font-size: 1.28rem;
 	font-weight: 700;
-	grid-column: span 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	font-size: 1.42rem;
 }
 
-.isCheckbox {
-	text-align: center;
+.block__icons {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: func.adapt(10px, 1920px);
+	width: func.adapt(350px, 1920px);
+	background-color: vars.$grey_icons;
+	border: 1px solid vars.$grey_border_icons;
+	border-radius: func.adapt(30px, 1920px);
+	padding: func.adapt(25px, 1920px);
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(10px, 480px);
+		width: func.adapt(250px, 480px);
+		border-radius: func.adapt(30px, 480px);
+		padding: func.adapt(25px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(10px, 360px);
+		width: func.adapt(250px, 360px);
+		border-radius: func.adapt(30px, 360px);
+		padding: func.adapt(25px, 360px);
+	}
 }
 
 .icon_svg {

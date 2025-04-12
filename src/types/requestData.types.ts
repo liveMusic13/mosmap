@@ -227,3 +227,10 @@ export interface IColorMapResponse {
 	name: string;
 	polygon: LatLngExpression[] | LatLngExpression[][] | LatLngExpression[][][];
 }
+
+export interface IListItemsResponse {
+	icon_name?: string;
+	color?: string;
+	id: number;
+	name: string;
+}

@@ -15,6 +15,7 @@ import {
 	IFieldsResponse,
 	IIntervalObject,
 	IItemFilter,
+	IListItemsResponse,
 	IListsResponse,
 	IMapResponse,
 	IMarker,
@@ -211,9 +212,11 @@ export interface IBlockParam {
 export interface IRowDatabaseOptions {
 	data: IFieldsResponse | IMapResponse | IListsResponse;
 	position: number;
-
+	targetIdObject: number;
+	handleDelete?: (id: number) => void;
 	editableData?: IEditableData;
 	onUpdate: (id: number, field: keyof IEditableData, value: any) => void;
+	handleViewSettings: (el: { id: number; name: string }) => void;
 }
 
 export interface IBlockIntervalParam {
@@ -288,4 +291,25 @@ export interface IUseRangeIntervalLogicReturn {
 
 export interface IViewObjectInfoProps {
 	area: boolean;
+}
+
+export interface IIconAndColorSettings {
+	column: string;
+	targetIdObject: number;
+	// editableData: IEditableData[];
+	closeFunc: () => void;
+}
+
+export interface IIconsSettingsProps {
+	editListData: IListItemsResponse[];
+	onUpdate: (id: number, field: keyof IListItemsResponse, value: any) => void;
+	handleDelete: (id: number) => void;
+}
+
+export interface IColorSettingsProps extends IIconsSettingsProps {}
+
+export interface IChoiceIconProps {
+	handleClose: () => void;
+	idListItem: number;
+	onUpdate: (id: number, field: keyof IListItemsResponse, value: any) => void;
 }

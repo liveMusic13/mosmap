@@ -44,3 +44,41 @@ export const arrColumn = [
 		name: '', //HELP: Для кнопки удаления
 	},
 ];
+
+export const arrColumnPopup = [
+	{
+		id: 1,
+		name: '#',
+	},
+	{
+		id: 2,
+		name: 'Название',
+	},
+	{
+		id: 3,
+		name: 'Иконка',
+	},
+	{
+		id: 4,
+		name: 'Действие',
+	},
+];
+
+export const arrColumnPopupColor = [
+	{
+		id: 1,
+		name: '#',
+	},
+	{
+		id: 2,
+		name: 'Название',
+	},
+	{
+		id: 3,
+		name: 'Цвет',
+	},
+	{
+		id: 4,
+		name: 'Действие',
+	},
+];

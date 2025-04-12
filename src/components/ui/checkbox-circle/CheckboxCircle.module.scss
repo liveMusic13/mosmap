@@ -13,6 +13,13 @@
 		cursor: pointer;
 		font-size: 1.08rem;
 	}
+
+	@media (max-width: 767.98px) {
+		gap: func.adapt(5px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		gap: func.adapt(5px, 360px);
+	}
 }
 
 .checkbox__custom {
@@ -26,6 +33,17 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(30px, 480px);
+		height: func.adapt(30px, 480px);
+		padding: func.adapt(2px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(30px, 360px);
+		height: func.adapt(30px, 360px);
+		padding: func.adapt(2px, 360px);
+	}
 }
 
 .disabled {
@@ -53,10 +71,28 @@
 	&:hover + .checkbox__custom {
 		width: func.adapt(23px, 1920px);
 		height: func.adapt(23px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(30px, 480px);
+			height: func.adapt(30px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(30px, 360px);
+			height: func.adapt(30px, 360px);
+		}
 	}
 
 	&:hover + .checkbox__img {
 		width: func.adapt(14px, 1920px);
 		height: func.adapt(10px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(30px, 480px);
+			height: func.adapt(30px, 480px);
+		}
+		@media (max-width: 479.98px) {
+			width: func.adapt(30px, 360px);
+			height: func.adapt(30px, 360px);
+		}
 	}
 }

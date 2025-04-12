@@ -6,6 +6,7 @@ export const colors = {
 	green: '#117474',
 	green_middle: '#28b2aa',
 	green_light: '#73dfd8',
+	green_shadow: 'rgb(75, 232, 205)',
 	black: '#2e2e2e',
 	black_hard: '#0A1D17',
 	white: '#fff',
