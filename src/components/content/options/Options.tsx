@@ -42,9 +42,17 @@ const Options: FC = () => {
 	const onClick = useCallback(
 		(id: number) => {
 			if (id === 0) {
-				router.push(`/import?map=${map}`);
+				if (token) {
+					router.push(`/import?map=${map}`);
+				} else {
+					router.push(`/auth`);
+				}
 			} else if (id === 1) {
-				router.push(`/export?map=${map}`);
+				if (token) {
+					router.push(`/export?map=${map}`);
+				} else {
+					router.push(`/auth`);
+				}
 			} else if (id === 2) {
 				if (windowSize <= 767) {
 					router.push(`/mobile-filters/filters/?map=${map}`);
@@ -93,8 +101,12 @@ const Options: FC = () => {
 		[isMobile, isColorInterval, isColorIntervalMobile],
 	);
 	const handleClick = useCallback((id: number) => {
-		if (id === 5) {
-			router.push(`/settings-database?map=${map}`);
+		if (token) {
+			if (id === 5) {
+				router.push(`/settings-database?map=${map}`);
+			}
+		} else {
+			router.push(`/auth`);
 		}
 	}, []);
 

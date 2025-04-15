@@ -11,6 +11,18 @@
 	display: flex;
 	flex-direction: column;
 	gap: func.adapt(15px, 1920px);
+
+	@media (max-width: 767.98px) {
+		top: func.adapt(70px, 480px);
+		width: func.adapt(220px, 480px);
+		gap: func.adapt(15px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		top: func.adapt(70px, 360px);
+		width: func.adapt(220px, 360px);
+		gap: func.adapt(15px, 360px);
+	}
 }
 
 .input {
@@ -26,6 +38,18 @@
 	&::placeholder {
 		color: rgba($color: vars.$black, $alpha: 0.3);
 	}
+
+	@media (max-width: 767.98px) {
+		height: func.adapt(40px, 480px);
+		border-radius: func.adapt(8px, 480px);
+		padding: 0px func.adapt(12px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		height: func.adapt(40px, 360px);
+		border-radius: func.adapt(8px, 360px);
+		padding: 0px func.adapt(12px, 360px);
+	}
 }
 
 .block__variables {
@@ -37,6 +61,16 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	@include mix.scrollbar();
+
+	@media (max-width: 767.98px) {
+		border-radius: func.adapt(12px, 480px);
+		max-height: func.adapt(257px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		border-radius: func.adapt(12px, 360px);
+		max-height: func.adapt(257px, 360px);
+	}
 }
 
 .variables {
@@ -49,5 +83,13 @@
 	&:hover {
 		cursor: pointer;
 		font-size: 1rem;
+	}
+
+	@media (max-width: 767.98px) {
+		padding: func.adapt(10px, 480px) func.adapt(20px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		padding: func.adapt(10px, 360px) func.adapt(20px, 360px);
 	}
 }

@@ -83,9 +83,9 @@ const DatabaseOptions: FC = () => {
 			query_lists.isSuccess
 		) {
 			const mapFullData = [
-				...(query_fields.data as IFieldsResponse[]),
-				...(query_lists.data as IListsResponse[]),
-				...(query_maps.data as IMapResponse[]),
+				...(query_fields?.data as IFieldsResponse[]),
+				...(query_lists?.data as IListsResponse[]),
+				...(query_maps?.data as IMapResponse[]),
 			];
 
 			setMapFullData(mapFullData);
