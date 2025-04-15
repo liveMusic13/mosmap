@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FC, useEffect } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -7,6 +7,7 @@ import Loader from '@/components/ui/loader/Loader';
 
 import { useClearAllFiltersStore } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useGetFilters } from '@/hooks/useGetFilters';
 
@@ -16,6 +17,9 @@ import FilterCalendar from './filter-calendar/FilterCalendar';
 import { colors } from '@/app.constants';
 
 const Filters: FC = () => {
+	const windowSize = useCheckWidth();
+	const isMobile = windowSize <= 767;
+	const router = useRouter();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
 	//HELP: Преобразование searchParams в строку
@@ -87,11 +91,14 @@ const Filters: FC = () => {
 			</div>
 			<Button
 				onClick={() => {
+					if (isMobile) {
+						router.push(`/?${queryString}`);
+					}
 					refetch();
 				}}
 				style={{
 					width: '100%',
-					height: 'calc(44/1920*100vw)',
+					height: isMobile ? 'calc(44/480*100vw)' : 'calc(44/1920*100vw)',
 					boxShadow: `0px 0px 10px ${colors.green_light}`,
 				}}
 			>

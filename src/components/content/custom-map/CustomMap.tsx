@@ -75,7 +75,7 @@ const CustomMap: FC<ICustomMap> = () => {
 						<RenderArea />
 					</>
 				)}
-				<FlyToLocation />
+				<FlyToLocation toZoom={data?.zoom_max} />
 				<RenderColorMap />
 				{isSelectArea && (
 					<FeatureGroup>

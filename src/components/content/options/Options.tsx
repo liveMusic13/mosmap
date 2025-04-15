@@ -24,7 +24,9 @@ import { settingsArr, standardArr } from '@/data/options.data';
 const Options: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	//HELP: Преобразование searchParams в строку
+	const queryString = new URLSearchParams(searchParams.toString()).toString();
+
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 
@@ -43,19 +45,19 @@ const Options: FC = () => {
 		(id: number) => {
 			if (id === 0) {
 				if (token) {
-					router.push(`/import?map=${map}`);
+					router.push(`/import?${queryString}`);
 				} else {
 					router.push(`/auth`);
 				}
 			} else if (id === 1) {
 				if (token) {
-					router.push(`/export?map=${map}`);
+					router.push(`/export?${queryString}`);
 				} else {
 					router.push(`/auth`);
 				}
 			} else if (id === 2) {
 				if (windowSize <= 767) {
-					router.push(`/mobile-filters/filters/?map=${map}`);
+					router.push(`/mobile-filters/filters/?${queryString}`);
 				} else {
 					useFiltersStore.setState(state => {
 						if (!state.isFilters) {
@@ -68,7 +70,7 @@ const Options: FC = () => {
 				}
 			} else if (id === 3) {
 				if (windowSize <= 767) {
-					router.push(`/mobile-filters/list-of-objects/?map=${map}`);
+					router.push(`/mobile-filters/list-of-objects/?${queryString}`);
 				} else {
 					useListOfObjectsStore.setState(state => ({
 						isListOfObjects: !state.isListOfObjects,
@@ -89,7 +91,7 @@ const Options: FC = () => {
 					if (isColorIntervalMobile) {
 						setIsColorIntervalMobile(false);
 					} else {
-						router.push(`/mobile-filters/color-interval?map=${map}`);
+						router.push(`/mobile-filters/color-interval?${queryString}`);
 					}
 				} else {
 					useColorsIntervalStore.setState(state => ({
@@ -103,7 +105,7 @@ const Options: FC = () => {
 	const handleClick = useCallback((id: number) => {
 		if (token) {
 			if (id === 5) {
-				router.push(`/settings-database?map=${map}`);
+				router.push(`/settings-database?${queryString}`);
 			}
 		} else {
 			router.push(`/auth`);
