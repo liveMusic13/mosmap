@@ -234,3 +234,18 @@ export interface IListItemsResponse {
 	id: number;
 	name: string;
 }
+
+export interface IAllFieldsResponse {
+	id: string;
+	name: string;
+	type: number;
+	priority: string | null;
+	address?: number;
+	namefield?: number;
+	nameonmap?: number;
+	type_name?: string;
+	mode?: number;
+	visible?: number;
+	color?: number;
+	icon?: number;
+}

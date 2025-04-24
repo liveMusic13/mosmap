@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 
 import { IEditableData } from '@/types/localState.types';
 import {
+	IAllFieldsResponse,
 	IApiResponse,
 	IFieldsResponse,
 	IListItemsResponse,
@@ -114,44 +115,6 @@ export const settingsService = {
 			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
-	// lists: async (
-	// 	map: number | string | null,
-	// ): Promise<
-	// 	IApiResponse<IListsResponse[] | AxiosError<{ message?: string }> | Error>
-	// > => {
-	// 	if (!map) throw new Error('Номер карты не найден');
-
-	// 	try {
-	// 		const response = await $axios.get(`/api/lists.php?map=${map}`);
-
-	// 		return {
-	// 			status: response.status,
-	// 			data: response.data,
-	// 		};
-	// 	} catch (axiosError: any) {
-	// 		const error = axiosError;
-	// 		throw new Error(error.response?.data?.message || error.message);
-	// 	}
-	// },
-	// fields: async (
-	// 	map: number | string | null,
-	// ): Promise<
-	// 	IApiResponse<IFieldsResponse[] | AxiosError<{ message?: string }> | Error>
-	// > => {
-	// 	if (!map) throw new Error('Номер карты не найден');
-
-	// 	try {
-	// 		const response = await $axios.get(`/api/fields.php?map=${map}`);
-
-	// 		return {
-	// 			status: response.status,
-	// 			data: response.data,
-	// 		};
-	// 	} catch (axiosError: any) {
-	// 		const error = axiosError;
-	// 		throw new Error(error.response?.data?.message || error.message);
-	// 	}
-	// },
 	getIcons: async (
 		map: number | string | null,
 	): Promise<
@@ -193,6 +156,34 @@ export const settingsService = {
 			return {
 				data: response.data,
 				status: response.status,
+			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
+		}
+	},
+	getAllFields: async (): Promise<IApiResponse<IAllFieldsResponse[]>> => {
+		try {
+			const response = await $axios.get(`/api/fields_all.php`);
+
+			return {
+				status: response.status,
+				data: response.data,
+			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
+		}
+	},
+	saveAllFields: async (
+		data: IAllFieldsResponse[],
+	): Promise<IApiResponse<IAllFieldsResponse[]>> => {
+		try {
+			const response = await $axios.post(`/api/fields_all.php`, data);
+
+			return {
+				status: response.status,
+				data: response.data,
 			};
 		} catch (axiosError: any) {
 			const error = axiosError;

@@ -9,15 +9,13 @@ import {
 import { IFormAuth } from './data.types';
 import { ICalendarState, IEditableData } from './localState.types';
 import {
+	IAllFieldsResponse,
 	IDataFilters,
 	IDataMap,
 	IDotInfoData,
-	IFieldsResponse,
 	IIntervalObject,
 	IItemFilter,
 	IListItemsResponse,
-	IListsResponse,
-	IMapResponse,
 	IMarker,
 	INumAndSloiFieldsObject,
 	IRegistrResponse,
@@ -210,7 +208,8 @@ export interface IBlockParam {
 }
 
 export interface IRowDatabaseOptions {
-	data: IFieldsResponse | IMapResponse | IListsResponse;
+	// data: IFieldsResponse | IMapResponse | IListsResponse;
+	data: IAllFieldsResponse;
 	position: number;
 	targetIdObject: number;
 	handleDelete?: (id: number) => void;

@@ -12,7 +12,8 @@ import {
 	IMapResponse,
 } from '@/types/requestData.types';
 
-import { useMapsEdit } from '@/hooks/requests/database-options/useMapsEdit';
+import { useGetAllFields } from '@/hooks/requests/database-options/useGetAllFields';
+import { useSaveAllFields } from '@/hooks/requests/database-options/useSaveAllFields';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDatabaseSettings } from '@/hooks/useGetDatabaseSettings';
 
@@ -63,6 +64,11 @@ const DatabaseOptions: FC = () => {
 
 	const { query_fields, query_lists, query_maps, query_icons } =
 		useGetDatabaseSettings();
+	const {
+		data: dataAllFields,
+		isSuccess: isSuccessAllFields,
+		isLoading: isLoadingAllFields,
+	} = useGetAllFields();
 
 	const [mapFullData, setMapFullData] = useState<
 		(IFieldsResponse | IMapResponse | IListsResponse)[]
@@ -76,64 +82,82 @@ const DatabaseOptions: FC = () => {
 	});
 
 	useEffect(() => {
-		//HELP:Для маппинга всех элементов
-		if (
-			query_fields.isSuccess &&
-			query_maps.isSuccess &&
-			query_lists.isSuccess
-		) {
-			const mapFullData = [
-				...(query_fields?.data as IFieldsResponse[]),
-				...(query_lists?.data as IListsResponse[]),
-				...(query_maps?.data as IMapResponse[]),
-			];
+		if (isSuccessAllFields) {
+			const initialData = dataAllFields.map(el => {
+				return {
+					...el,
+					id: Number(el.id),
+					type_object: getType(el),
+				};
+			});
 
-			setMapFullData(mapFullData);
-		}
-	}, [
-		query_fields.data as IFieldsResponse[],
-		query_maps.data as IMapResponse[],
-		query_lists.data as IListsResponse[],
-	]);
-
-	useEffect(() => {
-		if (mapFullData.length) {
-			const initialData = mapFullData.map(item => ({
-				id: item.id,
-				name: item.name,
-				...((item as IFieldsResponse).namefield !== undefined && {
-					namefield: (item as IFieldsResponse).namefield,
-				}),
-				...((item as IFieldsResponse).nameonmap !== undefined && {
-					nameonmap: (item as IFieldsResponse).nameonmap,
-				}),
-				...((item as IFieldsResponse).address !== undefined && {
-					address: (item as IFieldsResponse).address,
-				}),
-				...((item as IFieldsResponse).type !== undefined && {
-					type: (item as IFieldsResponse).type,
-				}),
-				...((item as IListsResponse).mode !== undefined && {
-					mode: (item as IListsResponse).mode,
-				}),
-				...((item as IListsResponse).color !== undefined && {
-					color: (item as IListsResponse).color,
-				}),
-				...((item as IListsResponse).icon !== undefined && {
-					icon: (item as IListsResponse).icon,
-				}),
-				...((item as IMapResponse).visible !== undefined && {
-					visible: (item as IMapResponse).visible,
-				}),
-				type_object: getType(item),
-			}));
 			setEditableData(initialData);
 		}
-	}, [mapFullData]);
+	}, [dataAllFields, isSuccessAllFields]);
 
-	const { data, mutate } = useMapsEdit(map, editableData);
+	// useEffect(() => {
+	// 	//HELP:Для маппинга всех элементов
+	// 	if (
+	// 		query_fields.isSuccess &&
+	// 		query_maps.isSuccess &&
+	// 		query_lists.isSuccess
+	// 	) {
+	// 		const mapFullData = [
+	// 			...(query_fields?.data as IFieldsResponse[]),
+	// 			...(query_lists?.data as IListsResponse[]),
+	// 			...(query_maps?.data as IMapResponse[]),
+	// 		];
 
-	const handleUpdate = (id: number, field: keyof IEditableData, value: any) => {
+	// 		setMapFullData(mapFullData);
+	// 	}
+	// }, [
+	// 	query_fields.data as IFieldsResponse[],
+	// 	query_maps.data as IMapResponse[],
+	// 	query_lists.data as IListsResponse[],
+	// ]);
+
+	// useEffect(() => {
+	// 	if (mapFullData.length) {
+	// 		const initialData = mapFullData.map(item => ({
+	// 			id: item.id,
+	// 			name: item.name,
+	// 			...((item as IFieldsResponse).namefield !== undefined && {
+	// 				namefield: (item as IFieldsResponse).namefield,
+	// 			}),
+	// 			...((item as IFieldsResponse).nameonmap !== undefined && {
+	// 				nameonmap: (item as IFieldsResponse).nameonmap,
+	// 			}),
+	// 			...((item as IFieldsResponse).address !== undefined && {
+	// 				address: (item as IFieldsResponse).address,
+	// 			}),
+	// 			...((item as IFieldsResponse).type !== undefined && {
+	// 				type: (item as IFieldsResponse).type,
+	// 			}),
+	// 			...((item as IListsResponse).mode !== undefined && {
+	// 				mode: (item as IListsResponse).mode,
+	// 			}),
+	// 			...((item as IListsResponse).color !== undefined && {
+	// 				color: (item as IListsResponse).color,
+	// 			}),
+	// 			...((item as IListsResponse).icon !== undefined && {
+	// 				icon: (item as IListsResponse).icon,
+	// 			}),
+	// 			...((item as IMapResponse).visible !== undefined && {
+	// 				visible: (item as IMapResponse).visible,
+	// 			}),
+	// 			type_object: getType(item),
+	// 		}));
+	// 		setEditableData(initialData);
+	// 	}
+	// }, [mapFullData]);
+
+	const { mutate } = useSaveAllFields();
+
+	const handleUpdate = (
+		id: number,
+		field: keyof IEditableData,
+		value: string,
+	) => {
 		setTargetIdObject(id);
 		setEditableData(prev =>
 			prev.map(item => (item.id === id ? { ...item, [field]: value } : item)),
@@ -174,8 +198,14 @@ const DatabaseOptions: FC = () => {
 		[editableData],
 	);
 
+	const test = async () => {
+		const formatData = editableData.map(({ type_object, ...rest }) => rest);
+		mutate(formatData);
+	};
+
 	return (
 		<div className={styles.wrapper_dataBaseOptions}>
+			<button onClick={test}>test</button>
 			{targetColumn.isTarget && (
 				<>
 					<BackgroundOpacity />
@@ -233,10 +263,7 @@ const DatabaseOptions: FC = () => {
 						);
 					})}
 				</div>
-				{(query_fields.isLoading ||
-					query_lists.isLoading ||
-					query_maps.isLoading ||
-					query_icons.isLoading) && (
+				{(isLoadingAllFields || query_icons.isLoading) && (
 					<Loader
 						style={{
 							width: 'calc(50/1920*100vw)',
@@ -244,23 +271,25 @@ const DatabaseOptions: FC = () => {
 						}}
 					/>
 				)}
-				{mapFullData.map((el, ind) => (
-					<RowDatabaseOptions
-						key={ind}
-						data={el}
-						position={ind}
-						editableData={editableData.find(d => d.id === el.id)}
-						onUpdate={handleUpdate}
-						handleDelete={handleDelete}
-						targetIdObject={targetIdObject}
-						handleViewSettings={handleViewSettings}
-					/>
-				))}
+				{/* {mapFullData.map((el, ind) => ( */}
+				{isSuccessAllFields &&
+					dataAllFields?.map((el, ind) => (
+						<RowDatabaseOptions
+							key={ind}
+							data={el}
+							position={ind}
+							editableData={editableData.find(
+								d => Number(d.id) === Number(el.id),
+							)}
+							onUpdate={handleUpdate}
+							handleDelete={handleDelete}
+							targetIdObject={targetIdObject}
+							handleViewSettings={handleViewSettings}
+						/>
+					))}
 			</div>
 			<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
-			<Button onClick={() => mutate({ map, data: editableData })}>
-				Сохранить
-			</Button>
+			<Button onClick={test}>Сохранить</Button>
 			<Button
 				style={
 					isMobile

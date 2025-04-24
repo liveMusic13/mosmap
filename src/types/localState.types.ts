@@ -21,8 +21,8 @@ export interface IExportCheckboxData {
 }
 
 export interface IEditableData {
-	id: number;
-	name?: string;
+	id: number | any; // TODO: Убрать потом тип строки
+	name: string;
 	namefield?: number;
 	nameonmap?: number;
 	address?: number;
@@ -30,6 +30,7 @@ export interface IEditableData {
 	color?: number;
 	icon?: number;
 	visible?: number;
-	type?: string;
+	type: number;
 	type_object: string;
+	priority: string | null;
 }

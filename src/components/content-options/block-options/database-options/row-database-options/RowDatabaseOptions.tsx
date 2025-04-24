@@ -188,7 +188,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 			item_name: 'Текст',
 		},
 	];
-	const isTarget = targetIdObject === data.id;
+	const isTarget = targetIdObject === Number(data.id);
 
 	//HELP: Выделим элементы, удовлетворяющие условию
 	const generalOptions = useMemo(
@@ -218,19 +218,31 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	const type = getType(data);
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		onUpdate(data.id, 'name', e.target.value);
+		onUpdate(Number(data.id), 'name', e.target.value);
 	};
 
 	//HELP: Для чекбоксов - принимаем событие, извлекаем checked
 	const handleCheckboxChange =
 		(field: keyof IEditableData) => (e: ChangeEvent<HTMLInputElement>) => {
-			onUpdate(data.id, field, e.target.checked ? 1 : 0);
+			onUpdate(Number(data.id), field, e.target.checked ? 1 : 0);
 		};
 
 	//HELP: Для селекта - принимаем IItemFilter, извлекаем значение
 	const handleSelectChange = (selectedItem: IItemFilter) => {
-		onUpdate(data.id, 'type_object', selectedItem.item_name);
-		onUpdate(data.id, 'type', String(selectedItem.item_id ? 2 : 5));
+		onUpdate(Number(data.id), 'type_object', selectedItem.item_name);
+		onUpdate(
+			Number(data.id),
+			'type',
+			// String(
+			// 	selectedItem.item_id === 0 ? 1 : selectedItem.item_id === 1 ? 2 : 5,
+			// ),
+			selectedItem.item_id === 2 ? 5 : selectedItem.item_id,
+		);
+		console.log(
+			'selectedItem',
+			selectedItem,
+			String(selectedItem.item_id === 2 ? 5 : selectedItem.item_id),
+		);
 	};
 
 	return (
@@ -280,13 +292,12 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 								key={el.id}
 								forInfo={{
 									isInfo: true,
-									value: editableData?.type
-										? optionsSelect[
-												editableData.type === '5'
-													? 2
-													: Number(editableData.type)
-											]?.item_name
-										: ' ',
+									value:
+										editableData?.type || editableData?.type === 0
+											? optionsSelect[
+													editableData.type === 5 ? 2 : editableData.type
+												]?.item_name
+											: ' ',
 								}}
 								handleClick={handleSelectChange}
 								items={optionsSelect}
@@ -306,7 +317,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 									backgroundColor: 'transparent',
 								}}
 								onClick={() =>
-									handleDelete ? handleDelete(data.id) : undefined
+									handleDelete ? handleDelete(Number(data.id)) : undefined
 								}
 								disabled={isDisabled}
 							>
@@ -369,7 +380,9 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 							style={{
 								backgroundColor: 'transparent',
 							}}
-							onClick={() => (handleDelete ? handleDelete(data.id) : undefined)}
+							onClick={() =>
+								handleDelete ? handleDelete(Number(data.id)) : undefined
+							}
 							disabled={
 								data.name === 'Районы Москвы' ||
 								data.name === 'Округа' ||
@@ -401,9 +414,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 										isInfo: true,
 										value: editableData?.type
 											? optionsSelect[
-													editableData.type === '5'
-														? 2
-														: Number(editableData.type)
+													editableData.type === 5 ? 2 : editableData.type
 												]?.item_name
 											: ' ',
 									}}
