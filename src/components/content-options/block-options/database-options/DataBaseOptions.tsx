@@ -6,11 +6,7 @@ import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 
 import { IEditableData } from '@/types/localState.types';
-import {
-	IFieldsResponse,
-	IListsResponse,
-	IMapResponse,
-} from '@/types/requestData.types';
+import { IAllFieldsResponse } from '@/types/requestData.types';
 
 import { useGetAllFields } from '@/hooks/requests/database-options/useGetAllFields';
 import { useSaveAllFields } from '@/hooks/requests/database-options/useSaveAllFields';
@@ -25,28 +21,33 @@ import RowDatabaseOptions from './row-database-options/RowDatabaseOptions';
 import { colors } from '@/app.constants';
 import { arrColumn } from '@/data/database.data';
 
-const clearFieldObject = (type_object: string) => ({
+const clearFieldObject = (type_object: string, type: number) => ({
 	address: 0,
-	id: 0,
+	id: '0',
 	name: '',
 	namefield: 0,
 	nameonmap: 0,
-	type: '',
+	priority: '',
+	type,
 	type_name: '',
 	type_object: type_object,
 });
-const clearListObject = (type_object: string) => ({
+const clearListObject = (type_object: string, type: number) => ({
 	color: 0,
 	icon: 0,
-	id: 0,
+	id: '0',
 	mode: 0,
+	priority: '',
 	name: '',
+	type,
 	type_object: type_object,
 });
-const clearMapObject = (type_object: string) => ({
-	id: 0,
+const clearMapObject = (type_object: string, type: number) => ({
+	id: '0',
 	mode: 0,
 	name: '',
+	priority: '',
+	type,
 	visible: 0,
 	type_object: type_object,
 });
@@ -70,9 +71,7 @@ const DatabaseOptions: FC = () => {
 		isLoading: isLoadingAllFields,
 	} = useGetAllFields();
 
-	const [mapFullData, setMapFullData] = useState<
-		(IFieldsResponse | IMapResponse | IListsResponse)[]
-	>([]); //HELP: Стейт для мапинга
+	const [mapFullData, setMapFullData] = useState<IAllFieldsResponse[]>([]); //HELP: Стейт для мапинга
 
 	const [editableData, setEditableData] = useState<IEditableData[]>([]);
 	const [targetIdObject, setTargetIdObject] = useState<number>(0);
@@ -83,7 +82,13 @@ const DatabaseOptions: FC = () => {
 
 	useEffect(() => {
 		if (isSuccessAllFields) {
-			const initialData = dataAllFields.map(el => {
+			setMapFullData(dataAllFields);
+		}
+	}, [dataAllFields, isSuccessAllFields]);
+
+	useEffect(() => {
+		if (mapFullData && mapFullData.length > 0) {
+			const initialData = mapFullData.map(el => {
 				return {
 					...el,
 					id: Number(el.id),
@@ -93,7 +98,7 @@ const DatabaseOptions: FC = () => {
 
 			setEditableData(initialData);
 		}
-	}, [dataAllFields, isSuccessAllFields]);
+	}, [mapFullData]);
 
 	// useEffect(() => {
 	// 	//HELP:Для маппинга всех элементов
@@ -166,7 +171,7 @@ const DatabaseOptions: FC = () => {
 	const handleDelete = (id: number) => {
 		console.log('id', id);
 		setEditableData(prev => prev.filter(el => el.id !== id)); //TODO: Проверить потом нужно ли удалять из этого состояния или достаточно из фулмап, из которого выводятся объекты в таблицу.
-		setMapFullData(prev => prev.filter(el => el.id !== id));
+		setMapFullData(prev => prev.filter(el => Number(el.id) !== id));
 	};
 	const handleSettingsMap = () => router.push(`/settings-map?map=${map}`);
 	const handleViewSettings = (el: { id: number; name: string }) =>
@@ -176,19 +181,21 @@ const DatabaseOptions: FC = () => {
 	const handleAddObjectData = () => {
 		const findTargetObject = editableData.find(el => el.id === targetIdObject);
 		const typeTarget = findTargetObject?.type_object;
+		const typeCategory = findTargetObject?.type || 0;
+
+		console.log('findTargetObject', findTargetObject, editableData);
 
 		if (typeTarget === 'field') {
 			setMapFullData(prev => {
-				return [...prev, clearFieldObject(typeTarget)];
+				return [...prev, clearFieldObject(typeTarget, typeCategory)];
 			});
 		} else if (typeTarget === 'list') {
-			clearListObject;
 			setMapFullData(prev => {
-				return [...prev, clearListObject(typeTarget)];
+				return [...prev, clearListObject(typeTarget, typeCategory)];
 			});
 		} else if (typeTarget === 'map') {
 			setMapFullData(prev => {
-				return [...prev, clearMapObject(typeTarget)];
+				return [...prev, clearMapObject(typeTarget, typeCategory)];
 			});
 		}
 	};
@@ -205,7 +212,6 @@ const DatabaseOptions: FC = () => {
 
 	return (
 		<div className={styles.wrapper_dataBaseOptions}>
-			<button onClick={test}>test</button>
 			{targetColumn.isTarget && (
 				<>
 					<BackgroundOpacity />
@@ -271,22 +277,20 @@ const DatabaseOptions: FC = () => {
 						}}
 					/>
 				)}
-				{/* {mapFullData.map((el, ind) => ( */}
-				{isSuccessAllFields &&
-					dataAllFields?.map((el, ind) => (
-						<RowDatabaseOptions
-							key={ind}
-							data={el}
-							position={ind}
-							editableData={editableData.find(
-								d => Number(d.id) === Number(el.id),
-							)}
-							onUpdate={handleUpdate}
-							handleDelete={handleDelete}
-							targetIdObject={targetIdObject}
-							handleViewSettings={handleViewSettings}
-						/>
-					))}
+				{mapFullData.map((el, ind) => (
+					<RowDatabaseOptions
+						key={ind}
+						data={el}
+						position={ind}
+						editableData={editableData.find(
+							d => Number(d.id) === Number(el.id),
+						)}
+						onUpdate={handleUpdate}
+						handleDelete={handleDelete}
+						targetIdObject={targetIdObject}
+						handleViewSettings={handleViewSettings}
+					/>
+				))}
 			</div>
 			<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
 			<Button onClick={test}>Сохранить</Button>
