@@ -1,5 +1,5 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
 import Button from '@/components/ui/button/Button';
@@ -8,6 +8,7 @@ import Loader from '@/components/ui/loader/Loader';
 import { IEditableData } from '@/types/localState.types';
 import { IAllFieldsResponse } from '@/types/requestData.types';
 
+import { useCheckFormatData } from '@/hooks/requests/database-options/useCheckFormatData';
 import { useGetAllFields } from '@/hooks/requests/database-options/useGetAllFields';
 import { useSaveAllFields } from '@/hooks/requests/database-options/useSaveAllFields';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -52,6 +53,18 @@ const clearMapObject = (type_object: string, type: number) => ({
 	type_object: type_object,
 });
 
+const newObj = {
+	address: 0,
+	id: '0',
+	name: '',
+	namefield: 0,
+	nameonmap: 0,
+	priority: '',
+	type: 0,
+	type_name: '',
+	type_object: 'field',
+};
+
 const DatabaseOptions: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -63,8 +76,7 @@ const DatabaseOptions: FC = () => {
 	}, []);
 	const isMobile = mounted ? windowSize <= 767 : false;
 
-	const { query_fields, query_lists, query_maps, query_icons } =
-		useGetDatabaseSettings();
+	const { query_icons } = useGetDatabaseSettings();
 	const {
 		data: dataAllFields,
 		isSuccess: isSuccessAllFields,
@@ -72,9 +84,10 @@ const DatabaseOptions: FC = () => {
 	} = useGetAllFields();
 
 	const [mapFullData, setMapFullData] = useState<IAllFieldsResponse[]>([]); //HELP: Стейт для мапинга
-
+	const cacheFullDataRef = useRef<IEditableData[]>([]);
 	const [editableData, setEditableData] = useState<IEditableData[]>([]);
 	const [targetIdObject, setTargetIdObject] = useState<number>(0);
+	const [targetNewAddObject, setTargetNewAddObject] = useState();
 	const [targetColumn, setTargetColumn] = useState({
 		isTarget: false,
 		column: '',
@@ -183,27 +196,32 @@ const DatabaseOptions: FC = () => {
 		const typeTarget = findTargetObject?.type_object;
 		const typeCategory = findTargetObject?.type || 0;
 
-		console.log('findTargetObject', findTargetObject, editableData);
+		setMapFullData(prev => {
+			return [...prev, newObj];
+		});
 
-		if (typeTarget === 'field') {
-			setMapFullData(prev => {
-				return [...prev, clearFieldObject(typeTarget, typeCategory)];
-			});
-		} else if (typeTarget === 'list') {
-			setMapFullData(prev => {
-				return [...prev, clearListObject(typeTarget, typeCategory)];
-			});
-		} else if (typeTarget === 'map') {
-			setMapFullData(prev => {
-				return [...prev, clearMapObject(typeTarget, typeCategory)];
-			});
-		}
+		// if (typeTarget === 'field') {
+		// 	setMapFullData(prev => {
+		// 		return [...prev, clearFieldObject(typeTarget, typeCategory)];
+		// 	});
+		// } else if (typeTarget === 'list') {
+		// 	setMapFullData(prev => {
+		// 		return [...prev, clearListObject(typeTarget, typeCategory)];
+		// 	});
+		// } else if (typeTarget === 'map') {
+		// 	setMapFullData(prev => {
+		// 		return [...prev, clearMapObject(typeTarget, typeCategory)];
+		// 	});
+		// }
 	};
 
-	useEffect(
-		() => console.log('editableData', editableData, targetColumn),
-		[editableData],
-	);
+	useCheckFormatData({
+		editableData,
+		cacheFullDataRef,
+		targetIdObject,
+		setEditableData,
+		setMapFullData,
+	});
 
 	const test = async () => {
 		const formatData = editableData.map(({ type_object, ...rest }) => rest);

@@ -36,6 +36,8 @@ const IconsSettings: FC<IIconsSettingsProps> = ({
 	const handleOpenChoiceIcon = (el: IListItemsResponse) =>
 		setViewIcon({ id: el.id, isView: true });
 
+	console.log('editListData', editListData);
+
 	return (
 		<div className={styles.block__iconsSettings}>
 			<div className={styles.block__titles_table}>
