@@ -32,6 +32,7 @@ export const useRange = ({
 		[min, max, step],
 	);
 	const handleMouseDown = (type: 'min' | 'max') => (e: React.MouseEvent) => {
+		e.preventDefault();
 		setDragging(type);
 		const value = calculateValue(e.clientX);
 		updateValue(type, value);
@@ -64,6 +65,7 @@ export const useRange = ({
 	);
 	const handleMouseMove = useCallback(
 		(e: MouseEvent) => {
+			e.preventDefault();
 			handleMove(e.clientX);
 		},
 		[handleMove],

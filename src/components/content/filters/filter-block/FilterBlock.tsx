@@ -33,6 +33,8 @@ const FilterBlock: FC<IFilterBlock> = memo(({ filter }) => {
 						max={rangeBoundaries.max}
 						values={sliderValues}
 						onChange={handleRangeChange}
+						filter={filter}
+						updateUrlParams={updateUrlParams}
 					/>
 				)}
 				{filter.type === 'map' &&

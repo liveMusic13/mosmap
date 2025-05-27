@@ -12,6 +12,8 @@ const Range: FC<IRangeProps> = ({
 	step = 1,
 	values = { min: 25, max: 75 },
 	onChange,
+	filter,
+	updateUrlParams,
 }) => {
 	const {
 		containerRef,
@@ -22,7 +24,7 @@ const Range: FC<IRangeProps> = ({
 		handleTouchStart,
 		localValues,
 		setLocalValues,
-	} = useRange({ values, min, max, step, onChange });
+	} = useRange({ values, min, max, step, onChange, filter, updateUrlParams });
 
 	useEffect(() => {
 		document.addEventListener('mousemove', handleMouseMove);
