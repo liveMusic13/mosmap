@@ -4,12 +4,13 @@ import { useMapEvents } from 'react-leaflet';
 import {
 	useActiveAddObjectStore,
 	useDotInfoCoordsStore,
-	useFiltersStore,
+	// useFiltersStore,
 	useIdObjectInfoStore,
-	useObjectInfoStore,
+	// useObjectInfoStore,
 	useRemoveMarkerCrdStore,
-	useViewDotInfoStore,
+	// useViewDotInfoStore,
 	useViewObjectAbdAreaInfoStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -20,13 +21,15 @@ const MapClickHandler: FC = () => {
 	const isMobile = windowSize <= 767;
 
 	const { coords, setCoords } = useDotInfoCoordsStore(store => store);
-	const setIsFilters = useFiltersStore(store => store.setIsFilters);
-	const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
+	// const setIsFilters = useFiltersStore(store => store.setIsFilters);
+	// const setIsObjectInfo = useObjectInfoStore(store => store.setIsObjectInfo);
+	const fullCloseView = useViewStore(store => store.fullCloseView);
+	const openView = useViewStore(store => store.openView);
 
 	const setIsActiveAddObject = useActiveAddObjectStore(
 		store => store.setIsActiveAddObject,
 	);
-	const setViewDotInfo = useViewDotInfoStore(store => store.setViewDotInfo);
+	// const setViewDotInfo = useViewDotInfoStore(store => store.setViewDotInfo);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const isRemoveMarker = useRemoveMarkerCrdStore(store => store.isRemoveMarker);
 	const { setIsViewAreaInfo } = useViewObjectAbdAreaInfoStore(store => store);
@@ -39,7 +42,7 @@ const MapClickHandler: FC = () => {
 
 	useMapEvents({
 		click: async e => {
-			setIsObjectInfo(false);
+			// setIsObjectInfo(false);
 			setIsActiveAddObject(false);
 			setCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
 			if (!isRemoveMarker) {
@@ -48,11 +51,13 @@ const MapClickHandler: FC = () => {
 			}
 
 			if (isMobile) {
+				fullCloseView();
 				//HELP: Аналогично ситуации в клике по объекту
 				setIsViewAreaInfo(true);
 			} else {
-				setViewDotInfo(true);
-				setIsFilters(false);
+				// setViewDotInfo(true);
+				// setIsFilters(false);
+				openView('zoneInfo');
 			}
 
 			// setIsFilters(false);

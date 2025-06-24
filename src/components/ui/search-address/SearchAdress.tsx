@@ -12,10 +12,11 @@ import { IHelpSearchAddress } from '@/types/requestData.types';
 import {
 	useActiveAddObjectStore,
 	useCenterMapStore,
-	useFiltersStore,
+	// useFiltersStore,
 	useListOfObjectsStore,
-	useObjectInfoStore,
+	// useObjectInfoStore,
 	useSearchAddressStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useGetSearchAddress } from '@/hooks/useGetSearchAddress';
@@ -24,8 +25,9 @@ import styles from './SearchAddress.module.scss';
 
 const SearchAddress: FC = () => {
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
-	const isFilters = useFiltersStore(store => store.isFilters);
-	const isObjectInfo = useObjectInfoStore(store => store.isObjectInfo);
+	// const isFilters = useFiltersStore(store => store.isFilters);
+	// const isObjectInfo = useObjectInfoStore(store => store.isObjectInfo);
+	const view = useViewStore(store => store.view);
 	const isActiveAddObject = useActiveAddObjectStore(
 		store => store.isActiveAddObject,
 	);
@@ -78,20 +80,42 @@ const SearchAddress: FC = () => {
 	};
 
 	const transformStyle = () => {
-		//HELP: Здесь контролируется позиционирование по горизонтали поисковой строки
-		if (isActiveAddObject || isObjectInfo || isFilters || isListOfObjects) {
-			if (isFilters && (isObjectInfo || isActiveAddObject)) {
-				return 'translateX(-52%)';
-			} else if (
-				(isFilters || isObjectInfo || isActiveAddObject) &&
-				isListOfObjects
-			) {
+		// Есть ли открыта любая из панелей?
+		const panelOpen =
+			view === 'filters' ||
+			view === 'objectInfo' ||
+			view === 'zoneInfo' ||
+			view === 'addObject';
+
+		// Если открыта панель или список объектов…
+		if (panelOpen || isListOfObjects) {
+			// …и одновременно открыт список объектов — сдвигаем вправо
+			if (panelOpen && isListOfObjects) {
 				return 'translateX(45%)';
 			}
+			// …иначе просто слегка влево
 			return 'translateX(-25%)';
 		}
+
+		// Ничего не открыто
 		return 'translateX(-50%)';
 	};
+
+	// const transformStyle = () => {
+	// 	//HELP: Здесь контролируется позиционирование по горизонтали поисковой строки
+	// 	if (isActiveAddObject || isObjectInfo || isFilters || isListOfObjects) {
+	// 		if (isFilters && (isObjectInfo || isActiveAddObject)) {
+	// 			return 'translateX(-52%)';
+	// 		} else if (
+	// 			(isFilters || isObjectInfo || isActiveAddObject) &&
+	// 			isListOfObjects
+	// 		) {
+	// 			return 'translateX(45%)';
+	// 		}
+	// 		return 'translateX(-25%)';
+	// 	}
+	// 	return 'translateX(-50%)';
+	// };
 
 	return (
 		<div

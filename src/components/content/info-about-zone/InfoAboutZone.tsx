@@ -15,7 +15,7 @@ import {
 	useIdObjectInfoStore,
 	usePopupStore,
 	useRemoveMarkerCrdStore,
-	useViewDotInfoStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -45,7 +45,10 @@ const InfoAboutZone: FC = () => {
 	const setIsActiveAddObject = useActiveAddObjectStore(
 		store => store.setIsActiveAddObject,
 	);
-	const { isViewDotInfo, setViewDotInfo } = useViewDotInfoStore(store => store);
+	// const { isViewDotInfo, setViewDotInfo } = useViewDotInfoStore(store => store);
+	const view = useViewStore(store => store.view);
+	const closeView = useViewStore(store => store.closeView);
+
 	const { isPopup, messageInPopup, setIsPopup } = usePopupStore(store => store);
 
 	//HELP: Преобразование searchParams в строку
@@ -56,7 +59,10 @@ const InfoAboutZone: FC = () => {
 
 	useSaveUpdateAfterRemoveMarker(isSuccess_save);
 
-	const handleClose = () => setViewDotInfo(false);
+	const handleClose = () => {
+		// setViewDotInfo(false)
+		closeView();
+	};
 	const handleActiveAddObject = () => {
 		if (map && token) {
 			setIsActiveAddObject(true);
@@ -96,7 +102,7 @@ const InfoAboutZone: FC = () => {
 
 			<div className={styles.block__objectInfo}>
 				<div className={styles.block__title}>
-					<h2 className={styles.title}>Просмотр объекта</h2>
+					<h2 className={styles.title}>Информация по точке</h2>
 
 					<Button
 						style={{
@@ -113,7 +119,10 @@ const InfoAboutZone: FC = () => {
 								alt='arrow'
 								width={19}
 								height={19}
-								style={isViewDotInfo ? { transform: 'rotate(-180deg)' } : {}}
+								style={
+									// isViewDotInfo
+									view === 'zoneInfo' ? { transform: 'rotate(-180deg)' } : {}
+								}
 							/>
 						) : (
 							<Image

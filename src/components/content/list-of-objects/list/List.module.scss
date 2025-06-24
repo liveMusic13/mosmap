@@ -12,6 +12,7 @@
 
 	&:hover {
 		background-color: vars.$blue_very_light;
+		cursor: pointer;
 	}
 
 	@media (max-width: 767.98px) {
@@ -35,7 +36,6 @@
 	transition: font-size 0.3s ease;
 
 	&:hover {
-		cursor: pointer;
 		font-size: 1.5rem;
 	}
 }

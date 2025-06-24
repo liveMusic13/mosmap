@@ -8,10 +8,15 @@
 	border: 1px solid rgba($color: vars.$grey_lines, $alpha: 0.4);
 	box-shadow: 0px 0px 10px rgba($color: vars.$green_light, $alpha: 0.3);
 
-	overflow-y: auto;
-	overflow-x: hidden;
-	@include mix.scrollbar();
+	// overflow-y: auto;
+	// overflow-x: hidden;
+	// @include mix.scrollbar();
 	max-height: 100%; //HELP: Ограничить максимальную высоту, чтобы когда компонент не помещается по высоте , то появлялся скролбар. А когда в компоненте мало контента, то он просто стоял маленький по центру экрана.
+
+	// height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 
 	@media (max-width: 767.98px) {
 		padding: func.adapt(20px, 480px);
@@ -28,6 +33,8 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: func.adapt(25px, 1920px);
+
+	flex: 0 0 auto;
 
 	> button {
 		text-transform: uppercase;
@@ -62,6 +69,8 @@
 }
 
 .line {
+	flex: 0 0 auto;
+
 	margin-top: func.adapt(25px, 1920px);
 	margin-bottom: func.adapt(15px, 1920px);
 	width: 100%;
@@ -79,6 +88,11 @@
 .block__content {
 	border-radius: func.adapt(11px, 1920px);
 	background-color: vars.$blue_very_light;
+
+	flex: 1 1 auto; // занимает всё свободное место
+	overflow-y: auto; // скролл только здесь
+	overflow-x: hidden;
+	@include mix.scrollbar();
 
 	@media (max-width: 767.98px) {
 		border-radius: func.adapt(11px, 480px);

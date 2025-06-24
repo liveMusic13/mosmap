@@ -2,6 +2,16 @@ import { LatLngExpression } from 'leaflet';
 
 import { IImportResponse, IMarker } from './requestData.types';
 
+export type View = 'filters' | 'objectInfo' | 'zoneInfo' | 'addObject' | null;
+
+export interface IViewStore {
+	view: View;
+	prevView: View;
+	openView: (newView: Exclude<View, null>) => void;
+	closeView: () => void;
+	fullCloseView: () => void;
+}
+
 export interface IListOfObjectsStore {
 	isListOfObjects: boolean;
 	setIsListOfObjects: (bol: boolean) => void;
@@ -15,6 +25,8 @@ export interface IFiltersStore {
 export interface IObjectInfoStore {
 	isObjectInfo: boolean;
 	setIsObjectInfo: (bol: boolean) => void;
+	isObjectInfoReserve: boolean;
+	setIsObjectInfoReserve: (bol: boolean) => void;
 }
 
 export interface IIdObjectInfoStore {

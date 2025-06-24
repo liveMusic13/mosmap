@@ -16,7 +16,16 @@ import styles from './FilterBlock.module.scss';
 
 const FilterBlock: FC<IFilterBlock> = memo(({ filter }) => {
 	const { onChange, checkValueInUrl } = useCheckbox(filter, updateUrlParams);
-	const { rangeBoundaries, sliderValues, handleRangeChange } = useRange({
+	const {
+		rangeBoundaries,
+		handleMouseDown,
+		handleTouchStart,
+		handleMouseUp,
+		handleTouchMove,
+		handleMouseMove,
+		localValues,
+		containerRef,
+	} = useRange({
 		filter,
 		updateUrlParams,
 	});
@@ -31,10 +40,13 @@ const FilterBlock: FC<IFilterBlock> = memo(({ filter }) => {
 					<Range
 						min={rangeBoundaries.min}
 						max={rangeBoundaries.max}
-						values={sliderValues}
-						onChange={handleRangeChange}
-						filter={filter}
-						updateUrlParams={updateUrlParams}
+						handleMouseDown={handleMouseDown}
+						handleTouchStart={handleTouchStart}
+						handleMouseUp={handleMouseUp}
+						handleTouchMove={handleTouchMove}
+						handleMouseMove={handleMouseMove}
+						localValues={localValues}
+						containerRef={containerRef}
 					/>
 				)}
 				{filter.type === 'map' &&

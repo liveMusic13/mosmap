@@ -9,9 +9,9 @@ import { IMarker } from '@/types/requestData.types';
 
 import {
 	useCenterMapStore,
-	useFiltersStore,
+	// useFiltersStore,
 	useIdObjectInfoStore,
-	useObjectInfoStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -36,10 +36,11 @@ const List = memo(
 			const setIdObjectInfo = useIdObjectInfoStore(
 				store => store.setIdObjectInfo,
 			);
-			const setIsFilters = useFiltersStore(store => store.setIsFilters);
-			const setIsObjectInfo = useObjectInfoStore(
-				store => store.setIsObjectInfo,
-			);
+			// const setIsFilters = useFiltersStore(store => store.setIsFilters);
+			// const setIsObjectInfo = useObjectInfoStore(
+			// 	store => store.setIsObjectInfo,
+			// );
+			const openView = useViewStore(store => store.openView);
 
 			const { refetch, data, isSuccess } = useGetObjectInfo(el.id);
 
@@ -53,11 +54,13 @@ const List = memo(
 					setIdObjectInfo(el.id);
 				}
 			};
+
 			const handleClickInfo = () => {
 				//HELP: Добавляем id объекта для взятия из кэша данных об объекте. Отключаем видимость фильтров и включаем видимость блока информации об объекте. После этого запускаем запрос
 				setIdObjectInfo(el.id);
-				setIsFilters(false);
-				setIsObjectInfo(true);
+				// setIsFilters(false);
+				// setIsObjectInfo(true);
+				openView('objectInfo');
 				refetch();
 			};
 
@@ -67,10 +70,9 @@ const List = memo(
 					ref={ref}
 					className={styles.block__name}
 					style={isTarget ? { backgroundColor: colors.blue_very_light } : {}}
+					onClick={handleClickInfo}
 				>
-					<p className={styles.name} onClick={handleClickInfo}>
-						{el.name}
-					</p>
+					<p className={styles.name}>{el.name}</p>
 					<Button
 						style={{
 							backgroundColor: 'transparent',
@@ -80,7 +82,10 @@ const List = memo(
 							width: 'calc(25/1920*100vw)',
 							height: 'calc(25/1920*100vw)',
 						}}
-						onClick={() => onClick(el)}
+						onClick={e => {
+							e.stopPropagation();
+							onClick(el);
+						}}
 					>
 						<Image
 							src={

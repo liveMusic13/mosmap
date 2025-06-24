@@ -1,3 +1,5 @@
+'use client';
+
 import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, useCallback } from 'react';
@@ -8,9 +10,10 @@ import Line from '@/components/ui/line/Line';
 import {
 	useActiveAddObjectStore,
 	useColorsIntervalStore,
-	useFiltersStore,
+	// useFiltersStore,
 	useIdObjectInfoStore,
 	useListOfObjectsStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -33,7 +36,11 @@ const Options: FC = () => {
 	const { isColorIntervalMobile, setIsColorIntervalMobile, isColorInterval } =
 		useColorsIntervalStore(store => store);
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
-	const isFilters = useFiltersStore(store => store.isFilters);
+	// const isFilters = useFiltersStore(store => store.isFilters);
+	const view = useViewStore(store => store.view);
+	const openView = useViewStore(store => store.openView);
+	const closeView = useViewStore(store => store.closeView);
+
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
 		store => store,
@@ -59,14 +66,19 @@ const Options: FC = () => {
 				if (windowSize <= 767) {
 					router.push(`/mobile-filters/filters/?${queryString}`);
 				} else {
-					useFiltersStore.setState(state => {
-						if (!state.isFilters) {
-							setIsActiveAddObject(false);
-						}
-						return {
-							isFilters: !state.isFilters,
-						};
-					});
+					// useFiltersStore.setState(state => {
+					// 	if (!state.isFilters) {
+					// 		setIsActiveAddObject(false);
+					// 	}
+					// 	return {
+					// 		isFilters: !state.isFilters,
+					// 	};
+					// });
+					if (view === 'filters') {
+						closeView();
+					} else {
+						openView('filters');
+					}
 				}
 			} else if (id === 3) {
 				if (windowSize <= 767) {
@@ -100,16 +112,16 @@ const Options: FC = () => {
 				}
 			}
 		},
-		[isMobile, isColorInterval, isColorIntervalMobile],
+		[isMobile, isColorInterval, isColorIntervalMobile, view],
 	);
 	const handleClick = useCallback((id: number) => {
-		if (token) {
-			if (id === 5) {
-				router.push(`/settings-database?${queryString}`);
-			}
-		} else {
-			router.push(`/auth`);
+		// if (token) {
+		if (id === 5) {
+			router.push(`/settings-database?${queryString}`);
 		}
+		// } else {
+		// router.push(`/auth`);
+		// }
 	}, []);
 
 	const personActiveStyle = (id: number): CSSProperties | undefined => {
@@ -130,31 +142,44 @@ const Options: FC = () => {
 	return (
 		<div className={styles.block__options}>
 			<div className={styles.one}>
-				{standardArr.map(opt => (
-					<Button
-						key={opt.id}
-						style={{
-							width: 'calc(39/1920*100vw)',
-							height: 'calc(39/1920*100vw)',
-							border: `1px solid ${colors.grey_middle}`,
-							backgroundColor: 'transparent',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							position: 'relative',
-						}}
-						onClick={() => onClick(opt.id)}
-					>
-						<svg className={styles.icon_svg} style={personActiveStyle(opt.id)}>
-							<use
-								xlinkHref={srcStandard(opt, isListOfObjects, isFilters)}
-							></use>
-						</svg>
-						<p className={styles.hover__text} style={{ left: 0 }}>
-							{opt.hover_text}
-						</p>
-					</Button>
-				))}
+				{standardArr.map(opt => {
+					const isDisabled =
+						(opt.id === 0 || opt.id === 1 || opt.id === 4) && !token;
+					return (
+						<Button
+							key={opt.id}
+							style={{
+								width: 'calc(39/1920*100vw)',
+								height: 'calc(39/1920*100vw)',
+								border: `1px solid ${colors.grey_middle}`,
+								backgroundColor: 'transparent',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								position: 'relative',
+							}}
+							onClick={() => onClick(opt.id)}
+							disabled={isDisabled}
+						>
+							<svg
+								className={styles.icon_svg}
+								style={personActiveStyle(opt.id)}
+							>
+								<use
+									// xlinkHref={srcStandard(opt, isListOfObjects, isFilters)}
+									xlinkHref={srcStandard(
+										opt,
+										isListOfObjects,
+										view === 'filters',
+									)}
+								></use>
+							</svg>
+							<p className={styles.hover__text} style={{ left: 0 }}>
+								{opt.hover_text}
+							</p>
+						</Button>
+					);
+				})}
 				<Line
 					style={{
 						backgroundColor: colors.grey_lines,
@@ -187,6 +212,7 @@ const Options: FC = () => {
 							position: 'relative',
 						}}
 						onClick={() => handleClick(opt.id)}
+						disabled={!token}
 					>
 						<svg className={styles.icon_svg} style={{ color: colors.green }}>
 							<use

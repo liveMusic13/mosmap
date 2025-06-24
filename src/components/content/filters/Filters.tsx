@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FC, useEffect } from 'react';
@@ -24,6 +26,7 @@ const Filters: FC = () => {
 	const map = searchParams.get('map');
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
+
 	const { refetch } = useGetDataMap(queryString);
 
 	const { isClear, setIsClear } = useClearAllFiltersStore(store => store);
@@ -33,12 +36,21 @@ const Filters: FC = () => {
 	useEffect(() => {
 		if (isClear) {
 			// router.replace(`/?map=${map}`);
-			window.history.replaceState(null, '', `/?map=${map}`); //HELP: чтобы не срабатывал серверный запрос после изменения адресной строки
+			// window.history.replaceState(null, '', `/?map=${map}`); //HELP: чтобы не срабатывал серверный запрос после изменения адресной строки
 			setIsClear(false);
 		}
 	}, [isClear]);
 
-	const handleClickClear = () => setIsClear(true);
+	const handleClickClear = () => {
+		setIsClear(true);
+		window.history.replaceState(null, '', `/?map=${map}`); //HELP: чтобы не срабатывал серверный запрос после изменения адресной строки
+
+		const timeoutId = setTimeout(() => {
+			console.log('click');
+			refetch();
+		}, 2000);
+		return () => clearTimeout(timeoutId);
+	};
 
 	return (
 		<div className={styles.wrapper_filters}>

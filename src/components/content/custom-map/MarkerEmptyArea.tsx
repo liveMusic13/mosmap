@@ -4,8 +4,9 @@ import { Marker } from 'react-leaflet';
 
 import {
 	useDotInfoCoordsStore,
-	useViewDotInfoStore,
+	// useViewDotInfoStore,
 	useViewObjectAbdAreaInfoStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -16,14 +17,17 @@ const MarkerEmptyArea: FC = () => {
 	const isMobile = windowSize <= 767;
 
 	const coords = useDotInfoCoordsStore(store => store.coords);
-	const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
+	// const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
+	const view = useViewStore(store => store.view);
+
 	const isViewAreaInfo = useViewObjectAbdAreaInfoStore(
 		store => store.isViewAreaInfo,
 	);
 
 	const sizeMarker = useGetSizeMarker();
 
-	const shouldShowMarker = isMobile ? isViewAreaInfo : isViewDotInfo;
+	// const shouldShowMarker = isMobile ? isViewAreaInfo : isViewDotInfo;
+	const shouldShowMarker = isMobile ? isViewAreaInfo : view === 'zoneInfo';
 
 	return shouldShowMarker ? (
 		<Marker

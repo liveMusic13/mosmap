@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { LatLngExpression } from 'leaflet';
 import { useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, memo } from 'react';
@@ -15,10 +16,11 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import styles from './MenuObject.module.scss';
-import { colors } from '@/app.constants';
+import { TOKEN, colors } from '@/app.constants';
 import { arrMenuObject } from '@/data/menuObject.data';
 
 const MenuObject: FC = memo(() => {
+	const token = Cookies.get(TOKEN);
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const isMobile_mini = windowSize <= 481;
@@ -88,6 +90,7 @@ const MenuObject: FC = memo(() => {
 						position: 'relative',
 					}}
 					onClick={() => onClick(el.id)}
+					disabled={!token && el.id === 1}
 				>
 					<svg className={styles.icon_svg} style={personActiveStyle(el.id)}>
 						<use xlinkHref={`/images/icons/sprite.svg#${el.src}`}></use>

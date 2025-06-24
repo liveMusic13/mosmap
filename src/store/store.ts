@@ -7,12 +7,10 @@ import {
 	IClearAllFiltersStore,
 	IColorsIntervalStore,
 	IDotInfoCoordsStore,
-	IFiltersStore,
 	IIdObjectInfoStore,
 	IImportResponseStore,
 	IListOfObjectsStore,
 	IMapLayersStore,
-	IObjectInfoStore,
 	IPopupStore,
 	IQueryKeysForGetCacheDataStore,
 	IRemoveMarkerCrdStore,
@@ -21,8 +19,8 @@ import {
 	ISuccessSaveColorsIntervalStore,
 	ITargetObjectStore,
 	IToggleViewAreaStore,
-	IViewDotInfoStore,
 	IViewObjectAndAreaInfoStore,
+	IViewStore,
 	IZoomLevelStore,
 } from '@/types/store.types';
 
@@ -31,15 +29,17 @@ export const useListOfObjectsStore = create<IListOfObjectsStore>(set => ({
 	setIsListOfObjects: bol => set({ isListOfObjects: bol }),
 }));
 
-export const useFiltersStore = create<IFiltersStore>(set => ({
-	isFilters: true,
-	setIsFilters: bol => set({ isFilters: bol }),
-}));
+// export const useFiltersStore = create<IFiltersStore>(set => ({
+// 	isFilters: true,
+// 	setIsFilters: bol => set({ isFilters: bol }),
+// }));
 
-export const useObjectInfoStore = create<IObjectInfoStore>(set => ({
-	isObjectInfo: false,
-	setIsObjectInfo: bol => set({ isObjectInfo: bol }),
-}));
+// export const useObjectInfoStore = create<IObjectInfoStore>(set => ({
+// 	isObjectInfo: false,
+// 	setIsObjectInfo: bol => set({ isObjectInfo: bol }),
+// 	isObjectInfoReserve: false,
+// 	setIsObjectInfoReserve: bol => set({ isObjectInfoReserve: bol }),
+// }));
 
 export const useIdObjectInfoStore = create<IIdObjectInfoStore>((set, get) => ({
 	idObjectInfo: null,
@@ -115,9 +115,41 @@ export const useMapLayersStore = create<IMapLayersStore>(set => ({
 		set(state => ({ arrayPolygons: [...state.arrayPolygons, pol] })),
 }));
 
-export const useViewDotInfoStore = create<IViewDotInfoStore>(set => ({
-	isViewDotInfo: false,
-	setViewDotInfo: bol => set({ isViewDotInfo: bol }),
+// export const useViewDotInfoStore = create<IViewDotInfoStore>(set => ({
+// 	isViewDotInfo: false,
+// 	setViewDotInfo: bol => set({ isViewDotInfo: bol }),
+// }));
+
+// один store вместо трёх
+export const useViewStore = create<IViewStore>(set => ({
+	view: 'filters',
+	prevView: null,
+
+	// открываем новый экран, запоминая текущий
+	openView: newView =>
+		set(state => ({
+			prevView: state.view,
+			view: newView,
+		})),
+
+	// // закрываем текущий экран и возвращаем предыдущее, или к фильтрам
+	// closeView: () =>
+	// 	set(state => ({
+	// 		view: state.prevView ?? 'filters',
+	// 		prevView: null,
+	// 	})),
+	// закрываем текущий экран и возвращаем предыдущее, или к фильтрам
+	closeView: () =>
+		set(state => ({
+			view: state.prevView,
+			prevView: null,
+		})),
+
+	fullCloseView: () =>
+		set(state => ({
+			view: null,
+			prevView: null,
+		})),
 }));
 
 export const useDotInfoCoordsStore = create<IDotInfoCoordsStore>(set => ({

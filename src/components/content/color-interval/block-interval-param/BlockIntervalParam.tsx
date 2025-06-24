@@ -36,6 +36,13 @@ const BlockIntervalParam: FC<IBlockIntervalParam> = ({
 			el => el.item_name === targetValue,
 		);
 
+		console.log(
+			'searchTargetValue',
+			searchTargetValue,
+			targetValue,
+			formatOptions,
+		);
+
 		if (searchTargetValue) handleClickSelect(searchTargetValue);
 	}, []);
 
@@ -45,7 +52,7 @@ const BlockIntervalParam: FC<IBlockIntervalParam> = ({
 
 		if (targetParams) {
 			const isOptionValid = options.some(el => el.id === Number(targetParams));
-			console.log('isOptionValid', isOptionValid, targetParams);
+			// console.log('isOptionValid', isOptionValid, targetParams);
 		}
 	}, [searchParams.toString(), options, targetValue]);
 

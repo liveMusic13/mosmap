@@ -9,22 +9,20 @@ import QueryProvider from '@/providers/QueryProvider';
 import { IContent } from '@/types/props.types';
 
 import {
-	useActiveAddObjectStore,
 	useBurgerMenuStore,
 	useColorsIntervalStore,
-	useFiltersStore,
+	// useFiltersStore,
 	useListOfObjectsStore,
 	useMapLayersStore,
-	useObjectInfoStore,
+	// useObjectInfoStore,
 	usePopupStore,
 	useSearchAddressStore,
 	useSelectAreaStore,
-	useViewDotInfoStore,
+	// useViewDotInfoStore,
 	useViewObjectAbdAreaInfoStore,
+	useViewStore,
 } from '@/store/store';
 
-import { useCheckActiveInfo } from '@/hooks/useCheckActiveInfo';
-import { useCheckDisabledZone } from '@/hooks/useCheckDisabledZone';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledRemoveMarker } from '@/hooks/useDisabledRemoveMarker';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
@@ -42,9 +40,12 @@ import ColorInterval from './color-interval/ColorInterval';
 import InfoAboutZone from './info-about-zone/InfoAboutZone';
 import ObjectInfo from './object-info/ObjectInfo';
 import ViewObjectInfo from './object-info/view-object-info/ViewObjectInfo';
-import Options from './options/Options';
 import { colors } from '@/app.constants';
 import { buttonsMap } from '@/data/content.data';
+
+const DynamicOptions = dynamic(() => import('./options/Options'), {
+	ssr: false,
+});
 
 const DynamicCustomMap = dynamic(() => import('./custom-map/CustomMap'), {
 	ssr: false,
@@ -79,16 +80,17 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	const isMobile = mounted ? windowSize <= 767 : false; //HELP: Делаем эту часть + динамический импорты для списка и фильтров, что не выдавало ошибок гидратации при использовании условий зависящих от размера экрана при обращении к window на сервере
 
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
-	const isFilters = useFiltersStore(store => store.isFilters);
-	const isObjectInfo = useObjectInfoStore(store => store.isObjectInfo);
-	const isActiveAddObject = useActiveAddObjectStore(
-		store => store.isActiveAddObject,
-	);
+	// const isFilters = useFiltersStore(store => store.isFilters);
+	// const isObjectInfo = useObjectInfoStore(store => store.isObjectInfo);
+	const view = useViewStore(store => store.view);
+	// const isActiveAddObject = useActiveAddObjectStore(
+	// 	store => store.isActiveAddObject,
+	// );
 	const isPopup = usePopupStore(store => store.isPopup);
 	const isSearchAddress = useSearchAddressStore(store => store.isSearchAddress);
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
 	const clearPolygon = useMapLayersStore(store => store.clearPolygon);
-	const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
+	// const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
 	const isColorInterval = useColorsIntervalStore(
 		store => store.isColorInterval,
 	);
@@ -98,8 +100,8 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	);
 
 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
-	useCheckActiveInfo(); //HELP: Для того чтобы отключало показ фильтров при показе информации об объекте или при создании объекта
-	useCheckDisabledZone(); //HELP: Для того чтобы отключать показ информации о клике на пустую зону при активации хоть одного из окон кроме списка объектов
+	// useCheckActiveInfo(); //HELP: Для того чтобы отключало показ фильтров при показе информации об объекте или при создании объекта
+	// useCheckDisabledZone(); //HELP: Для того чтобы отключать показ информации о клике на пустую зону при активации хоть одного из окон кроме списка объектов
 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
 
 	const handleClickButtonInMap = useCallback((id: number) => {
@@ -150,9 +152,10 @@ const Content: FC<IContent> = ({ dataMap }) => {
 			) : (
 				<div className={styles.wrapper_content}>
 					<h1 className={styles.title}>{dataMap.title}</h1>
-					<Options />
+					{/* <Options /> */}
+					<DynamicOptions />
 					<div className={styles.block__content}>
-						{!isMobile && isFilters && !isObjectInfo && !isViewDotInfo && (
+						{/* {!isMobile && isFilters && !isObjectInfo && !isViewDotInfo && (
 							<DynamicFilters />
 							// <Filters />
 						)}
@@ -164,7 +167,17 @@ const Content: FC<IContent> = ({ dataMap }) => {
 							isViewDotInfo &&
 							!isFilters &&
 							!isObjectInfo &&
-							!isActiveAddObject && <InfoAboutZone />}
+							!isActiveAddObject && <InfoAboutZone />} */}
+
+						{/* условный рендеринг */}
+						{!isMobile && view === 'filters' && <DynamicFilters />}
+
+						{!isMobile && (view === 'objectInfo' || view === 'addObject') && (
+							<ObjectInfo />
+						)}
+
+						{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+
 						{!isMobile && isListOfObjects && (
 							<DynamicLists />
 							// <ListOfObjects />
@@ -173,13 +186,15 @@ const Content: FC<IContent> = ({ dataMap }) => {
 						{isSearchAddress && <SearchAddress />}
 
 						<DynamicCustomMap />
-						{isMobile &&
+						{/* {isMobile &&
 							(isActiveAddObject || isObjectInfo) &&
 							!isViewDotInfo && <ObjectInfo />}
 						{isMobile &&
 							isViewDotInfo &&
 							!isObjectInfo &&
-							!isActiveAddObject && <InfoAboutZone />}
+							!isActiveAddObject && <InfoAboutZone />} */}
+						{isMobile && view === 'objectInfo' && <ObjectInfo />}
+						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
 
 						{isViewAreaInfo && <ViewObjectInfo area={true} />}
 						{isViewObjectInfo && <ViewObjectInfo area={false} />}
@@ -210,7 +225,8 @@ const Content: FC<IContent> = ({ dataMap }) => {
 											xlinkHref={
 												isSelectArea && el.id === 1
 													? `/images/icons/sprite.svg#selection-remove`
-													: srcStandard(el, isListOfObjects, isFilters)
+													: // : srcStandard(el, isListOfObjects, isFilters)
+														srcStandard(el, isListOfObjects, view === 'filters')
 											}
 										></use>
 									</svg>

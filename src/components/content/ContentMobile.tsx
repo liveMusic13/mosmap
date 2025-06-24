@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 
@@ -18,7 +19,10 @@ import styles from './ContentMobile.module.scss';
 import ColorInterval from './color-interval/ColorInterval';
 import Filters from './filters/Filters';
 import ListOfObjects from './list-of-objects/ListOfObjects';
-import Options from './options/Options';
+
+const DynamicOptions = dynamic(() => import('./options/Options'), {
+	ssr: false,
+});
 
 const ContentMobile: FC<IContent> = ({ dataMap }) => {
 	const pathname = usePathname();
@@ -36,7 +40,7 @@ const ContentMobile: FC<IContent> = ({ dataMap }) => {
 			) : (
 				<div className={styles.wrapper_content}>
 					<h1 className={styles.title}>{dataMap.title}</h1>
-					<Options />
+					<DynamicOptions />
 					<div className={styles.block__content}>
 						{pathname === '/mobile-filters/filters' && <Filters />}
 						{pathname === '/mobile-filters/list-of-objects' && (

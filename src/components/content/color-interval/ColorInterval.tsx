@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 
@@ -16,15 +17,18 @@ import { useGetColorMap } from '@/hooks/useGetColorMap';
 
 import styles from './ColorInterval.module.scss';
 import BlockIntervalParam from './block-interval-param/BlockIntervalParam';
+import { TOKEN } from '@/app.constants';
 
 const ColorInterval: FC = () => {
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+	const token = Cookies.get(TOKEN);
 
 	const { data, isLoading, isSuccess } = useGetColorInterval(map);
 
 	const [isValidTargetValues, setIsValidTargetValues] =
 		useState<boolean>(false);
+	const [isViewButton, setIsViewButton] = useState<boolean>(false);
 	const [isViewFieldSelect, setIsViewFieldSelect] = useState<boolean>(true);
 	const [isViewInputsInterval, setIsViewInputsInterval] =
 		useState<boolean>(true);
@@ -55,59 +59,134 @@ const ColorInterval: FC = () => {
 			const modeValue = searchParams.get('Способ раскраски');
 			const numFieldValue = searchParams.get('Числовое поле');
 
+			// console.log(
+			// 	'in success',
+			// 	sloiValue,
+			// 	modeValue,
+			// 	numFieldValue,
+			// 	numFieldValue === null,
+			// 	data,
+			// );
+			console.log('data', data);
+
+			//HELP: Проверка совпадения с id в соответствующих массивах
+			const isSloiValid = (data as IColorIntervalResponse).sloi_fields?.some(
+				field => field.id === Number(sloiValue),
+			);
+			const isModeValid = (data as IColorIntervalResponse).mode_list?.some(
+				mode => mode.id === Number(modeValue),
+			);
+			const isNumFieldValid = (data as IColorIntervalResponse).num_fields?.some(
+				field => field.id === Number(numFieldValue),
+			);
+
+			if (isSloiValid && isModeValid && isNumFieldValid) {
+				setIsValidTargetValues(true);
+			} else {
+				setIsValidTargetValues(false);
+			}
+
+			if (isSloiValid && isModeValid) {
+				setIsViewButton(true);
+			} else {
+				setIsViewButton(false);
+			}
+
+			//HELP:Здесь проверяем будет ли виден 3 селект
+			const isViewSelect = Number(modeValue) === 0;
+
+			if (isViewSelect) {
+				setIsViewFieldSelect(false);
+			} else {
+				setIsViewFieldSelect(true);
+			}
+
+			//HELP:Здесь проверяем будут ли видны инпуты
+			const isViewInputs = Number(modeValue) === 1 || Number(modeValue) === 3;
+			if (isViewInputs) {
+				setIsViewInputsInterval(false);
+			} else {
+				setIsViewInputsInterval(true);
+			}
+
+			//HELP: Ищем есть ли объект с интервалами для выбранных настроек в селекте. Если есть добавляем его в стейт
+			const objectTargetInData = (
+				data as IColorIntervalResponse
+			).intervals.find(
+				el =>
+					el.field_id === Number(numFieldValue) &&
+					el.sloi === Number(sloiValue) &&
+					el.type === Number(modeValue),
+			);
+			if (objectTargetInData) {
+				setIntervalsObject(objectTargetInData);
+			}
+
 			if (sloiValue && modeValue && numFieldValue) {
 				setQueryParams({
 					sloi: sloiValue,
 					mode: modeValue,
 					field_id: numFieldValue,
 				});
-				//HELP: Проверка совпадения с id в соответствующих массивах
-				const isSloiValid = (data as IColorIntervalResponse).sloi_fields?.some(
-					field => field.id === Number(sloiValue),
-				);
-				const isModeValid = (data as IColorIntervalResponse).mode_list?.some(
-					mode => mode.id === Number(modeValue),
-				);
-				const isNumFieldValid = (
-					data as IColorIntervalResponse
-				).num_fields?.some(field => field.id === Number(numFieldValue));
-
-				if (isSloiValid && isModeValid && isNumFieldValid) {
-					setIsValidTargetValues(true);
-				} else {
-					setIsValidTargetValues(false);
-				}
-
-				//HELP:Здесь проверяем будет ли виден 3 селект
-				const isViewSelect = Number(modeValue) === 0;
-				if (isViewSelect) {
-					setIsViewFieldSelect(false);
-				} else {
-					setIsViewFieldSelect(true);
-				}
-				//HELP:Здесь проверяем будут ли видны инпуты
-				const isViewInputs = Number(modeValue) === 1 || Number(modeValue) === 3;
-				if (isViewInputs) {
-					setIsViewInputsInterval(false);
-				} else {
-					setIsViewInputsInterval(true);
-				}
-
-				//HELP: Ищем есть ли объект с интервалами для выбранных настроек в селекте. Если есть добавляем его в стейт
-				const objectTargetInData = (
-					data as IColorIntervalResponse
-				).intervals.find(
-					el =>
-						el.field_id === Number(numFieldValue) &&
-						el.sloi === Number(sloiValue) &&
-						el.type === Number(modeValue),
-				);
-				if (objectTargetInData) {
-					setIntervalsObject(objectTargetInData);
-				}
 			}
+
+			// if (sloiValue && modeValue && numFieldValue) {
+			// 	setQueryParams({
+			// 		sloi: sloiValue,
+			// 		mode: modeValue,
+			// 		field_id: numFieldValue,
+			// 	});
+			// 	//HELP: Проверка совпадения с id в соответствующих массивах
+			// 	const isSloiValid = (data as IColorIntervalResponse).sloi_fields?.some(
+			// 		field => field.id === Number(sloiValue),
+			// 	);
+			// 	const isModeValid = (data as IColorIntervalResponse).mode_list?.some(
+			// 		mode => mode.id === Number(modeValue),
+			// 	);
+			// 	const isNumFieldValid = (
+			// 		data as IColorIntervalResponse
+			// 	).num_fields?.some(field => field.id === Number(numFieldValue));
+
+			// 	if (isSloiValid && isModeValid && isNumFieldValid) {
+			// 		setIsValidTargetValues(true);
+			// 	} else {
+			// 		setIsValidTargetValues(false);
+			// 	}
+
+			// 	//HELP:Здесь проверяем будет ли виден 3 селект
+			// 	const isViewSelect = Number(modeValue) === 0;
+			// 	console.log('Числовое поле in EFFECT', isViewSelect, modeValue);
+
+			// 	if (isViewSelect) {
+			// 		setIsViewFieldSelect(false);
+			// 	} else {
+			// 		setIsViewFieldSelect(true);
+			// 	}
+			// 	//HELP:Здесь проверяем будут ли видны инпуты
+			// 	const isViewInputs = Number(modeValue) === 1 || Number(modeValue) === 3;
+			// 	if (isViewInputs) {
+			// 		setIsViewInputsInterval(false);
+			// 	} else {
+			// 		setIsViewInputsInterval(true);
+			// 	}
+
+			// 	//HELP: Ищем есть ли объект с интервалами для выбранных настроек в селекте. Если есть добавляем его в стейт
+			// 	const objectTargetInData = (
+			// 		data as IColorIntervalResponse
+			// 	).intervals.find(
+			// 		el =>
+			// 			el.field_id === Number(numFieldValue) &&
+			// 			el.sloi === Number(sloiValue) &&
+			// 			el.type === Number(modeValue),
+			// 	);
+			// 	if (objectTargetInData) {
+			// 		setIntervalsObject(objectTargetInData);
+			// 	}
+			// }
 		}
 	}, [searchParams.toString(), data, isSuccess]);
+
+	// console.log('isValidTargetValues', isValidTargetValues, intervalsObject);
 
 	return (
 		<div className={styles.wrapper_colorInterval}>
@@ -188,9 +267,19 @@ const ColorInterval: FC = () => {
 								options={(data as IColorIntervalResponse)?.num_fields || []}
 							/>
 						)}
-						{isValidTargetValues && intervalsObject && (
+						{/* {isValidTargetValues && intervalsObject && (
 							<RangeInterval
 								intervalsObject={intervalsObject}
+								isViewInputsInterval={isViewInputsInterval}
+								isViewFieldSelect={isViewFieldSelect}
+							/>
+						)} */}
+						{isViewButton && (
+							<RangeInterval
+								isValidTargetValues={isValidTargetValues}
+								intervalsObject={
+									intervalsObject || { min_value: 0, max_value: 0, values: [] }
+								}
 								isViewInputsInterval={isViewInputsInterval}
 								isViewFieldSelect={isViewFieldSelect}
 							/>

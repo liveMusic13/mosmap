@@ -20,6 +20,7 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 	intervalsObject,
 	isViewInputsInterval,
 	isViewFieldSelect,
+	isValidTargetValues,
 }) => {
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
@@ -170,8 +171,65 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 	}, [intervalsObject, rangeData]);
 
 	return (
+		// <div className={styles['range_wrapper']}>
+		// 	{token && isViewFieldSelect && (
+		// 		<>
+		// 			<div className={styles['range-container']}>
+		// 				<div ref={trackRef} className={styles['range-track']}>
+		// 					{sliderPositions.map((sliderValue, index) => (
+		// 						<div
+		// 							key={index}
+		// 							className={styles['range-thumb']}
+		// 							//HELP: Вычисляем позицию в процентах относительно общего диапазона
+		// 							style={{
+		// 								left: `${((sliderValue - min_value) / (max_value - min_value)) * 100}%`,
+		// 							}}
+		// 							onMouseDown={e => {
+		// 								e.preventDefault();
+		// 								onMouseDown(index, e);
+		// 							}}
+		// 							onTouchStart={e => {
+		// 								e.preventDefault();
+		// 								onTouchStart(index, e);
+		// 							}}
+		// 						>
+		// 							<span className={styles['range-value']}>
+		// 								{Math.round(sliderValue)}
+		// 							</span>
+		// 						</div>
+		// 					))}
+		// 				</div>
+		// 			</div>
+		// 			{isViewInputsInterval && (
+		// 				<div className={styles['range-values-container']}>
+		// 					{rangeData.map((interval, index) => (
+		// 						<InputGroup
+		// 							key={index}
+		// 							index={index}
+		// 							inputValues={inputValues}
+		// 							handleInputChange={handleInputChange}
+		// 							handleInputBlurWrapper={handleInputBlurWrapper}
+		// 							interval={interval}
+		// 							disableMin={index === 0}
+		// 							disableMax={index === rangeData.length - 1}
+		// 							setRangeData={setRangeData}
+		// 							rangeData={rangeData}
+		// 						/>
+		// 					))}
+		// 				</div>
+		// 			)}
+		// 		</>
+		// 	)}
+		// 	<div className={styles.block__buttons}>
+		// 		{token && isViewFieldSelect && (
+		// 			<Button onClick={handleAddNewInterval}>Добавить</Button>
+		// 		)}
+		// 		<Button onClick={handleSaveData}>Применить</Button>
+		// 	</div>
+		// </div>
+
 		<div className={styles['range_wrapper']}>
-			{token && isViewFieldSelect && (
+			{token && isViewFieldSelect && isValidTargetValues && intervalsObject && (
 				<>
 					<div className={styles['range-container']}>
 						<div ref={trackRef} className={styles['range-track']}>
@@ -220,9 +278,12 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 				</>
 			)}
 			<div className={styles.block__buttons}>
-				{token && isViewFieldSelect && (
-					<Button onClick={handleAddNewInterval}>Добавить</Button>
-				)}
+				{token &&
+					isViewFieldSelect &&
+					isValidTargetValues &&
+					intervalsObject && (
+						<Button onClick={handleAddNewInterval}>Добавить</Button>
+					)}
 				<Button onClick={handleSaveData}>Применить</Button>
 			</div>
 		</div>

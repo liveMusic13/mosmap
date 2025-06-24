@@ -2,7 +2,9 @@ import {
 	CSSProperties,
 	ChangeEvent,
 	Dispatch,
+	MouseEventHandler,
 	PropsWithChildren,
+	RefObject,
 	SetStateAction,
 } from 'react';
 
@@ -23,7 +25,9 @@ import {
 } from './requestData.types';
 
 export interface IButton extends PropsWithChildren {
-	onClick?: () => void;
+	// onClick?: () => void;
+	// onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+	onClick?: MouseEventHandler<HTMLButtonElement>;
 	style?: CSSProperties;
 	disabled?: boolean;
 	className?: string;
@@ -81,11 +85,13 @@ export interface IFilterBlock {
 export interface IRangeProps {
 	min?: number;
 	max?: number;
-	step?: number;
-	values?: { min: number; max: number };
-	onChange?: (values: { min: number; max: number }) => void;
-	filter?: IDataFilters;
-	updateUrlParams?: (newParams: Record<string, string | null>) => void;
+	handleMouseDown: (type: 'min' | 'max') => (e: React.MouseEvent) => void;
+	handleTouchStart: (type: 'min' | 'max') => (e: React.TouchEvent) => void;
+	handleMouseUp: () => void;
+	handleTouchMove: (e: TouchEvent) => void;
+	handleMouseMove: (e: MouseEvent) => void;
+	localValues: { min: number; max: number };
+	containerRef: RefObject<HTMLDivElement | null>;
 }
 
 export interface ICheckbox {
@@ -268,9 +274,10 @@ export interface IRangeIntervalProps {
 	// intervals: IIntervals[];
 	// min_value: number;
 	// max_value: number;
-	intervalsObject: IIntervalObject;
+	intervalsObject: IIntervalObject | any;
 	isViewInputsInterval: boolean;
 	isViewFieldSelect: boolean;
+	isValidTargetValues: boolean;
 }
 
 export interface IUseRangeIntervalLogicProps {

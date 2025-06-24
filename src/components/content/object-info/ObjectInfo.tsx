@@ -16,13 +16,14 @@ import {
 import {
 	useActiveAddObjectStore,
 	useDotInfoCoordsStore,
-	useFiltersStore,
+	// useFiltersStore,
 	useIdObjectInfoStore,
-	useObjectInfoStore,
+	// useObjectInfoStore,
 	usePopupStore,
 	useRemoveMarkerCrdStore,
 	useTargetObjectStore,
 	useToggleViewAreaStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -53,8 +54,14 @@ const ObjectInfo: FC = () => {
 
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
-	const setIsFilters = useFiltersStore(store => store.setIsFilters);
-	const { isObjectInfo, setIsObjectInfo } = useObjectInfoStore(store => store);
+	// const setIsFilters = useFiltersStore(store => store.setIsFilters);
+	// const { isObjectInfo, setIsObjectInfo } = useObjectInfoStore(store => store);
+	// const setIsObjectInfoReserve = useObjectInfoStore(
+	// 	store => store.setIsObjectInfoReserve,
+	// );
+	const closeView = useViewStore(store => store.closeView);
+	const view = useViewStore(store => store.view);
+
 	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
 	const { setMarker, clearMarker } = useTargetObjectStore(store => store);
 	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
@@ -132,9 +139,11 @@ const ObjectInfo: FC = () => {
 
 	const handleClose = () => {
 		setIdObjectInfo(0); //HELP: Обнуляем чтобы маркер таргета исчезал
-		setIsObjectInfo(false);
+		// setIsObjectInfo(false);
+		// setIsObjectInfoReserve(false);
 		setIsActiveAddObject(false);
-		setIsFilters(true);
+		// setIsFilters(true);
+		closeView();
 		setIsViewArea(false);
 		clearMarker();
 	};
@@ -168,8 +177,9 @@ const ObjectInfo: FC = () => {
 	const deleteObject = () => {
 		mutate_delete(idObjectInfo);
 
-		setIsObjectInfo(false);
-		setIsFilters(true);
+		// setIsObjectInfo(false);
+		// setIsFilters(true);
+		closeView();
 		setIsPopup(false);
 
 		const timeoutId = setTimeout(() => refetch_getDataMap(), 1500);
@@ -224,7 +234,8 @@ const ObjectInfo: FC = () => {
 								width={19}
 								height={19}
 								style={
-									isObjectInfo || isActiveAddObject
+									// isObjectInfo || isActiveAddObject
+									view === 'objectInfo' || view === 'addObject'
 										? { transform: 'rotate(-180deg)' }
 										: {}
 								}

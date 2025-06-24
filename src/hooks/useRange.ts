@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { IRangeProps } from '@/types/props.types';
+import { IUseRange } from '@/types/hooks.types';
 
 import { useClearAllFiltersStore } from '@/store/store';
 
@@ -12,9 +12,10 @@ export const useRange = ({
 	onChange,
 	filter,
 	updateUrlParams,
-}: IRangeProps) => {
+}: IUseRange) => {
 	const isClear = useClearAllFiltersStore(store => store.isClear);
 
+	const [inSearchParams, setInSearchParams] = useState<boolean>(true);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [dragging, setDragging] = useState<'min' | 'max' | null>(null);
 	const [localValues, setLocalValues] = useState(values);
@@ -36,12 +37,24 @@ export const useRange = ({
 		setDragging(type);
 		const value = calculateValue(e.clientX);
 		updateValue(type, value);
+
+		console.log('before in func', inSearchParams);
+		if (inSearchParams) {
+			console.log('ok func');
+			setInSearchParams(false);
+		}
 	};
 	const handleTouchStart = (type: 'min' | 'max') => (e: React.TouchEvent) => {
 		setDragging(type);
 		const touch = e.touches[0];
 		const value = calculateValue(touch.clientX);
 		updateValue(type, value);
+
+		console.log('before in func', inSearchParams);
+		if (inSearchParams) {
+			console.log('ok func');
+			setInSearchParams(false);
+		}
 	};
 	const updateValue = (type: 'min' | 'max', value: number) => {
 		setLocalValues(prev => {
@@ -107,25 +120,12 @@ export const useRange = ({
 				min: rangeBoundaries.min,
 				max: rangeBoundaries.max,
 			});
+			setInSearchParams(true);
 		}
 	}, [isClear, rangeBoundaries, filter?.min_value]);
 
-	// const handleRangeChange = (values: { min: number; max: number }) => {
-	// 	if (
-	// 		values.min !== Number(searchParams.get(`num_from[${filter?.id}]`)) ||
-	// 		values.max !== Number(searchParams.get(`num_to[${filter?.id}]`))
-	// 	) {
-	// 		if (updateUrlParams) {
-	// 			updateUrlParams({
-	// 				[`num_from[${filter?.id}]`]: values.min.toString(),
-	// 				[`num_to[${filter?.id}]`]: values.max.toString(),
-	// 			});
-	// 		}
-	// 	}
-	// };
-
-	//HELP: Эта функция вызывается, когда пользователь отпустил ползунок.
-	//HELP: Обновляем URL с новыми значениями.
+	// //HELP: Эта функция вызывается, когда пользователь отпустил ползунок.
+	// //HELP: Обновляем URL с новыми значениями.
 	const handleRangeChange = (values: { min: number; max: number }) => {
 		const currentMin = searchParams.get(`num_from[${filter?.id}]`);
 		const currentMax = searchParams.get(`num_to[${filter?.id}]`);
@@ -150,6 +150,62 @@ export const useRange = ({
 				});
 		}
 	};
+
+	useEffect(() => {
+		// console.log('in effect', inSearchParams);
+		if (updateUrlParams && !inSearchParams)
+			updateUrlParams({
+				[`num_from[${filter?.id}]`]: localValues.min.toString(),
+				[`num_to[${filter?.id}]`]: localValues.max.toString(),
+			});
+	}, [localValues, inSearchParams]);
+
+	// const handleRangeChange = (values: { min: number; max: number }) => {
+	// 	const currentMin = searchParams.get(`num_from[${filter?.id}]`);
+	// 	const currentMax = searchParams.get(`num_to[${filter?.id}]`);
+
+	// 	const isDefaultMin = values.min === rangeBoundaries.min;
+	// 	const isDefaultMax = values.max === rangeBoundaries.max;
+
+	// 	// Если текущие значения совпадают с дефолтными и в URL уже нет параметров — ничего не делаем
+	// 	if (
+	// 		currentMin === null &&
+	// 		currentMax === null &&
+	// 		isDefaultMin &&
+	// 		isDefaultMax
+	// 	) {
+	// 		return;
+	// 	}
+
+	// 	// Если выбраны граничные значения — удаляем параметры из URL
+	// 	if (isDefaultMin && isDefaultMax) {
+	// 		if (updateUrlParams)
+	// 			updateUrlParams({
+	// 				[`num_from[${filter?.id}]`]: null,
+	// 				[`num_to[${filter?.id}]`]: null,
+	// 			});
+	// 		return;
+	// 	}
+
+	// 	// Если хотя бы одно значение отличается — обновляем соответствующие параметры
+	// 	const newParams: Record<string, string | null> = {};
+	// 	if (!isDefaultMin) {
+	// 		newParams[`num_from[${filter?.id}]`] = values.min.toString();
+	// 	} else {
+	// 		newParams[`num_from[${filter?.id}]`] = null;
+	// 	}
+	// 	if (!isDefaultMax) {
+	// 		newParams[`num_to[${filter?.id}]`] = values.max.toString();
+	// 	} else {
+	// 		newParams[`num_to[${filter?.id}]`] = null;
+	// 	}
+
+	// 	if (updateUrlParams) {
+	// 		updateUrlParams(newParams);
+	// 	}
+	// };
+
+	// console.log('localValues', localValues, inSearchParams);
 
 	return {
 		containerRef,

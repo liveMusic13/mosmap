@@ -2,30 +2,19 @@ import { FC, useEffect } from 'react';
 
 import { IRangeProps } from '@/types/props.types';
 
-import { useRange } from '@/hooks/useRange';
-
 import styles from './Range.module.scss';
 
 const Range: FC<IRangeProps> = ({
 	min = 0,
 	max = 100,
-	step = 1,
-	values = { min: 25, max: 75 },
-	onChange,
-	filter,
-	updateUrlParams,
+	handleMouseDown,
+	handleTouchStart,
+	handleMouseUp,
+	handleTouchMove,
+	handleMouseMove,
+	localValues,
+	containerRef,
 }) => {
-	const {
-		containerRef,
-		handleMouseDown,
-		handleMouseMove,
-		handleMouseUp,
-		handleTouchMove,
-		handleTouchStart,
-		localValues,
-		setLocalValues,
-	} = useRange({ values, min, max, step, onChange, filter, updateUrlParams });
-
 	useEffect(() => {
 		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
@@ -38,11 +27,6 @@ const Range: FC<IRangeProps> = ({
 			document.removeEventListener('touchend', handleMouseUp);
 		};
 	}, [handleMouseMove, handleMouseUp, handleTouchMove]);
-
-	useEffect(() => {
-		//HELP: При сбросе настроек откатываем range к стандартным значениям здесь т.к. из кастомного хука почему-то вылетает предыдещее значение, поэтому здесь принудительно устанавливаем
-		setLocalValues(values); //HELP: Принудительно обновляем state при изменении props
-	}, [values]);
 
 	const minPosition = ((localValues.min - min) / (max - min)) * 100;
 	const maxPosition = ((localValues.max - min) / (max - min)) * 100;
