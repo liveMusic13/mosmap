@@ -112,7 +112,7 @@ export interface ISelect {
 	style?: CSSProperties;
 	absoluteOptions?: boolean;
 	items: IItemFilter[];
-	handleClick: (el: IItemFilter) => void;
+	handleClick: (el: IItemFilter | null) => void;
 	queryName?: string;
 	forInfo?: {
 		isInfo: boolean;
@@ -181,7 +181,7 @@ export interface IInfoEdit extends IInfo {
 }
 
 export interface IInfoBlock {
-	onCallbackForSelect: (opt: IItemFilter) => void;
+	onCallbackForSelect: (opt: IItemFilter | null) => void;
 	filter: IDataFilters | undefined;
 	value: string | number;
 }
@@ -207,7 +207,7 @@ export interface IBlockParam {
 	};
 	inputValue?: string;
 	functions?: {
-		select?: (el: IItemFilter) => void;
+		select?: (el: IItemFilter | null) => void;
 		input?: (e: ChangeEvent<HTMLInputElement>) => void;
 	};
 	absoluteOptionsForSelect?: boolean;

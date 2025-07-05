@@ -22,37 +22,6 @@ import RowDatabaseOptions from './row-database-options/RowDatabaseOptions';
 import { colors } from '@/app.constants';
 import { arrColumn } from '@/data/database.data';
 
-const clearFieldObject = (type_object: string, type: number) => ({
-	address: 0,
-	id: '0',
-	name: '',
-	namefield: 0,
-	nameonmap: 0,
-	priority: '',
-	type,
-	type_name: '',
-	type_object: type_object,
-});
-const clearListObject = (type_object: string, type: number) => ({
-	color: 0,
-	icon: 0,
-	id: '0',
-	mode: 0,
-	priority: '',
-	name: '',
-	type,
-	type_object: type_object,
-});
-const clearMapObject = (type_object: string, type: number) => ({
-	id: '0',
-	mode: 0,
-	name: '',
-	priority: '',
-	type,
-	visible: 0,
-	type_object: type_object,
-});
-
 const newObj = {
 	address: 0,
 	id: '0',
@@ -327,3 +296,34 @@ const DatabaseOptions: FC = () => {
 };
 
 export default DatabaseOptions;
+
+// const clearFieldObject = (type_object: string, type: number) => ({
+// 	address: 0,
+// 	id: '0',
+// 	name: '',
+// 	namefield: 0,
+// 	nameonmap: 0,
+// 	priority: '',
+// 	type,
+// 	type_name: '',
+// 	type_object: type_object,
+// });
+// const clearListObject = (type_object: string, type: number) => ({
+// 	color: 0,
+// 	icon: 0,
+// 	id: '0',
+// 	mode: 0,
+// 	priority: '',
+// 	name: '',
+// 	type,
+// 	type_object: type_object,
+// });
+// const clearMapObject = (type_object: string, type: number) => ({
+// 	id: '0',
+// 	mode: 0,
+// 	name: '',
+// 	priority: '',
+// 	type,
+// 	visible: 0,
+// 	type_object: type_object,
+// });

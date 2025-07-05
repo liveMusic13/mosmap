@@ -50,6 +50,11 @@ const Select: FC<ISelect> = ({
 		handleClick(el);
 		setIsOptions(false);
 	};
+	const onClear = () => {
+		setTarget('Не выбрано');
+		handleClick(null);
+		setIsOptions(false);
+	};
 
 	return (
 		<div
@@ -77,6 +82,10 @@ const Select: FC<ISelect> = ({
 							: `${styles.options}`
 					}
 				>
+					{/* пункт сброса */}
+					<p key='clear' className={styles.option} onClick={onClear}>
+						Не выбрано
+					</p>
 					{items.map(el => (
 						<p
 							key={el.item_id}

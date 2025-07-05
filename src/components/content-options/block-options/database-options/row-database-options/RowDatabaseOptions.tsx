@@ -83,7 +83,8 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 		};
 
 	//HELP: Для селекта - принимаем IItemFilter, извлекаем значение
-	const handleSelectChange = (selectedItem: IItemFilter) => {
+	const handleSelectChange = (selectedItem: IItemFilter | null) => {
+		if (!selectedItem) return;
 		onUpdate(Number(data.id), 'type_object', selectedItem.item_name);
 		onUpdate(
 			Number(data.id),

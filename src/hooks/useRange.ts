@@ -32,42 +32,64 @@ export const useRange = ({
 		},
 		[min, max, step],
 	);
-	const handleMouseDown = (type: 'min' | 'max') => (e: React.MouseEvent) => {
-		e.preventDefault();
-		setDragging(type);
-		const value = calculateValue(e.clientX);
-		updateValue(type, value);
+	const updateValue = useCallback(
+		(type: 'min' | 'max', value: number) => {
+			setLocalValues(prev => {
+				const newValues = { ...prev };
+				if (type === 'min') {
+					newValues.min = Math.min(value, prev.max - step);
+				} else {
+					newValues.max = Math.max(value, prev.min + step);
+				}
+				// if (onChange) onChange(newValues);
+				return newValues;
+			});
+		},
+		[setLocalValues],
+	);
+	const handleMouseDown = useCallback(
+		(type: 'min' | 'max') => (e: React.MouseEvent) => {
+			e.preventDefault();
+			setDragging(type);
+			const value = calculateValue(e.clientX);
+			updateValue(type, value);
 
-		console.log('before in func', inSearchParams);
-		if (inSearchParams) {
-			console.log('ok func');
-			setInSearchParams(false);
-		}
-	};
-	const handleTouchStart = (type: 'min' | 'max') => (e: React.TouchEvent) => {
-		setDragging(type);
-		const touch = e.touches[0];
-		const value = calculateValue(touch.clientX);
-		updateValue(type, value);
-
-		console.log('before in func', inSearchParams);
-		if (inSearchParams) {
-			console.log('ok func');
-			setInSearchParams(false);
-		}
-	};
-	const updateValue = (type: 'min' | 'max', value: number) => {
-		setLocalValues(prev => {
-			const newValues = { ...prev };
-			if (type === 'min') {
-				newValues.min = Math.min(value, prev.max - step);
-			} else {
-				newValues.max = Math.max(value, prev.min + step);
+			console.log('before in func', inSearchParams);
+			if (inSearchParams) {
+				console.log('ok func');
+				setInSearchParams(false);
 			}
-			// if (onChange) onChange(newValues);
-			return newValues;
-		});
-	};
+		},
+		[
+			setDragging,
+			setInSearchParams,
+			inSearchParams,
+			updateValue,
+			calculateValue,
+		],
+	);
+	const handleTouchStart = useCallback(
+		(type: 'min' | 'max') => (e: React.TouchEvent) => {
+			setDragging(type);
+			const touch = e.touches[0];
+			const value = calculateValue(touch.clientX);
+			updateValue(type, value);
+
+			console.log('before in func', inSearchParams);
+			if (inSearchParams) {
+				console.log('ok func');
+				setInSearchParams(false);
+			}
+		},
+		[
+			setDragging,
+			calculateValue,
+			updateValue,
+			inSearchParams,
+			setInSearchParams,
+		],
+	);
+
 	const handleMove = useCallback(
 		(clientX: number) => {
 			if (!dragging) return;
@@ -107,10 +129,10 @@ export const useRange = ({
 	//HELP: Текущие значения ползунков (приоритет: значение из URL, если его нет – можно задать дефолтные значения)
 	const sliderValues = {
 		min:
-			Number(searchParams.get(`num_from[${filter?.id}]`)) ||
-			rangeBoundaries.min,
+			rangeBoundaries.min ||
+			Number(searchParams.get(`num_from[${filter?.id}]`)),
 		max:
-			Number(searchParams.get(`num_to[${filter?.id}]`)) || rangeBoundaries.max,
+			rangeBoundaries.max || Number(searchParams.get(`num_to[${filter?.id}]`)),
 	};
 
 	useEffect(() => {
@@ -126,30 +148,33 @@ export const useRange = ({
 
 	// //HELP: Эта функция вызывается, когда пользователь отпустил ползунок.
 	// //HELP: Обновляем URL с новыми значениями.
-	const handleRangeChange = (values: { min: number; max: number }) => {
-		const currentMin = searchParams.get(`num_from[${filter?.id}]`);
-		const currentMax = searchParams.get(`num_to[${filter?.id}]`);
+	const handleRangeChange = useCallback(
+		(values: { min: number; max: number }) => {
+			const currentMin = searchParams.get(`num_from[${filter?.id}]`);
+			const currentMax = searchParams.get(`num_to[${filter?.id}]`);
 
-		if (
-			currentMin === null &&
-			values.min === rangeBoundaries.min &&
-			currentMax === null &&
-			values.max === rangeBoundaries.max
-		) {
-			return; //HELP: Не обновляем URL, если он еще не содержит значений и они дефолтные
-		}
+			if (
+				currentMin === null &&
+				values.min === rangeBoundaries.min &&
+				currentMax === null &&
+				values.max === rangeBoundaries.max
+			) {
+				return; //HELP: Не обновляем URL, если он еще не содержит значений и они дефолтные
+			}
 
-		if (
-			values.min !== Number(currentMin) ||
-			values.max !== Number(currentMax)
-		) {
-			if (updateUrlParams)
-				updateUrlParams({
-					[`num_from[${filter?.id}]`]: values.min.toString(),
-					[`num_to[${filter?.id}]`]: values.max.toString(),
-				});
-		}
-	};
+			if (
+				values.min !== Number(currentMin) ||
+				values.max !== Number(currentMax)
+			) {
+				if (updateUrlParams)
+					updateUrlParams({
+						[`num_from[${filter?.id}]`]: values.min.toString(),
+						[`num_to[${filter?.id}]`]: values.max.toString(),
+					});
+			}
+		},
+		[rangeBoundaries, updateUrlParams, searchParams],
+	);
 
 	useEffect(() => {
 		// console.log('in effect', inSearchParams);
@@ -159,53 +184,6 @@ export const useRange = ({
 				[`num_to[${filter?.id}]`]: localValues.max.toString(),
 			});
 	}, [localValues, inSearchParams]);
-
-	// const handleRangeChange = (values: { min: number; max: number }) => {
-	// 	const currentMin = searchParams.get(`num_from[${filter?.id}]`);
-	// 	const currentMax = searchParams.get(`num_to[${filter?.id}]`);
-
-	// 	const isDefaultMin = values.min === rangeBoundaries.min;
-	// 	const isDefaultMax = values.max === rangeBoundaries.max;
-
-	// 	// Если текущие значения совпадают с дефолтными и в URL уже нет параметров — ничего не делаем
-	// 	if (
-	// 		currentMin === null &&
-	// 		currentMax === null &&
-	// 		isDefaultMin &&
-	// 		isDefaultMax
-	// 	) {
-	// 		return;
-	// 	}
-
-	// 	// Если выбраны граничные значения — удаляем параметры из URL
-	// 	if (isDefaultMin && isDefaultMax) {
-	// 		if (updateUrlParams)
-	// 			updateUrlParams({
-	// 				[`num_from[${filter?.id}]`]: null,
-	// 				[`num_to[${filter?.id}]`]: null,
-	// 			});
-	// 		return;
-	// 	}
-
-	// 	// Если хотя бы одно значение отличается — обновляем соответствующие параметры
-	// 	const newParams: Record<string, string | null> = {};
-	// 	if (!isDefaultMin) {
-	// 		newParams[`num_from[${filter?.id}]`] = values.min.toString();
-	// 	} else {
-	// 		newParams[`num_from[${filter?.id}]`] = null;
-	// 	}
-	// 	if (!isDefaultMax) {
-	// 		newParams[`num_to[${filter?.id}]`] = values.max.toString();
-	// 	} else {
-	// 		newParams[`num_to[${filter?.id}]`] = null;
-	// 	}
-
-	// 	if (updateUrlParams) {
-	// 		updateUrlParams(newParams);
-	// 	}
-	// };
-
-	// console.log('localValues', localValues, inSearchParams);
 
 	return {
 		containerRef,
@@ -221,3 +199,58 @@ export const useRange = ({
 		setLocalValues,
 	};
 };
+
+// const sliderValues = {
+// 	min:
+// 		Number(searchParams.get(`num_from[${filter?.id}]`)) ||
+// 		rangeBoundaries.min,
+// 	max:
+// 		Number(searchParams.get(`num_to[${filter?.id}]`)) || rangeBoundaries.max,
+// };
+
+// const handleRangeChange = (values: { min: number; max: number }) => {
+// 	const currentMin = searchParams.get(`num_from[${filter?.id}]`);
+// 	const currentMax = searchParams.get(`num_to[${filter?.id}]`);
+
+// 	const isDefaultMin = values.min === rangeBoundaries.min;
+// 	const isDefaultMax = values.max === rangeBoundaries.max;
+
+// 	// Если текущие значения совпадают с дефолтными и в URL уже нет параметров — ничего не делаем
+// 	if (
+// 		currentMin === null &&
+// 		currentMax === null &&
+// 		isDefaultMin &&
+// 		isDefaultMax
+// 	) {
+// 		return;
+// 	}
+
+// 	// Если выбраны граничные значения — удаляем параметры из URL
+// 	if (isDefaultMin && isDefaultMax) {
+// 		if (updateUrlParams)
+// 			updateUrlParams({
+// 				[`num_from[${filter?.id}]`]: null,
+// 				[`num_to[${filter?.id}]`]: null,
+// 			});
+// 		return;
+// 	}
+
+// 	// Если хотя бы одно значение отличается — обновляем соответствующие параметры
+// 	const newParams: Record<string, string | null> = {};
+// 	if (!isDefaultMin) {
+// 		newParams[`num_from[${filter?.id}]`] = values.min.toString();
+// 	} else {
+// 		newParams[`num_from[${filter?.id}]`] = null;
+// 	}
+// 	if (!isDefaultMax) {
+// 		newParams[`num_to[${filter?.id}]`] = values.max.toString();
+// 	} else {
+// 		newParams[`num_to[${filter?.id}]`] = null;
+// 	}
+
+// 	if (updateUrlParams) {
+// 		updateUrlParams(newParams);
+// 	}
+// };
+
+// console.log('localValues', localValues, inSearchParams);

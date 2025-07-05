@@ -124,7 +124,8 @@ const ImportDoneOptions: FC = () => {
 					key={ind}
 					select={{ optionsSelect: data, targetValue: data[0] }}
 					functions={{
-						select: (el: IItemFilter) => {
+						select: (el: IItemFilter | null) => {
+							if (!el) return;
 							setTargetOptions(prev => ({
 								...prev,
 								[key]: {
@@ -151,7 +152,9 @@ const ImportDoneOptions: FC = () => {
 					key={ind}
 					select={{ optionsSelect: data, targetValue: data[0] }}
 					functions={{
-						select: (el: IItemFilter) => {
+						select: (el: IItemFilter | null) => {
+							if (!el) return;
+
 							setTargetOptions(prev => ({
 								...prev,
 								[key]: {
@@ -176,7 +179,9 @@ const ImportDoneOptions: FC = () => {
 					targetValue: dataId[0],
 				}}
 				functions={{
-					select: (el: IItemFilter) => {
+					select: (el: IItemFilter | null) => {
+						if (!el) return;
+
 						setTargetOptions(prev => ({
 							...prev,
 							['dataId']: {

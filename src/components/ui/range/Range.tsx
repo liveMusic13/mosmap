@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, memo, useEffect } from 'react';
 
 import { IRangeProps } from '@/types/props.types';
 
@@ -65,4 +65,4 @@ const Range: FC<IRangeProps> = ({
 	);
 };
 
-export default Range;
+export default memo(Range);

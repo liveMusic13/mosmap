@@ -107,7 +107,8 @@ const SettingsOptions: FC = () => {
 	const onChangeInputs = (e: ChangeEvent<HTMLInputElement>, name: string) => {
 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
 	};
-	const onCallbackSelect = useCallback((el: IItemFilter) => {
+	const onCallbackSelect = useCallback((el: IItemFilter | null) => {
+		if (!el) return;
 		setTargetOption(el.item_name);
 	}, []);
 	const handleSaveSettings = () => {

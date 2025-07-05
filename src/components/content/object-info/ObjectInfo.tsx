@@ -270,7 +270,8 @@ const ObjectInfo: FC = () => {
 										filter => filter.name === el.name,
 									);
 
-									const onCallbackForSelect = (opt: IItemFilter) => {
+									const onCallbackForSelect = (opt: IItemFilter | null) => {
+										if (!opt) return;
 										setFormState(prev => ({ ...prev, [el.name]: opt }));
 									};
 

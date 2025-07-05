@@ -43,7 +43,8 @@ export const useImportExport = () => {
 			setNameFileImport(file[0].name);
 		}
 	};
-	const onCallbackSelect = useCallback((el: IItemFilter) => {
+	const onCallbackSelect = useCallback((el: IItemFilter | null) => {
+		if (!el) return;
 		setTargetOption(el.item_name);
 	}, []);
 	const onCallbackInput = useCallback(
