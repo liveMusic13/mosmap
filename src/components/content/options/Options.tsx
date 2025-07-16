@@ -17,7 +17,7 @@ import {
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 
-import { hasMapAccess } from '@/utils/jwtTokenDecoder';
+import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
 
 import styles from './Options.module.scss';
@@ -48,7 +48,8 @@ const Options: FC = () => {
 	);
 
 	// const token = Cookies.get(TOKEN);
-	const token = hasMapAccess(Number(map));
+	// const token = hasMapAccess(Number(map));
+	const token = checkMapAccess(Number(map)).hasMapAccess;
 
 	const onClick = useCallback(
 		(id: number) => {

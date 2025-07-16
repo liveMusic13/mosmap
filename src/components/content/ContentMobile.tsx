@@ -14,7 +14,7 @@ import { useAuthGuard } from '@/hooks/auth/useAuthGuard';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
 
-import { hasMapAccess } from '@/utils/jwtTokenDecoder';
+import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 
 import BurgerMenu from '../burger-menu/BurgerMenu';
 
@@ -34,7 +34,8 @@ const ContentMobile: FC<IContent> = ({ dataMap }) => {
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
 
-	useAuthGuard(() => hasMapAccess(Number(map)));
+	// useAuthGuard(() => hasMapAccess(Number(map)));
+	useAuthGuard(() => checkMapAccess(Number(map)).hasValidToken);
 
 	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
 

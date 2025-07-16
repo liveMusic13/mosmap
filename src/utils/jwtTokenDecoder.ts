@@ -19,6 +19,11 @@ export interface DecodedTokenData {
 	isExpired: boolean; // Проверка на истечение токена
 }
 
+interface MapAccessResult {
+	hasValidToken: boolean;
+	hasMapAccess: boolean;
+}
+
 /**
  * Декодирует Base64 строку
  */
@@ -168,26 +173,66 @@ export const getDecodedTokenData = (
 /**
  * Проверяет, имеет ли пользователь доступ к карте
  */
-export const hasMapAccess = (
+// export const hasMapAccess = (
+// 	mapId: number | null,
+// 	cookieName: string = TOKEN,
+// ): boolean => {
+// 	if (!mapId) return false;
+
+// 	const tokenData = getDecodedTokenData(cookieName);
+
+// 	if (!tokenData) {
+// 		return false;
+// 	}
+
+// 	// Проверяем, не истек ли токен
+// 	if (tokenData.isExpired) {
+// 		console.warn('Token has expired');
+// 		return false;
+// 	}
+
+// 	// Проверяем доступ к конкретной карте
+// 	return tokenData.id === mapId;
+// };
+
+export const checkMapAccess = (
 	mapId: number | null,
 	cookieName: string = TOKEN,
-): boolean => {
-	if (!mapId) return false;
+): MapAccessResult => {
+	if (!mapId) {
+		return {
+			hasValidToken: false,
+			hasMapAccess: false,
+		};
+	}
 
 	const tokenData = getDecodedTokenData(cookieName);
 
 	if (!tokenData) {
-		return false;
+		return {
+			hasValidToken: false,
+			hasMapAccess: false,
+		};
 	}
 
 	// Проверяем, не истек ли токен
-	if (tokenData.isExpired) {
+	const hasValidToken = !tokenData.isExpired;
+
+	if (!hasValidToken) {
 		console.warn('Token has expired');
-		return false;
+		return {
+			hasValidToken: false,
+			hasMapAccess: false,
+		};
 	}
 
 	// Проверяем доступ к конкретной карте
-	return tokenData.id === mapId;
+	const hasMapAccess = tokenData.id === mapId;
+
+	return {
+		hasValidToken: true,
+		hasMapAccess,
+	};
 };
 
 /**

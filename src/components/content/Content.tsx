@@ -26,7 +26,7 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledRemoveMarker } from '@/hooks/useDisabledRemoveMarker';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
 
-import { hasMapAccess } from '@/utils/jwtTokenDecoder';
+import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
 
 import BurgerMenu from '../burger-menu/BurgerMenu';
@@ -82,7 +82,7 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	const windowSize = useCheckWidth();
 	const isMobile = mounted ? windowSize <= 767 : false; //HELP: Делаем эту часть + динамический импорты для списка и фильтров, что не выдавало ошибок гидратации при использовании условий зависящих от размера экрана при обращении к window на сервере
 
-	useAuthGuard(() => hasMapAccess(Number(map)));
+	useAuthGuard(() => checkMapAccess(Number(map)).hasValidToken);
 
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
 	const view = useViewStore(store => store.view);
