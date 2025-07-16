@@ -15,10 +15,20 @@ export const useRange = ({
 }: IUseRange) => {
 	const isClear = useClearAllFiltersStore(store => store.isClear);
 
+	//HELP: Границы диапазона, которые можно выбрать (из filter)
+	const rangeBoundaries = {
+		min: Number(filter?.min_value) || 0,
+		max: Number(filter?.max_value) || 100,
+	};
+
 	const [inSearchParams, setInSearchParams] = useState<boolean>(true);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [dragging, setDragging] = useState<'min' | 'max' | null>(null);
-	const [localValues, setLocalValues] = useState(values);
+	// const [localValues, setLocalValues] = useState(values);
+	const [localValues, setLocalValues] = useState({
+		min: rangeBoundaries.min,
+		max: rangeBoundaries.max,
+	});
 	const searchParams = new URLSearchParams(window.location.search);
 
 	const calculateValue = useCallback(
@@ -119,12 +129,6 @@ export const useRange = ({
 			onChange(localValues);
 		}
 	}, [localValues, onChange]);
-
-	//HELP: Границы диапазона, которые можно выбрать (из filter)
-	const rangeBoundaries = {
-		min: Number(filter?.min_value) || 0,
-		max: Number(filter?.max_value) || 100,
-	};
 
 	//HELP: Текущие значения ползунков (приоритет: значение из URL, если его нет – можно задать дефолтные значения)
 	const sliderValues = {

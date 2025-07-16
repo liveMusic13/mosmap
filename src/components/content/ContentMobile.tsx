@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { FC } from 'react';
 
 import QueryProvider from '@/providers/QueryProvider';
@@ -10,8 +10,11 @@ import { IContent } from '@/types/props.types';
 
 import { useBurgerMenuStore } from '@/store/store';
 
+import { useAuthGuard } from '@/hooks/auth/useAuthGuard';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
+
+import { hasMapAccess } from '@/utils/jwtTokenDecoder';
 
 import BurgerMenu from '../burger-menu/BurgerMenu';
 
@@ -28,6 +31,10 @@ const ContentMobile: FC<IContent> = ({ dataMap }) => {
 	const pathname = usePathname();
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
+	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
+
+	useAuthGuard(() => hasMapAccess(Number(map)));
 
 	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
 

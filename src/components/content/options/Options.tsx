@@ -1,6 +1,5 @@
 'use client';
 
-import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, useCallback } from 'react';
 
@@ -18,15 +17,17 @@ import {
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 
+import { hasMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
 
 import styles from './Options.module.scss';
-import { TOKEN, colors } from '@/app.constants';
+import { colors } from '@/app.constants';
 import { settingsArr, standardArr } from '@/data/options.data';
 
 const Options: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 
@@ -46,7 +47,8 @@ const Options: FC = () => {
 		store => store,
 	);
 
-	const token = Cookies.get(TOKEN);
+	// const token = Cookies.get(TOKEN);
+	const token = hasMapAccess(Number(map));
 
 	const onClick = useCallback(
 		(id: number) => {

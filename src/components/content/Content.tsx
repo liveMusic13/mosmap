@@ -2,6 +2,7 @@
 
 import 'leaflet-draw/dist/leaflet.draw.css';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, useCallback, useEffect, useState } from 'react';
 
 import QueryProvider from '@/providers/QueryProvider';
@@ -11,22 +12,21 @@ import { IContent } from '@/types/props.types';
 import {
 	useBurgerMenuStore,
 	useColorsIntervalStore,
-	// useFiltersStore,
 	useListOfObjectsStore,
 	useMapLayersStore,
-	// useObjectInfoStore,
 	usePopupStore,
 	useSearchAddressStore,
 	useSelectAreaStore,
-	// useViewDotInfoStore,
 	useViewObjectAbdAreaInfoStore,
 	useViewStore,
 } from '@/store/store';
 
+import { useAuthGuard } from '@/hooks/auth/useAuthGuard';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledRemoveMarker } from '@/hooks/useDisabledRemoveMarker';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
 
+import { hasMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
 
 import BurgerMenu from '../burger-menu/BurgerMenu';
@@ -72,25 +72,25 @@ const DynamicLists = dynamic(() => import('./list-of-objects/ListOfObjects'), {
 });
 
 const Content: FC<IContent> = ({ dataMap }) => {
-	const windowSize = useCheckWidth();
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => {
 		setMounted(true);
 	}, []);
+
+	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
+	const windowSize = useCheckWidth();
 	const isMobile = mounted ? windowSize <= 767 : false; //HELP: Делаем эту часть + динамический импорты для списка и фильтров, что не выдавало ошибок гидратации при использовании условий зависящих от размера экрана при обращении к window на сервере
 
+	useAuthGuard(() => hasMapAccess(Number(map)));
+
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
-	// const isFilters = useFiltersStore(store => store.isFilters);
-	// const isObjectInfo = useObjectInfoStore(store => store.isObjectInfo);
 	const view = useViewStore(store => store.view);
-	// const isActiveAddObject = useActiveAddObjectStore(
-	// 	store => store.isActiveAddObject,
-	// );
+
 	const isPopup = usePopupStore(store => store.isPopup);
 	const isSearchAddress = useSearchAddressStore(store => store.isSearchAddress);
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
 	const clearPolygon = useMapLayersStore(store => store.clearPolygon);
-	// const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
 	const isColorInterval = useColorsIntervalStore(
 		store => store.isColorInterval,
 	);
@@ -100,8 +100,6 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	);
 
 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
-	// useCheckActiveInfo(); //HELP: Для того чтобы отключало показ фильтров при показе информации об объекте или при создании объекта
-	// useCheckDisabledZone(); //HELP: Для того чтобы отключать показ информации о клике на пустую зону при активации хоть одного из окон кроме списка объектов
 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
 
 	const handleClickButtonInMap = useCallback((id: number) => {
@@ -133,14 +131,24 @@ const Content: FC<IContent> = ({ dataMap }) => {
 		}
 	};
 
-	useEffect(() => {
-		if (isViewObjectInfo) {
-			console.log('isViewObjectInfo', isViewObjectInfo);
-		}
-		if (isViewAreaInfo) {
-			console.log('isViewAreaInfo', isViewAreaInfo);
-		}
-	}, [isViewAreaInfo, isViewObjectInfo]);
+	if (!mounted) {
+		return (
+			<QueryProvider>
+				<div className={styles.wrapper_content}>
+					<Loader
+						style={{
+							width: 'calc(100/1920*100vw)',
+							height: 'calc(100/1920*100vw)',
+							position: 'relative',
+							left: '50%',
+							top: '50%',
+							transform: 'translate(-50%, -50%)',
+						}}
+					/>
+				</div>
+			</QueryProvider>
+		);
+	}
 
 	return (
 		<QueryProvider>
@@ -152,23 +160,8 @@ const Content: FC<IContent> = ({ dataMap }) => {
 			) : (
 				<div className={styles.wrapper_content}>
 					<h1 className={styles.title}>{dataMap.title}</h1>
-					{/* <Options /> */}
 					<DynamicOptions />
 					<div className={styles.block__content}>
-						{/* {!isMobile && isFilters && !isObjectInfo && !isViewDotInfo && (
-							<DynamicFilters />
-							// <Filters />
-						)}
-						{!isMobile &&
-							(isActiveAddObject || isObjectInfo) &&
-							!isFilters &&
-							!isViewDotInfo && <ObjectInfo />}
-						{!isMobile &&
-							isViewDotInfo &&
-							!isFilters &&
-							!isObjectInfo &&
-							!isActiveAddObject && <InfoAboutZone />} */}
-
 						{/* условный рендеринг */}
 						{!isMobile && view === 'filters' && <DynamicFilters />}
 
@@ -178,21 +171,11 @@ const Content: FC<IContent> = ({ dataMap }) => {
 
 						{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
 
-						{!isMobile && isListOfObjects && (
-							<DynamicLists />
-							// <ListOfObjects />
-						)}
+						{!isMobile && isListOfObjects && <DynamicLists />}
 						{!isMobile && isColorInterval && <ColorInterval />}
 						{isSearchAddress && <SearchAddress />}
 
 						<DynamicCustomMap />
-						{/* {isMobile &&
-							(isActiveAddObject || isObjectInfo) &&
-							!isViewDotInfo && <ObjectInfo />}
-						{isMobile &&
-							isViewDotInfo &&
-							!isObjectInfo &&
-							!isActiveAddObject && <InfoAboutZone />} */}
 						{isMobile && view === 'objectInfo' && <ObjectInfo />}
 						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
 
@@ -217,19 +200,31 @@ const Content: FC<IContent> = ({ dataMap }) => {
 									}}
 									onClick={() => handleClickButtonInMap(el.id)}
 								>
-									<svg
-										className={styles.icon_svg}
-										style={personActiveStyle(el.id)}
-									>
-										<use
+									{mounted && (
+										<svg
+											className={styles.icon_svg}
+											style={personActiveStyle(el.id)}
+										>
+											{/* <use
 											xlinkHref={
 												isSelectArea && el.id === 1
 													? `/images/icons/sprite.svg#selection-remove`
-													: // : srcStandard(el, isListOfObjects, isFilters)
-														srcStandard(el, isListOfObjects, view === 'filters')
+													: srcStandard(el, isListOfObjects, view === 'filters')
 											}
-										></use>
-									</svg>
+										></use> */}
+											<use
+												href={
+													isSelectArea && el.id === 1
+														? `/images/icons/sprite.svg#selection-remove`
+														: srcStandard(
+																el,
+																isListOfObjects,
+																view === 'filters',
+															)
+												}
+											></use>
+										</svg>
+									)}
 									<p className={styles.hover__text} style={{ right: 0 }}>
 										{el.hover_text}
 									</p>
@@ -244,3 +239,248 @@ const Content: FC<IContent> = ({ dataMap }) => {
 };
 
 export default Content;
+
+// import 'leaflet-draw/dist/leaflet.draw.css';
+// import dynamic from 'next/dynamic';
+// import { CSSProperties, FC, useCallback, useEffect, useState } from 'react';
+
+// import QueryProvider from '@/providers/QueryProvider';
+
+// import { IContent } from '@/types/props.types';
+
+// import {
+// 	useBurgerMenuStore,
+// 	useColorsIntervalStore,
+// 	// useFiltersStore,
+// 	useListOfObjectsStore,
+// 	useMapLayersStore,
+// 	// useObjectInfoStore,
+// 	usePopupStore,
+// 	useSearchAddressStore,
+// 	useSelectAreaStore,
+// 	// useViewDotInfoStore,
+// 	useViewObjectAbdAreaInfoStore,
+// 	useViewStore,
+// } from '@/store/store';
+
+// import { useCheckWidth } from '@/hooks/useCheckWidth';
+// import { useDisabledRemoveMarker } from '@/hooks/useDisabledRemoveMarker';
+// import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
+
+// import { srcStandard } from '@/utils/pathSvg';
+
+// import BurgerMenu from '../burger-menu/BurgerMenu';
+// import BackgroundOpacity from '../ui/background-opacity/BackgroundOpacity';
+// import Button from '../ui/button/Button';
+// import Loader from '../ui/loader/Loader';
+// import SearchAddress from '../ui/search-address/SearchAdress';
+
+// import styles from './Content.module.scss';
+// import ColorInterval from './color-interval/ColorInterval';
+// import InfoAboutZone from './info-about-zone/InfoAboutZone';
+// import ObjectInfo from './object-info/ObjectInfo';
+// import ViewObjectInfo from './object-info/view-object-info/ViewObjectInfo';
+// import { colors } from '@/app.constants';
+// import { buttonsMap } from '@/data/content.data';
+
+// const DynamicOptions = dynamic(() => import('./options/Options'), {
+// 	ssr: false,
+// });
+
+// const DynamicCustomMap = dynamic(() => import('./custom-map/CustomMap'), {
+// 	ssr: false,
+// 	loading: () => (
+// 		<Loader
+// 			style={{
+// 				width: 'calc(100/1920*100vw)',
+// 				height: 'calc(100/1920*100vw)',
+// 				position: 'relative',
+// 				left: '25%',
+// 				top: '50%',
+// 				transform: 'translate(-25%, -50%)',
+// 			}}
+// 		/>
+// 	),
+// });
+// const DynamicFilters = dynamic(() => import('./filters/Filters'), {
+// 	ssr: false,
+// 	loading: () => null,
+// });
+// const DynamicLists = dynamic(() => import('./list-of-objects/ListOfObjects'), {
+// 	ssr: false,
+// 	loading: () => null,
+// });
+
+// const Content: FC<IContent> = ({ dataMap }) => {
+// 	const windowSize = useCheckWidth();
+// 	const [mounted, setMounted] = useState(false);
+// 	useEffect(() => {
+// 		setMounted(true);
+// 	}, []);
+// 	const isMobile = mounted ? windowSize <= 767 : false; //HELP: Делаем эту часть + динамический импорты для списка и фильтров, что не выдавало ошибок гидратации при использовании условий зависящих от размера экрана при обращении к window на сервере
+
+// 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
+// 	// const isFilters = useFiltersStore(store => store.isFilters);
+// 	// const isObjectInfo = useObjectInfoStore(store => store.isObjectInfo);
+// 	const view = useViewStore(store => store.view);
+// 	// const isActiveAddObject = useActiveAddObjectStore(
+// 	// 	store => store.isActiveAddObject,
+// 	// );
+// 	const isPopup = usePopupStore(store => store.isPopup);
+// 	const isSearchAddress = useSearchAddressStore(store => store.isSearchAddress);
+// 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
+// 	const clearPolygon = useMapLayersStore(store => store.clearPolygon);
+// 	// const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
+// 	const isColorInterval = useColorsIntervalStore(
+// 		store => store.isColorInterval,
+// 	);
+// 	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
+// 	const { isViewAreaInfo, isViewObjectInfo } = useViewObjectAbdAreaInfoStore(
+// 		store => store,
+// 	);
+
+// 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
+// 	// useCheckActiveInfo(); //HELP: Для того чтобы отключало показ фильтров при показе информации об объекте или при создании объекта
+// 	// useCheckDisabledZone(); //HELP: Для того чтобы отключать показ информации о клике на пустую зону при активации хоть одного из окон кроме списка объектов
+// 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
+
+// 	const handleClickButtonInMap = useCallback((id: number) => {
+// 		if (id === 0) {
+// 			useSearchAddressStore.setState(state => ({
+// 				isSearchAddress: !state.isSearchAddress,
+// 			}));
+// 		} else if (id === 1) {
+// 			useSelectAreaStore.setState(state => {
+// 				if (state.isSelectArea) {
+// 					clearPolygon();
+// 				}
+// 				return {
+// 					isSelectArea: !state.isSelectArea,
+// 				};
+// 			});
+// 		}
+// 	}, []);
+
+// 	const personActiveStyle = (id: number): CSSProperties | undefined => {
+// 		if (id === 0) {
+// 			return {
+// 				color: isSearchAddress ? colors.red : colors.green,
+// 			};
+// 		} else if (id === 1) {
+// 			return {
+// 				color: isSelectArea ? colors.red : colors.green,
+// 			};
+// 		}
+// 	};
+
+// 	// useEffect(() => {
+// 	// 	if (isViewObjectInfo) {
+// 	// 		console.log('isViewObjectInfo', isViewObjectInfo);
+// 	// 	}
+// 	// 	if (isViewAreaInfo) {
+// 	// 		console.log('isViewAreaInfo', isViewAreaInfo);
+// 	// 	}
+// 	// }, [isViewAreaInfo, isViewObjectInfo]);
+
+// 	return (
+// 		<QueryProvider>
+// 			{/* HELP: Для того чтобы когда глобально вызывается попап, затемнялась область за ним не только в блоке контента, но и во всем приложении */}
+// 			{isPopup && <BackgroundOpacity />}
+
+// 			{isBurgerMenu ? (
+// 				<BurgerMenu />
+// 			) : (
+// 				<div className={styles.wrapper_content}>
+// 					<h1 className={styles.title}>{dataMap.title}</h1>
+// 					{/* <Options /> */}
+// 					<DynamicOptions />
+// 					<div className={styles.block__content}>
+// 						{/* {!isMobile && isFilters && !isObjectInfo && !isViewDotInfo && (
+// 							<DynamicFilters />
+// 							// <Filters />
+// 						)}
+// 						{!isMobile &&
+// 							(isActiveAddObject || isObjectInfo) &&
+// 							!isFilters &&
+// 							!isViewDotInfo && <ObjectInfo />}
+// 						{!isMobile &&
+// 							isViewDotInfo &&
+// 							!isFilters &&
+// 							!isObjectInfo &&
+// 							!isActiveAddObject && <InfoAboutZone />} */}
+
+// 						{/* условный рендеринг */}
+// 						{!isMobile && view === 'filters' && <DynamicFilters />}
+
+// 						{!isMobile && (view === 'objectInfo' || view === 'addObject') && (
+// 							<ObjectInfo />
+// 						)}
+
+// 						{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+
+// 						{!isMobile && isListOfObjects && (
+// 							<DynamicLists />
+// 							// <ListOfObjects />
+// 						)}
+// 						{!isMobile && isColorInterval && <ColorInterval />}
+// 						{isSearchAddress && <SearchAddress />}
+
+// 						<DynamicCustomMap />
+// 						{/* {isMobile &&
+// 							(isActiveAddObject || isObjectInfo) &&
+// 							!isViewDotInfo && <ObjectInfo />}
+// 						{isMobile &&
+// 							isViewDotInfo &&
+// 							!isObjectInfo &&
+// 							!isActiveAddObject && <InfoAboutZone />} */}
+// 						{isMobile && view === 'objectInfo' && <ObjectInfo />}
+// 						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+
+// 						{isViewAreaInfo && <ViewObjectInfo area={true} />}
+// 						{isViewObjectInfo && <ViewObjectInfo area={false} />}
+// 						<div className={styles.block__buttons_map}>
+// 							{buttonsMap.map(el => (
+// 								<Button
+// 									key={el.id}
+// 									style={{
+// 										width: isMobile
+// 											? 'calc(39/480*100vw)'
+// 											: 'calc(39/1920*100vw)',
+// 										height: isMobile
+// 											? 'calc(39/480*100vw)'
+// 											: 'calc(39/1920*100vw)',
+// 										backgroundColor: colors.white,
+// 										display: 'flex',
+// 										alignItems: 'center',
+// 										justifyContent: 'center',
+// 										position: 'relative',
+// 									}}
+// 									onClick={() => handleClickButtonInMap(el.id)}
+// 								>
+// 									<svg
+// 										className={styles.icon_svg}
+// 										style={personActiveStyle(el.id)}
+// 									>
+// 										<use
+// 											xlinkHref={
+// 												isSelectArea && el.id === 1
+// 													? `/images/icons/sprite.svg#selection-remove`
+// 													: // : srcStandard(el, isListOfObjects, isFilters)
+// 														srcStandard(el, isListOfObjects, view === 'filters')
+// 											}
+// 										></use>
+// 									</svg>
+// 									<p className={styles.hover__text} style={{ right: 0 }}>
+// 										{el.hover_text}
+// 									</p>
+// 								</Button>
+// 							))}
+// 						</div>
+// 					</div>
+// 				</div>
+// 			)}
+// 		</QueryProvider>
+// 	);
+// };
+
+// export default Content;

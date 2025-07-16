@@ -9,7 +9,10 @@ import { IContentOptions } from '@/types/props.types';
 
 import { useBurgerMenuStore } from '@/store/store';
 
+import { useAuthGuard } from '@/hooks/auth/useAuthGuard';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
+
+import { hasMapAccess } from '@/utils/jwtTokenDecoder';
 
 import BurgerMenu from '../burger-menu/BurgerMenu';
 import Button from '../ui/button/Button';
@@ -24,6 +27,8 @@ const ContentOptions: FC<IContentOptions> = ({ title }) => {
 	const map = searchParams.get('map');
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
+
+	useAuthGuard(() => hasMapAccess(Number(map)));
 
 	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
 

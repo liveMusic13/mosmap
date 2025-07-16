@@ -1,12 +1,12 @@
 import { cookies, headers } from 'next/headers';
 import { FC } from 'react';
 
-import Content from '@/components/content/Content';
 import ContentISR from '@/components/contentISR/ContentISR';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 
+import ClientWrapper from './ClientWrapper';
 import { API_URL } from '@/app.constants';
 import NotFound from '@/app/not-found/page';
 import { mapService } from '@/services/map.service';
@@ -37,7 +37,8 @@ const Home: FC = async () => {
 	return (
 		<Layout>
 			<Header />
-			<Content dataMap={dataMap} />
+			{/* <Content dataMap={dataMap} /> */}
+			<ClientWrapper dataMap={dataMap} />
 
 			<ContentISR dataMap={dataMap} />
 			{/* HELP: для SEO. Чтобы возвращало html с данными из бэка */}

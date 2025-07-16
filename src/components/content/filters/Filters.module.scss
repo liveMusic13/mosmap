@@ -3,7 +3,8 @@
 @use '@st/mixins.scss' as mix;
 
 .wrapper_filters {
-	width: func.adapt(280px, 1920px);
+	// width: func.adapt(280px, 1920px);
+	width: func.adapt(290px, 1920px);
 	padding: func.adapt(20px, 1920px) func.adapt(16px, 1920px)
 		func.adapt(16px, 1920px);
 	box-shadow: 0px 2px 15px rgba($color: #000000, $alpha: 0.1);
@@ -83,6 +84,7 @@
 	flex-direction: column;
 	gap: func.adapt(20px, 1920px);
 	margin-top: func.adapt(16px, 1920px);
+	padding-right: 0.5rem;
 
 	overflow-y: auto;
 	overflow-x: hidden;

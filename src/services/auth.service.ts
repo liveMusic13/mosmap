@@ -9,8 +9,16 @@ import {
 	IRestoreData,
 } from '@/types/requestData.types';
 
+import { getDecodedTokenData } from '@/utils/jwtTokenDecoder';
+
 import { $axios } from '@/api';
-import { ACCESSIBLYMAP, API_URL, TOKEN } from '@/app.constants';
+import {
+	ACCESSIBLYMAP,
+	API_URL,
+	TOKEN,
+	USER_LOGIN,
+	USER_MAP,
+} from '@/app.constants';
 
 export const authService = {
 	login: async (
@@ -28,6 +36,15 @@ export const authService = {
 				Cookies.set(TOKEN, data.access_token);
 				Cookies.set(ACCESSIBLYMAP, data.user);
 				router.push(`/?map=${data.user}`);
+				const decoderTokenData = getDecodedTokenData(TOKEN);
+
+				if (decoderTokenData) {
+					Cookies.set(USER_LOGIN, login);
+					Cookies.set(USER_MAP, String(decoderTokenData.id));
+				}
+
+				console.log(getDecodedTokenData(TOKEN));
+				//TODO: закончить с доступом. Нужно закинуть в куки что-то типа объекта с номером карты и юзером или просто номер карты и назвать мол доступы или что-то такое. А потом по этому сверять доступ к карте
 			}
 
 			console.log('auth', data);

@@ -60,7 +60,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 				: valueFields['Логин'].value === '' ||
 					valueFields['Пароль'].value === '';
 
-	const [viewPass, setViewPass] = useState<boolean>(true);
+	const [viewPass, setViewPass] = useState<boolean>(false);
 	const [token, setToken] = useState<string>('');
 
 	useEffect(() => {
@@ -106,7 +106,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 	};
 
 	const handleChangeViewPass = (e: ChangeEvent<HTMLInputElement>) => {
-		setViewPass(e.target.checked);
+		setViewPass(!e.target.checked);
 	};
 	const handleViewPass = () => {
 		setViewPass(!viewPass);
@@ -200,7 +200,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 					<div className={styles.block__view_password}>
 						<Checkbox
 							value=''
-							checked={viewPass}
+							checked={!viewPass}
 							onChange={handleChangeViewPass}
 							label='Показать пароль'
 							styleLabel={{
