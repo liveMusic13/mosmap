@@ -69,6 +69,8 @@ const parseBase64JSON = (base64String: string): DecodedJWTPayload | null => {
  * Расшифровывает JWT токен и возвращает данные
  */
 export const decodeJWTToken = (token: string): DecodedTokenData | null => {
+	if (!token) return null;
+
 	try {
 		// Извлекаем payload (средняя часть)
 		const payload = extractJWTPayload(token);
