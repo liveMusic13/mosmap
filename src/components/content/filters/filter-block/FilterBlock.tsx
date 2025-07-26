@@ -15,7 +15,6 @@ import { updateUrlParams } from '@/utils/url';
 import styles from './FilterBlock.module.scss';
 
 const FilterBlock: FC<IFilterBlock> = memo(({ filter }) => {
-	console.log('render');
 	const { onChange, checkValueInUrl } = useCheckbox(filter, updateUrlParams);
 	const {
 		rangeBoundaries,

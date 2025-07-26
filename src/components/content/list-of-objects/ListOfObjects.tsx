@@ -48,6 +48,12 @@ const ListOfObjects: FC = () => {
 					isMarkerInsidePolygon(marker, arrayPolygons[indexTargetPolygon || 0]),
 				);
 
+	const filteredObjects =
+		objects &&
+		objects.filter(el =>
+			(el.name || '').toLowerCase().includes(searchValue.toLowerCase()),
+		);
+
 	useEffect(() => {
 		if (!idObjectInfo || !objects) return;
 
@@ -101,7 +107,10 @@ const ListOfObjects: FC = () => {
 			<div className={styles.block__counts}>
 				<div className={styles.block__description}>
 					<p className={styles.description}>Всего объектов в списке:</p>
-					<p className={styles.count}>{data?.['all-points']}</p>
+					{/* <p className={styles.count}>{data?.['all-points']}</p> */}
+					<p className={styles.count}>
+						{filteredObjects?.length || data?.['all-points']}
+					</p>
 				</div>
 				<div className={styles.block__description}>
 					<p className={styles.description}>Всего объектов на карте:</p>
@@ -171,21 +180,17 @@ const ListOfObjects: FC = () => {
 				/>
 				{
 					// data?.points //HELP:Предложить вывод ограниченного количества объектов и подгружать их при скроле. Т.к. все равно же есть фильтрация в новой версии
-					objects &&
-						objects
-							.filter(el =>
-								(el.name || '')
-									.toLowerCase()
-									.includes(searchValue.toLowerCase()),
-							)
-							.map(el => (
-								<List
-									key={el.id}
-									el={el}
-									ref={handleRef(el.id.toString())}
-									isTarget={idObjectInfo === el.id}
-								/>
-							))
+					// objects &&
+					// 	objects
+					filteredObjects &&
+						filteredObjects.map(el => (
+							<List
+								key={el.id}
+								el={el}
+								ref={handleRef(el.id.toString())}
+								isTarget={idObjectInfo === el.id}
+							/>
+						))
 				}
 			</div>
 		</div>
