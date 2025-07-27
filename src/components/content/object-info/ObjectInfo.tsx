@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { FC, useCallback, useEffect, useState } from 'react';
@@ -35,12 +34,14 @@ import { useSaveObject } from '@/hooks/useSaveObject';
 import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemoveMarker';
 import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
+import { checkMapAccess } from '@/utils/jwtTokenDecoder';
+
 import styles from './ObjectInfo.module.scss';
 import InfoBlock from './info-block/InfoBlock';
 import InfoEdit from './info-edit/InfoEdit';
 import Info from './info/Info';
 import MenuObject from './menu-object/MenuObject';
-import { TOKEN, colors } from '@/app.constants';
+import { colors } from '@/app.constants';
 
 const messageSave = 'Вы действительно хотите сохранить?';
 const messageDelete = 'Вы действительно хотите удалить?';
@@ -86,7 +87,8 @@ const ObjectInfo: FC = () => {
 	const { data: dataFilters, isLoading: isLoading_dataFilters } =
 		useGetFilters(map);
 
-	const token = Cookies.get(TOKEN);
+	// const token = Cookies.get(TOKEN);
+	const token = checkMapAccess(Number(map)).hasMapAccess;
 	const findTargetObject = data_getDataMap?.points.find(
 		el => el.id === idObjectInfo,
 	); //HELP: Находим объект таргета
