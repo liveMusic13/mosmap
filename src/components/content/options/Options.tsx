@@ -93,9 +93,14 @@ const Options: FC = () => {
 				}
 			} else if (id === 4) {
 				if (token) {
-					useActiveAddObjectStore.setState(state => ({
-						isActiveAddObject: !state.isActiveAddObject,
-					}));
+					// useActiveAddObjectStore.setState(state => ({
+					// 	isActiveAddObject: !state.isActiveAddObject,
+					// }));
+					if (view === 'addObject') {
+						closeView();
+					} else {
+						openView('addObject');
+					}
 					setIdObjectInfo(0);
 				} else {
 					router.push('/auth');
@@ -130,7 +135,7 @@ const Options: FC = () => {
 	const personActiveStyle = (id: number): CSSProperties | undefined => {
 		if (id === 4) {
 			return {
-				color: isActiveAddObject ? colors.red : colors.green,
+				color: view === 'addObject' ? colors.red : colors.green,
 			};
 		} else if (id === 7) {
 			return {

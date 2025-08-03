@@ -218,7 +218,8 @@ const ObjectInfo: FC = () => {
 			<div className={styles.block__objectInfo}>
 				<div className={styles.block__title}>
 					<h2 className={styles.title}>
-						{isActiveAddObject ? 'Добавление объекта' : 'Просмотр обьекта'}{' '}
+						{/* {isActiveAddObject ? 'Добавление объекта' : 'Просмотр обьекта'}{' '} */}
+						{view === 'addObject' ? 'Добавление объекта' : 'Просмотр обьекта'}
 					</h2>
 					<Button
 						style={{
@@ -262,7 +263,7 @@ const ObjectInfo: FC = () => {
 						}}
 					/>
 				)}
-				<div className={styles.block__info}>
+				<div className={styles.block__info} data-scrollable={true}>
 					{isSuccess &&
 						data &&
 						(data as IMarker)?.values?.map((el, ind) => {

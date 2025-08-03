@@ -47,6 +47,7 @@ const InfoAboutZone: FC = () => {
 	);
 	// const { isViewDotInfo, setViewDotInfo } = useViewDotInfoStore(store => store);
 	const view = useViewStore(store => store.view);
+	const openView = useViewStore(store => store.openView);
 	const closeView = useViewStore(store => store.closeView);
 
 	const { isPopup, messageInPopup, setIsPopup } = usePopupStore(store => store);
@@ -66,6 +67,7 @@ const InfoAboutZone: FC = () => {
 	const handleActiveAddObject = () => {
 		if (map && token) {
 			setIsActiveAddObject(true);
+			openView('addObject');
 		} else {
 			router.push('/registr');
 		}

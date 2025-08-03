@@ -37,7 +37,7 @@ const FilterBlock: FC<IFilterBlock> = memo(({ filter }) => {
 		<div className={styles.wrapper_filterBlock}>
 			<h2 className={styles.title}>{filter.caption}</h2>
 			<div className={styles.line}></div>
-			<div className={styles.block__filter}>
+			<div className={styles.block__filter} data-scrollable={true}>
 				{filter.type === 'number' && (
 					<Range
 						min={rangeBoundaries.min}

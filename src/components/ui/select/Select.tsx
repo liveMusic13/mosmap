@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import { ISelect } from '@/types/props.types';
 import { IItemFilter } from '@/types/requestData.types';
@@ -22,6 +22,8 @@ const Select: FC<ISelect> = ({
 	const nameSelect = searchParams.get(queryName || '');
 	const isClear = useClearAllFiltersStore(store => store.isClear);
 
+	const selectRef = useRef<HTMLDivElement>(null);
+	const optionsRef = useRef<HTMLDivElement>(null);
 	const [target, setTarget] = useState<string>('Выберите значение');
 	const [isOptions, setIsOptions] = useState<boolean>(false);
 
@@ -56,8 +58,46 @@ const Select: FC<ISelect> = ({
 		setIsOptions(false);
 	};
 
+	const scrollIntoView = () => {
+		console.log('click');
+		if (selectRef.current && optionsRef.current && isOptions) {
+			const selectElement = selectRef.current;
+			const optionsElement = optionsRef.current;
+			const container = selectElement.closest('[data-scrollable]'); // или найти контейнер по классу
+
+			if (container) {
+				const selectRect = selectElement.getBoundingClientRect();
+				const containerRect = container.getBoundingClientRect();
+				const optionsHeight = optionsElement.offsetHeight;
+
+				// Проверяем, помещается ли список опций в видимую область
+				const spaceBelow = containerRect.bottom - selectRect.bottom;
+				console.log('is container');
+				if (spaceBelow < optionsHeight) {
+					// Вычисляем насколько нужно проскроллить
+					const scrollAmount = optionsHeight - spaceBelow + 10; // +10 для отступа
+					console.log('is scroll');
+
+					container.scrollBy({
+						top: scrollAmount,
+						behavior: 'smooth',
+					});
+				}
+			}
+		}
+	};
+
+	// Вызываем скролл после того как состояние обновилось
+	useEffect(() => {
+		if (isOptions) {
+			// Небольшая задержка чтобы DOM успел обновиться
+			setTimeout(scrollIntoView, 0);
+		}
+	}, [isOptions, scrollIntoView]);
+
 	return (
 		<div
+			ref={selectRef}
 			className={`${styles.wrapper_select} ${disabled ? styles.disabled : ''}`}
 			style={style}
 		>
@@ -76,6 +116,7 @@ const Select: FC<ISelect> = ({
 			</div>
 			{isOptions && (
 				<div
+					ref={optionsRef}
 					className={
 						absoluteOptions
 							? `${styles.options} ${styles.absoluteOptions}`
