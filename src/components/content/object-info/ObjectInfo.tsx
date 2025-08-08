@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
@@ -25,6 +25,7 @@ import {
 	useViewStore,
 } from '@/store/store';
 
+import { useCheckDirtyDataObject } from '@/hooks/useCheckDirtyDataObject';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDeleteObject } from '@/hooks/useDeleteObject';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
@@ -55,11 +56,6 @@ const ObjectInfo: FC = () => {
 
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
-	// const setIsFilters = useFiltersStore(store => store.setIsFilters);
-	// const { isObjectInfo, setIsObjectInfo } = useObjectInfoStore(store => store);
-	// const setIsObjectInfoReserve = useObjectInfoStore(
-	// 	store => store.setIsObjectInfoReserve,
-	// );
 	const closeView = useViewStore(store => store.closeView);
 	const view = useViewStore(store => store.view);
 
@@ -82,7 +78,7 @@ const ObjectInfo: FC = () => {
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
 	);
-	const { mutate, isSuccess: isSuccess_save } = useSaveObject();
+	const { mutate, isSuccess: isSuccess_save, mutateAsync } = useSaveObject();
 	const { mutate: mutate_delete } = useDeleteObject();
 	const { data: dataFilters, isLoading: isLoading_dataFilters } =
 		useGetFilters(map);
@@ -96,8 +92,58 @@ const ObjectInfo: FC = () => {
 	const [editValuesObject, setEditValuesObject] = useState<IMarker | null>( //HELP: Записываем в стейт данные, чтобы можно было изменять при активной авторизации. А после спокойно отправлять весь объект
 		isSuccess ? (data as IMarker) : null,
 	);
+	const skipNextSubscriptionRef = useRef(false);
+	const prevIdRef = useRef<number>(idObjectInfo);
+	const pendingIdRef = useRef<number | null>(null);
+	const snapshotRef = useRef<IMarker | null>(null); // снимок старых данных
 
+	const [isDirty, setIsDirty] = useState(false);
+
+	// Подписываемся на любой чендж стейта и вручную сравниваем old/new
+	useEffect(() => {
+		const unsub = useIdObjectInfoStore.subscribe(state => {
+			const newId = state.idObjectInfo;
+			const oldId = prevIdRef.current;
+
+			// если флаг поднят — сбрасываем его и выходим
+			if (skipNextSubscriptionRef.current) {
+				skipNextSubscriptionRef.current = false;
+				prevIdRef.current = newId; // зафиксируем, что мы уже здесь были
+				return;
+			}
+
+			// если не поменялось — не нужен побочный эффект
+			if (newId === oldId) return;
+
+			if (isDirty) {
+				// 1) запоминаем, куда после попапа перейти
+				pendingIdRef.current = newId;
+				// 2) делаем снимок того, что надо сохранить
+				snapshotRef.current = editValuesObject;
+				// говорим, что этот следующий апдейт id мы уже обрабатывали
+				skipNextSubscriptionRef.current = true;
+
+				// 3) откатываем глобальный id назад
+				setIdObjectInfo(oldId || 0);
+				// 4) открываем попап
+				messageSave;
+				setMessageInPopup(messageSave);
+
+				// setMessageInPopup('Вы действительно хотите сохранить изменения?');
+				console.log('zdes');
+				setIsPopup(true);
+			} else {
+				// если нечего сохранять — просто обновляем prevId
+				prevIdRef.current = newId;
+			}
+		});
+
+		return () => {
+			unsub();
+		};
+	}, [isDirty, editValuesObject, setIdObjectInfo]);
 	useSaveUpdateAfterRemoveMarker(isSuccess_save);
+	useCheckDirtyDataObject(idObjectInfo, view, isDirty, setIsDirty, messageSave);
 
 	///test
 	const coords = useDotInfoCoordsStore(store => store.coords);
@@ -137,6 +183,7 @@ const ObjectInfo: FC = () => {
 		setEditValuesObject,
 		dataFilters,
 	);
+
 	//////
 
 	const handleClose = () => {
@@ -163,19 +210,90 @@ const ObjectInfo: FC = () => {
 				}
 				return prev;
 			});
+			setIsDirty(true);
 		},
 		[],
 	);
-	const resetValue = () => setEditValuesObject(data as IMarker);
-	const handleSaveValues = () => {
-		mutate(editValuesObject as IMarker);
-		const timeoutId = setTimeout(() => refetch_getDataMap(), 1500);
+	const resetValue = () => {
+		setEditValuesObject(data as IMarker);
+		setIsDirty(false);
+	};
 
-		setIsActiveAddObject(false);
+	// const handleSaveValues = () => {
+	// 	let objectToSave = null;
+
+	// 	if (isPopup) {
+	// 		objectToSave = prevObjectRef.current;
+	// 	} else {
+	// 		objectToSave = editValuesObject;
+	// 	}
+
+	// 	console.log(objectToSave, prevObjectRef.current, editValuesObject, isPopup);
+
+	// 	mutate(objectToSave as IMarker);
+
+	// 	// mutate(editValuesObject as IMarker);
+	// 	const timeoutId = setTimeout(() => refetch_getDataMap(), 1500);
+
+	// 	setIsActiveAddObject(false);
+	// 	setIsPopup(false);
+	// 	setIsDirty(false);
+	// 	return () => clearTimeout(timeoutId);
+	// };
+
+	// Сохранение из попапа
+
+	const onConfirm = () => {
 		setIsPopup(false);
 
-		return () => clearTimeout(timeoutId);
+		const toSave = snapshotRef.current!;
+		mutate(toSave, {
+			onSuccess: () => {
+				setIsDirty(false);
+
+				if (pendingIdRef.current != null) {
+					// опять говорим подписчику пропустить этот вызов
+					skipNextSubscriptionRef.current = true;
+					setIdObjectInfo(pendingIdRef.current);
+					prevIdRef.current = pendingIdRef.current;
+				}
+				pendingIdRef.current = null;
+				snapshotRef.current = null;
+			},
+		});
 	};
+
+	// const onConfirm = async () => {
+	// 	const toSave = snapshotRef.current;
+	// 	if (!toSave) {
+	// 		// если вдруг нет снимка, просто переходим
+	// 		setIsDirty(false);
+	// 		setIsPopup(false);
+	// 		if (pendingIdRef.current != null) setIdObjectInfo(pendingIdRef.current);
+	// 		return;
+	// 	}
+
+	// 	mutate(toSave, {
+	// 		onSuccess: () => {
+	// 			setIsDirty(false);
+	// 			setIsPopup(false);
+	// 			console.log('onSuccess');
+	// 			// только после успешного сохранения меняем id
+	// 			if (pendingIdRef.current != null) {
+	// 				setIdObjectInfo(pendingIdRef.current);
+	// 				prevIdRef.current = pendingIdRef.current;
+	// 			}
+	// 			// чистим ref’ы
+	// 			pendingIdRef.current = null;
+	// 			snapshotRef.current = null;
+	// 		},
+	// 	});
+	// };
+
+	useEffect(() => {
+		console.log('isPopup', isPopup, isDirty);
+	}, [isPopup, isDirty]);
+
 	const deleteObject = () => {
 		mutate_delete(idObjectInfo);
 
@@ -191,12 +309,17 @@ const ObjectInfo: FC = () => {
 	const onPopupSave = () => {
 		setIsPopup(true);
 		setMessageInPopup(messageSave);
+		setIsDirty(false);
 	};
 	const onPopupDelete = () => {
 		setIsPopup(true);
 		setMessageInPopup(messageDelete);
+		setIsDirty(false);
 	};
-	const cancelPopup = () => setIsPopup(false);
+	const cancelPopup = () => {
+		setIsPopup(false);
+		setIsDirty(false);
+	};
 	const handleDeleteCrd = () => {
 		if (findTargetObject && findTargetObject.crd) {
 			mutate({ ...findTargetObject, crd: [null, null] }); //TODO: Возможно проблема с тем что при удалении карты переключается в случайное место здесь. Т.к. приходит null вместо координат и возможно в этом и есть проблема. Позже надо будет разобраться.
@@ -211,14 +334,34 @@ const ObjectInfo: FC = () => {
 	const closePopupRemoveMarker = () => {
 		setIsRemoveMarker(true); //HELP: Включаем состояния при активации которого каждый клик на карту будет сохранятся для этого объекта как новые координаты, пока не отключишь это состояние правой кнопкой мыши.
 		setIsPopup(false);
+		setIsDirty(false);
 	};
+
+	// 1) Обработчик для вашей toolbar–кнопки «Сохранить»
+	const handleToolbarSave = () => {
+		if (!editValuesObject) return;
+
+		mutate(editValuesObject, {
+			onSuccess: () => {
+				// сбросим флаг «грязи»
+				setIsDirty(false);
+				// обновим карту
+				refetch_getDataMap();
+				// закроем попап, если он случайно открыт
+				setIsPopup(false);
+			},
+		});
+	};
+
+	useEffect(() => {
+		console.log('messageInPopup', messageInPopup, messageSave);
+	}, [messageInPopup]);
 
 	return (
 		<div className={styles.wrapper_objectInfo}>
 			<div className={styles.block__objectInfo}>
 				<div className={styles.block__title}>
 					<h2 className={styles.title}>
-						{/* {isActiveAddObject ? 'Добавление объекта' : 'Просмотр обьекта'}{' '} */}
 						{view === 'addObject' ? 'Добавление объекта' : 'Просмотр обьекта'}
 					</h2>
 					<Button
@@ -237,7 +380,6 @@ const ObjectInfo: FC = () => {
 								width={19}
 								height={19}
 								style={
-									// isObjectInfo || isActiveAddObject
 									view === 'objectInfo' || view === 'addObject'
 										? { transform: 'rotate(-180deg)' }
 										: {}
@@ -276,6 +418,7 @@ const ObjectInfo: FC = () => {
 									const onCallbackForSelect = (opt: IItemFilter | null) => {
 										if (!opt) return;
 										setFormState(prev => ({ ...prev, [el.name]: opt }));
+										setIsDirty(true);
 									};
 
 									return (
@@ -314,12 +457,18 @@ const ObjectInfo: FC = () => {
 					message={messageInPopup}
 					isConfirm={messageInPopup === messageRemoveMarker ? false : true}
 					functions={{
+						// confirm:
+						// 	messageSave === messageInPopup
+						// 		? handleSaveValues
+						// 		: messageMarker === messageInPopup
+						// 			? handleRemoveMarker
+						// 			: deleteObject,
 						confirm:
-							messageSave === messageInPopup
-								? handleSaveValues
-								: messageMarker === messageInPopup
-									? handleRemoveMarker
-									: deleteObject,
+							messageInPopup === messageSave
+								? onConfirm // <-- сюда
+								: messageInPopup === messageMarker
+									? handleRemoveMarker // не ваш случай «удалить координаты»
+									: deleteObject, // случай «удалить объект»
 						cancel:
 							messageMarker === messageInPopup ? handleDeleteCrd : cancelPopup,
 						onClick: closePopupRemoveMarker,
@@ -338,7 +487,8 @@ const ObjectInfo: FC = () => {
 					<Button
 						onClick={
 							// handleSaveValues
-							onPopupSave
+							// onPopupSave
+							handleToolbarSave
 						}
 					>
 						Сохранить

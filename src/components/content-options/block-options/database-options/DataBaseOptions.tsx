@@ -22,6 +22,12 @@ import RowDatabaseOptions from './row-database-options/RowDatabaseOptions';
 import { colors } from '@/app.constants';
 import { arrColumn } from '@/data/database.data';
 
+type Props = {
+	onDirtyChange: (dirty: boolean) => void;
+	provideSave: (fn: () => Promise<void>) => void;
+	onNavigateSettings: () => void;
+};
+
 const newObj = {
 	address: 0,
 	id: '0',
@@ -34,7 +40,11 @@ const newObj = {
 	type_object: 'field',
 };
 
-const DatabaseOptions: FC = () => {
+const DatabaseOptions: FC<Props> = ({
+	onDirtyChange,
+	provideSave,
+	onNavigateSettings,
+}) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
@@ -61,6 +71,7 @@ const DatabaseOptions: FC = () => {
 		isTarget: false,
 		column: '',
 	});
+	const initialDataRef = useRef<IEditableData[]>([]);
 
 	useEffect(() => {
 		if (isSuccessAllFields) {
@@ -79,6 +90,8 @@ const DatabaseOptions: FC = () => {
 			});
 
 			setEditableData(initialData);
+			initialDataRef.current = initialData;
+			onDirtyChange(false); // первый раз – грязи нет
 		}
 	}, [mapFullData]);
 
@@ -138,7 +151,7 @@ const DatabaseOptions: FC = () => {
 	// 	}
 	// }, [mapFullData]);
 
-	const { mutate } = useSaveAllFields();
+	const { mutate, mutateAsync } = useSaveAllFields();
 
 	const handleUpdate = (
 		id: number,
@@ -149,11 +162,13 @@ const DatabaseOptions: FC = () => {
 		setEditableData(prev =>
 			prev.map(item => (item.id === id ? { ...item, [field]: value } : item)),
 		);
+		onDirtyChange(true);
 	};
 	const handleDelete = (id: number) => {
 		console.log('id', id);
 		setEditableData(prev => prev.filter(el => el.id !== id)); //TODO: Проверить потом нужно ли удалять из этого состояния или достаточно из фулмап, из которого выводятся объекты в таблицу.
 		setMapFullData(prev => prev.filter(el => Number(el.id) !== id));
+		onDirtyChange(true);
 	};
 	const handleSettingsMap = () => router.push(`/settings-map?map=${map}`);
 	const handleViewSettings = (el: { id: number; name: string }) =>
@@ -168,6 +183,7 @@ const DatabaseOptions: FC = () => {
 		setMapFullData(prev => {
 			return [...prev, newObj];
 		});
+		onDirtyChange(true);
 
 		// if (typeTarget === 'field') {
 		// 	setMapFullData(prev => {
@@ -184,6 +200,18 @@ const DatabaseOptions: FC = () => {
 		// }
 	};
 
+	// useEffect(() => {
+	// 	onDirtyChange(true);
+	// }, [editableData]);
+
+	// отдадим наверх функцию сохранения, оборачивая её в async:
+	useEffect(() => {
+		provideSave(async () => {
+			await mutateAsync(editableData.map(({ type_object, ...rest }) => rest));
+			onDirtyChange(false);
+		});
+	}, [editableData, mutateAsync]);
+
 	useCheckFormatData({
 		editableData,
 		cacheFullDataRef,
@@ -192,7 +220,7 @@ const DatabaseOptions: FC = () => {
 		setMapFullData,
 	});
 
-	const test = async () => {
+	const saveDatabaseData = async () => {
 		const formatData = editableData.map(({ type_object, ...rest }) => rest);
 		mutate(formatData);
 	};
@@ -280,14 +308,15 @@ const DatabaseOptions: FC = () => {
 				))}
 			</div>
 			<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
-			<Button onClick={test}>Сохранить</Button>
+			<Button onClick={saveDatabaseData}>Сохранить</Button>
 			<Button
 				style={
 					isMobile
 						? { alignSelf: 'flex-start', marginTop: 'calc(20/480*100vw)' }
 						: { alignSelf: 'flex-start' }
 				}
-				onClick={handleSettingsMap}
+				// onClick={handleSettingsMap}
+				onClick={onNavigateSettings}
 			>
 				Настройка карты
 			</Button>

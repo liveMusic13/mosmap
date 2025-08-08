@@ -34,6 +34,7 @@ import Loader from '../ui/loader/Loader';
 import SearchAddress from '../ui/search-address/SearchAdress';
 
 import styles from './Content.module.scss';
+import TitleContent from './TitleContent';
 import ColorInterval from './color-interval/ColorInterval';
 import InfoAboutZone from './info-about-zone/InfoAboutZone';
 import ObjectInfo from './object-info/ObjectInfo';
@@ -77,6 +78,7 @@ const Content: FC<IContent> = ({ dataMap }) => {
 
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
+
 	const windowSize = useCheckWidth();
 	const isMobile = mounted ? windowSize <= 767 : false; //HELP: Делаем эту часть + динамический импорты для списка и фильтров, что не выдавало ошибок гидратации при использовании условий зависящих от размера экрана при обращении к window на сервере
 
@@ -157,7 +159,8 @@ const Content: FC<IContent> = ({ dataMap }) => {
 				<BurgerMenu />
 			) : (
 				<div className={styles.wrapper_content}>
-					<h1 className={styles.title}>{dataMap.title}</h1>
+					{/* <h1 className={styles.title}>{dataMap.title}</h1> */}
+					<TitleContent />
 					<DynamicOptions />
 					<div className={styles.block__content}>
 						{/* условный рендеринг */}

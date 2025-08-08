@@ -19,6 +19,13 @@ const ColorSettings: FC<IColorSettingsProps> = ({
 	onUpdate,
 	handleDelete,
 }) => {
+	if (
+		!editListData ||
+		editListData.length === 0 ||
+		!Array.isArray(editListData)
+	)
+		return null;
+
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const [viewColor, setViewColor] = useState<{
@@ -35,6 +42,8 @@ const ColorSettings: FC<IColorSettingsProps> = ({
 	const handleCloseChoiceIcon = () => setViewColor({ id: null, isView: false });
 	const handleOpenChoiceIcon = (el: IListItemsResponse) =>
 		setViewColor({ id: el.id, isView: true });
+
+	console.log('editListData', editListData);
 
 	return (
 		<div className={styles.wrapper_colorSettings}>

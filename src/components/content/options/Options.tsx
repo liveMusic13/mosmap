@@ -152,7 +152,9 @@ const Options: FC = () => {
 			<div className={styles.one}>
 				{standardArr.map(opt => {
 					const isDisabled =
-						(opt.id === 0 || opt.id === 1 || opt.id === 4) && !token;
+						((opt.id === 0 || opt.id === 1) && !token) ||
+						(opt.id === 4 && (!token || view !== 'objectInfo'));
+
 					return (
 						<Button
 							key={opt.id}
@@ -174,7 +176,6 @@ const Options: FC = () => {
 								style={personActiveStyle(opt.id)}
 							>
 								<use
-									// xlinkHref={srcStandard(opt, isListOfObjects, isFilters)}
 									xlinkHref={srcStandard(
 										opt,
 										isListOfObjects,

@@ -21,7 +21,12 @@ import styles from './SettingsOptions.module.scss';
 import ChangePassword from './change-password/ChangePassword';
 import { arrayCheckboxName, arrayInputsName } from '@/data/settingsMap.data';
 
-const SettingsOptions: FC = () => {
+type Props = {
+	onDirtyChange: (dirty: boolean) => void;
+	provideSave: (fn: () => Promise<void>) => void;
+};
+
+const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
@@ -29,6 +34,7 @@ const SettingsOptions: FC = () => {
 	const { data, isSuccess } = useSaveSettingsMap();
 	const {
 		mutate,
+		mutateAsync,
 		isSuccess: isSuccess_save,
 		data: data_save,
 	} = useSaveEditingDataSettingsMap();
@@ -88,6 +94,7 @@ const SettingsOptions: FC = () => {
 			};
 			setFormState(inputStates);
 			setFormStateCheck(checkboxState);
+			onDirtyChange(false);
 		}
 	}, [data]);
 
@@ -103,13 +110,16 @@ const SettingsOptions: FC = () => {
 			...prevState,
 			[name]: !prevState[name],
 		}));
+		onDirtyChange(true);
 	};
 	const onChangeInputs = (e: ChangeEvent<HTMLInputElement>, name: string) => {
 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
+		onDirtyChange(true);
 	};
 	const onCallbackSelect = useCallback((el: IItemFilter | null) => {
 		if (!el) return;
 		setTargetOption(el.item_name);
+		onDirtyChange(true);
 	}, []);
 	const handleSaveSettings = () => {
 		const formatInputsValue: any = renameKeys(formState);
@@ -149,6 +159,60 @@ const SettingsOptions: FC = () => {
 
 		mutate({ map, data: dataForRequest });
 	};
+
+	useEffect(() => {
+		provideSave(async () => {
+			const formatInputsValue: any = renameKeys(formState);
+			const tiles_id = (data as ISaveSettingsMapResponse)?.tiles_list.find(
+				el => el.name === targetOption,
+			)?.id;
+			const dataForRequest = {
+				autosize: '',
+				clastering: '',
+				showhouses: '',
+				showanalytic: '',
+				...formatInputsValue,
+				tiles_id: tiles_id,
+				tiles_list: (data as ISaveSettingsMapResponse)?.tiles_list,
+			};
+
+			for (const checkbox in formStateCheck) {
+				if (formStateCheck.hasOwnProperty(checkbox)) {
+					switch (checkbox) {
+						case 'Автоматическое масштабирование значков':
+							dataForRequest.autosize = formStateCheck[checkbox] ? '1' : '0';
+							break;
+						case 'Кластеризация':
+							dataForRequest.clastering = formStateCheck[checkbox] ? '1' : '0';
+							break;
+						case 'Заменять значки на контуры домов':
+							dataForRequest.showhouses = formStateCheck[checkbox] ? '1' : '0';
+							break;
+						case 'Добавлять в карточку объекта анализ местности':
+							dataForRequest.showanalytic = formStateCheck[checkbox]
+								? '1'
+								: '0';
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			await mutateAsync({ map, data: dataForRequest });
+			await refetch();
+			// router.refresh();
+			// router.push(`/?map=${map}`);
+			onDirtyChange(false);
+		});
+	}, [
+		formState,
+		formStateCheck,
+		map,
+		mutateAsync,
+		onDirtyChange,
+		refetch,
+		router,
+	]);
 
 	return (
 		<div className={styles.wrapper_settingsOptions}>

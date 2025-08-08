@@ -1,11 +1,15 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
-import { FC } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { FC, useRef, useState } from 'react';
 
+import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
 import Button from '@/components/ui/button/Button';
+import Popup from '@/components/ui/popup/Popup';
 
 import { IBlockOptions } from '@/types/props.types';
+
+import { usePopupStore } from '@/store/store';
 
 import styles from './BlockOptions.module.scss';
 import DatabaseOptions from './database-options/DataBaseOptions';
@@ -16,6 +20,8 @@ import SettingsOptions from './settings-options/SettingsOptions';
 
 const BlockOptions: FC<IBlockOptions> = () => {
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const map = searchParams.get('map');
 	const router = useRouter();
 	const title_text =
 		pathname === '/import'
@@ -30,13 +36,72 @@ const BlockOptions: FC<IBlockOptions> = () => {
 							? 'Настройка базы данных'
 							: '';
 
+	const pendingActionRef = useRef<'back' | 'toSettings' | 'toDB' | null>(null);
+	const isPopup = usePopupStore(store => store.isPopup);
+	const setIsPopup = usePopupStore(store => store.setIsPopup);
+	const setMessageInPopup = usePopupStore(store => store.setMessageInPopup);
+	const messageInPopup = usePopupStore(store => store.messageInPopup);
+	const [isDirty, setIsDirty] = useState(false);
+	const [saveFn, setSaveFn] = useState<(() => Promise<void>) | null>(null);
+
 	const handleBack = () => router.back();
+	const attemptNavigateBack = () => {
+		if (isDirty && saveFn) {
+			pendingActionRef.current = 'back';
+			setMessageInPopup(
+				'У вас есть несохранённые изменения. Сохранить перед выходом?',
+			);
+			setIsPopup(true);
+		} else {
+			router.back();
+		}
+	};
+
+	const attemptNavigateToSettings = () => {
+		if (isDirty && saveFn) {
+			pendingActionRef.current = 'toSettings';
+			setMessageInPopup(
+				'У вас есть несохранённые изменения. Сохранить перед выходом?',
+			);
+			setIsPopup(true);
+		} else {
+			router.push(`/settings-map?map=${map}`);
+		}
+	};
+
+	const onConfirm = async () => {
+		setIsPopup(false);
+		if (saveFn) {
+			await saveFn(); // сохраняем
+		}
+
+		// дальше смотрим, куда нам переходить
+		if (pendingActionRef.current === 'back') {
+			router.back();
+		} else if (pendingActionRef.current === 'toSettings') {
+			router.push(`/settings-map?map=${map}`);
+		}
+
+		pendingActionRef.current = null;
+	};
+
+	const onCancel = () => {
+		setIsPopup(false);
+		if (pendingActionRef.current === 'back') {
+			router.back();
+		} else if (pendingActionRef.current === 'toSettings') {
+			router.push(`/settings-map?map=${map}`);
+		} else if (pendingActionRef.current === 'toDB') {
+			router.push(`/settings-database`);
+		}
+		pendingActionRef.current = null;
+	};
 
 	return (
 		<div className={styles.wrapper_options}>
 			<div className={styles.block__title}>
 				<h2 className={styles.title}>{title_text}</h2>
-				<Button onClick={handleBack}>
+				<Button onClick={attemptNavigateBack}>
 					{pathname === '/import/done' || pathname === '/settings-map'
 						? 'Назад'
 						: 'На карту'}
@@ -47,9 +112,30 @@ const BlockOptions: FC<IBlockOptions> = () => {
 				{pathname === '/import' && <ImportOptions />}
 				{pathname === '/export' && <ExportOptions />}
 				{pathname === '/import/done' && <ImportDoneOptions />}
-				{pathname === '/settings-map' && <SettingsOptions />}
-				{pathname === '/settings-database' && <DatabaseOptions />}
+				{pathname === '/settings-map' && (
+					<SettingsOptions
+						onDirtyChange={setIsDirty}
+						provideSave={fn => setSaveFn(() => fn)}
+					/>
+				)}
+				{pathname === '/settings-database' && (
+					<DatabaseOptions
+						onDirtyChange={setIsDirty}
+						provideSave={fn => setSaveFn(() => fn)}
+						onNavigateSettings={attemptNavigateToSettings}
+					/>
+				)}
 			</div>
+			{isPopup && (
+				<>
+					<BackgroundOpacity />
+					<Popup
+						message={messageInPopup}
+						isConfirm={true}
+						functions={{ confirm: onConfirm, cancel: onCancel }}
+					/>
+				</>
+			)}
 		</div>
 	);
 };
