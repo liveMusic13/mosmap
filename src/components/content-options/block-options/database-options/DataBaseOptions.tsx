@@ -67,6 +67,7 @@ const DatabaseOptions: FC<Props> = ({
 	const [editableData, setEditableData] = useState<IEditableData[]>([]);
 	const [targetIdObject, setTargetIdObject] = useState<number>(0);
 	const [targetNewAddObject, setTargetNewAddObject] = useState();
+	const [isDeleteObj, setIsDeleteObj] = useState<boolean>(false);
 	const [targetColumn, setTargetColumn] = useState({
 		isTarget: false,
 		column: '',
@@ -91,7 +92,11 @@ const DatabaseOptions: FC<Props> = ({
 
 			setEditableData(initialData);
 			initialDataRef.current = initialData;
-			onDirtyChange(false); // первый раз – грязи нет
+			if (!isDeleteObj) {
+				onDirtyChange(false); // первый раз – грязи нет
+			} else {
+				setIsDeleteObj(false);
+			}
 		}
 	}, [mapFullData]);
 
@@ -165,6 +170,7 @@ const DatabaseOptions: FC<Props> = ({
 		onDirtyChange(true);
 	};
 	const handleDelete = (id: number) => {
+		setIsDeleteObj(true);
 		console.log('id', id);
 		setEditableData(prev => prev.filter(el => el.id !== id)); //TODO: Проверить потом нужно ли удалять из этого состояния или достаточно из фулмап, из которого выводятся объекты в таблицу.
 		setMapFullData(prev => prev.filter(el => Number(el.id) !== id));
@@ -199,10 +205,6 @@ const DatabaseOptions: FC<Props> = ({
 		// 	});
 		// }
 	};
-
-	// useEffect(() => {
-	// 	onDirtyChange(true);
-	// }, [editableData]);
 
 	// отдадим наверх функцию сохранения, оборачивая её в async:
 	useEffect(() => {

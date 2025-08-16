@@ -97,6 +97,8 @@ const BlockOptions: FC<IBlockOptions> = () => {
 		pendingActionRef.current = null;
 	};
 
+	console.log('is', isDirty);
+
 	return (
 		<div className={styles.wrapper_options}>
 			<div className={styles.block__title}>
