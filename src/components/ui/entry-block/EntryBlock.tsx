@@ -60,7 +60,7 @@ const EntryBlock: FC<IEntryBlock> = ({
 				: valueFields['Логин'].value === '' ||
 					valueFields['Пароль'].value === '';
 
-	const [viewPass, setViewPass] = useState<boolean>(false);
+	const [viewPass, setViewPass] = useState<boolean>(true);
 	const [token, setToken] = useState<string>('');
 
 	useEffect(() => {
