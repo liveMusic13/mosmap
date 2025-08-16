@@ -7,8 +7,9 @@ import styles from './Content.module.scss';
 
 const TitleContent: FC = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
-	const { data } = useGetDataMap(map);
+	const queryString = new URLSearchParams(searchParams.toString()).toString();
+
+	const { data } = useGetDataMap(queryString);
 
 	return <h1 className={styles.title}>{data?.title}</h1>;
 };
