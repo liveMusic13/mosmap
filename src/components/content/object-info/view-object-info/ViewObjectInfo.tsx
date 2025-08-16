@@ -36,7 +36,7 @@ const ViewObjectInfo: FC<IViewObjectInfoProps> = ({ area }) => {
 
 	return (
 		<div className={styles.block__viewObjectInfo}>
-			<span>Просмотр объекта</span>
+			<span onClick={handleClick}>Просмотр объекта</span>
 			<Button onClick={handleClick}>
 				<Image
 					src={'/images/icons/arrow_viewObject_mobile.svg'}
