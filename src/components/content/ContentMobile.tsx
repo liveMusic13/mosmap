@@ -18,11 +18,16 @@ import BurgerMenu from '../burger-menu/BurgerMenu';
 import styles from './ContentMobile.module.scss';
 import ColorInterval from './color-interval/ColorInterval';
 import Filters from './filters/Filters';
-import ListOfObjects from './list-of-objects/ListOfObjects';
 
 const DynamicOptions = dynamic(() => import('./options/Options'), {
 	ssr: false,
 });
+const DynamicListOfObject = dynamic(
+	() => import('./list-of-objects/ListOfObjects'),
+	{
+		ssr: false,
+	},
+);
 
 const ContentMobile: FC<IContent> = ({ dataMap }) => {
 	const pathname = usePathname();
@@ -49,7 +54,8 @@ const ContentMobile: FC<IContent> = ({ dataMap }) => {
 					<div className={styles.block__content}>
 						{pathname === '/mobile-filters/filters' && <Filters />}
 						{pathname === '/mobile-filters/list-of-objects' && (
-							<ListOfObjects />
+							// <ListOfObjects />
+							<DynamicListOfObject />
 						)}
 						{pathname === '/mobile-filters/color-interval' && <ColorInterval />}
 					</div>

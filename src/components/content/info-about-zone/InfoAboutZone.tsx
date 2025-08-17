@@ -89,6 +89,8 @@ const InfoAboutZone: FC = () => {
 		setIsRemoveMarker(false);
 	}, [data_getDataMap, idObjectInfo]);
 
+	console.log('data', data);
+
 	return (
 		<div className={styles.wrapper__infoAboutZone}>
 			{isPopup && (
@@ -153,7 +155,8 @@ const InfoAboutZone: FC = () => {
 				)}
 				{isSuccess &&
 					data &&
-					(data as IDotInfoData[]).map((el, ind) => (
+					Array.isArray(data) &&
+					(data as IDotInfoData[])?.map((el, ind) => (
 						<InfoZone key={ind} value_info={el} />
 					))}
 			</div>

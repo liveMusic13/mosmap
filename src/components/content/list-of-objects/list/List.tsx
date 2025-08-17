@@ -1,3 +1,5 @@
+'use client';
+
 import { LatLngExpression } from 'leaflet';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -47,7 +49,9 @@ const List = memo(
 			const onClick = (el: IMarker) => {
 				if (isMobile) {
 					router.push(`/?map=${map}`);
-					if (el.crd) setCenterMap(el.crd as LatLngExpression);
+					if (el.crd) {
+						setCenterMap(el.crd as LatLngExpression);
+					}
 					setIdObjectInfo(el.id);
 				} else {
 					if (el.crd) setCenterMap(el.crd as LatLngExpression);

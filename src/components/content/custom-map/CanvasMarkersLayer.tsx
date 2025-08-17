@@ -4,7 +4,10 @@ import { useMap } from 'react-leaflet';
 
 import { ICanvasMarkersLayer } from '@/types/props.types';
 
-import { useIdObjectInfoStore } from '@/store/store';
+import {
+	useIdObjectInfoStore,
+	useViewObjectAbdAreaInfoStore,
+} from '@/store/store';
 
 import { useClickOnMarker } from '@/hooks/useClickOnMarker';
 import { useGetSizeMarker } from '@/hooks/useGetSizeMarkers';
@@ -15,6 +18,9 @@ import { colors } from '@/app.constants';
 
 const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+	const setIsViewObjectInfo = useViewObjectAbdAreaInfoStore(
+		store => store.setIsViewObjectInfo,
+	);
 
 	const sizeMarker = useGetSizeMarker();
 
@@ -23,6 +29,18 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const map = useMap();
 	const canvasLayerRef = useRef<Canvas | null>(null);
 	const markersLayerRef = useRef<L.LayerGroup | null>(null);
+
+	useEffect(() => {
+		if (!map || !idObjectInfo) return;
+		const marker = dataMap.points.find(m => m.id === idObjectInfo);
+		if (marker?.crd) {
+			L.popup()
+				.setLatLng(marker.crd as LatLngExpression)
+				.setContent(marker.name || 'No name')
+				.openOn(map);
+			setIsViewObjectInfo(true);
+		}
+	}, [idObjectInfo, map, dataMap]);
 
 	useEffect(() => {
 		if (!map) return;

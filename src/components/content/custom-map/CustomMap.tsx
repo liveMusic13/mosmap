@@ -14,6 +14,7 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSelectArea } from '@/hooks/useSelectArea';
 
 import CanvasMarkersLayer from './CanvasMarkersLayer';
+import ControlledPopup from './ControlledPopup';
 import styles from './CustomMap.module.scss';
 import FlyToLocation from './FlyToLocation';
 import MapClickHandler from './MapClickHandler';
@@ -88,11 +89,13 @@ const CustomMap: FC<ICustomMap> = () => {
 						<>
 							<RenderMarkers dataMap={data} />
 							<RenderArea />
+							<ControlledPopup markers={data.points} />
 						</>
 					) : (
 						<MarkerClusterGroup chunkedLoading={true}>
 							<RenderMarkers dataMap={data} />
 							<RenderArea />
+							<ControlledPopup markers={data.points} />
 						</MarkerClusterGroup>
 					)
 				) : (
