@@ -24,6 +24,7 @@ import {
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledRemoveMarker } from '@/hooks/useDisabledRemoveMarker';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
+import { useScrollToElement } from '@/hooks/useScrollToElement';
 
 import { srcStandard } from '@/utils/pathSvg';
 
@@ -99,6 +100,10 @@ const Content: FC<IContent> = ({ dataMap }) => {
 		store => store,
 	);
 
+	const objectInfoRef = useScrollToElement(
+		isMobile && view === 'objectInfo',
+		150,
+	);
 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
 
@@ -177,7 +182,11 @@ const Content: FC<IContent> = ({ dataMap }) => {
 						{isSearchAddress && <SearchAddress />}
 
 						<DynamicCustomMap />
-						{isMobile && view === 'objectInfo' && <ObjectInfo />}
+						{isMobile && view === 'objectInfo' && (
+							<div ref={objectInfoRef}>
+								<ObjectInfo />
+							</div>
+						)}
 						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
 
 						{isViewAreaInfo && <ViewObjectInfo area={true} />}
