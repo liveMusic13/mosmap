@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { FC, useRef, useState } from 'react';
+import { FC, forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
 import Button from '@/components/ui/button/Button';
@@ -18,7 +18,7 @@ import ImportDoneOptions from './import-done-options/ImportDoneOptions';
 import ImportOptions from './import-options/ImportOptions';
 import SettingsOptions from './settings-options/SettingsOptions';
 
-const BlockOptions: FC<IBlockOptions> = () => {
+const BlockOptions: FC<IBlockOptions> = forwardRef((_, ref) => {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const map = searchParams.get('map');
@@ -46,6 +46,8 @@ const BlockOptions: FC<IBlockOptions> = () => {
 
 	const handleBack = () => router.back();
 	const attemptNavigateBack = () => {
+		console.log('click');
+
 		if (isDirty && saveFn) {
 			pendingActionRef.current = 'back';
 			setMessageInPopup(
@@ -97,6 +99,11 @@ const BlockOptions: FC<IBlockOptions> = () => {
 		pendingActionRef.current = null;
 	};
 
+	// 👇 Делаем метод доступным наружу
+	useImperativeHandle(ref, () => ({
+		attemptNavigateBack,
+	}));
+
 	console.log('is', isDirty);
 
 	return (
@@ -140,6 +147,6 @@ const BlockOptions: FC<IBlockOptions> = () => {
 			)}
 		</div>
 	);
-};
+});
 
 export default BlockOptions;

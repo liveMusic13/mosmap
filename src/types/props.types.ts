@@ -196,6 +196,7 @@ export interface IContentOptions {
 
 export interface IBlockOptions {
 	isImport?: boolean;
+	ref: any;
 }
 
 export interface IBlockParam {

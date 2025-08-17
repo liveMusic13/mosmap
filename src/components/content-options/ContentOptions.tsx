@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 
 import QueryProvider from '@/providers/QueryProvider';
 
@@ -25,11 +25,16 @@ const ContentOptions: FC<IContentOptions> = ({ title }) => {
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 
-	// useAuthGuard(() => checkMapAccess(Number(map)).hasValidToken);
+	const blockOptionsRef = useRef<{ attemptNavigateBack: () => void }>(null);
 
 	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
 
 	const handleBack = () => router.push(`/?map=${map}`);
+
+	console.log(
+		'	blockOptionsRef.current?.attemptNavigateBack',
+		blockOptionsRef.current,
+	);
 
 	return (
 		<QueryProvider>
@@ -38,11 +43,17 @@ const ContentOptions: FC<IContentOptions> = ({ title }) => {
 			) : (
 				<div className={styles.wrapper_contentOptions}>
 					<h1 className={styles.title}>{title}</h1>
-					<Button onClick={handleBack}>
+					<Button
+						onClick={
+							() => blockOptionsRef.current?.attemptNavigateBack()
+							// ? blockOptionsRef.current?.attemptNavigateBack()
+							// : handleBack()
+						}
+					>
 						{pathname === '/import/done' ? 'Назад' : 'На карту'}
 					</Button>
 					<div className={styles.block__content}>
-						<BlockOptions />
+						<BlockOptions ref={blockOptionsRef} />
 					</div>
 				</div>
 			)}
