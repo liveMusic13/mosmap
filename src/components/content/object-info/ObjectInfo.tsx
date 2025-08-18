@@ -78,7 +78,13 @@ const ObjectInfo: FC = () => {
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
 	);
-	const { mutate, isSuccess: isSuccess_save, mutateAsync } = useSaveObject();
+	const {
+		mutate,
+		isSuccess: isSuccess_save,
+		isPending,
+		isError,
+		mutateAsync,
+	} = useSaveObject();
 	const { mutate: mutate_delete } = useDeleteObject();
 	const { data: dataFilters, isLoading: isLoading_dataFilters } =
 		useGetFilters(map);
@@ -353,6 +359,17 @@ const ObjectInfo: FC = () => {
 		});
 	};
 
+	const [errorSave, setErrorSave] = useState(false);
+	useEffect(() => {
+		if (isError) {
+			setErrorSave(true);
+
+			const timeoutId = setTimeout(() => setErrorSave(false), 3000);
+
+			return () => clearTimeout(timeoutId);
+		}
+	}, [isError]);
+
 	useEffect(() => {
 		console.log('messageInPopup', messageInPopup, messageSave);
 	}, [messageInPopup]);
@@ -490,8 +507,31 @@ const ObjectInfo: FC = () => {
 							// onPopupSave
 							handleToolbarSave
 						}
+						style={
+							isMobile
+								? isPending
+									? {
+											backgroundColor: colors.orange,
+										}
+									: errorSave
+										? {
+												backgroundColor: colors.red,
+											}
+										: {}
+								: {}
+						}
 					>
 						Сохранить
+						{isMobile ? (
+							isPending ? (
+								<Loader
+									style={{
+										width: 'calc(50/1920*100vw)',
+										height: 'calc(50/1920*100vw)',
+									}}
+								/>
+							) : null
+						) : null}
 					</Button>
 					<Button
 						style={{ color: colors.grey_light, backgroundColor: 'transparent' }}

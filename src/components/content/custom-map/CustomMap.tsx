@@ -1,6 +1,7 @@
+import { Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useSearchParams } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { FeatureGroup, MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { EditControl } from 'react-leaflet-draw';
@@ -23,6 +24,8 @@ import MarkerEmptyArea from './MarkerEmptyArea';
 import RenderArea from './RenderArea';
 import RenderColorMap from './RenderColorMap';
 import RenderMarkers from './RenderMarkers';
+import SaveMapCenter from './SaveMapCenter';
+import UpdateMapSettings from './UpdateMapSettings';
 import ZoomTracker from './ZoomTracker';
 
 const CustomMap: FC<ICustomMap> = () => {
@@ -62,23 +65,27 @@ const CustomMap: FC<ICustomMap> = () => {
 		}
 	}, []);
 
+	const mapRef = useRef<Map | null>(null);
+	useEffect(
+		() => console.log('center', centerMap, mapRef.current),
+		[centerMap, mapRef],
+	);
+
 	return (
 		isSuccess && (
 			<MapContainer
 				//TODO: Если поставлю ключ, то исчезает ошибка и все ок, но тогда при срабатывании FlyToLocation происходит не анимация а просто скачок. ставим этот момент для продакшена и там посмотрим будет ли эта ошибка или нет. Если нет, то можноне ставить ключ, либо поставим и будет переход к маркерубез анимации.
 				// key={Math.random()} //HELP: Ставлю рандомный ключ, чтобы убрать ошибку, которая возникает при перезагрузки страницы. Суть той ошибки в том, что при обновлении страницы должен создаваться экземпляр новой карты, но старая не удаляется и поэтому возникает ошибка. Благодаря рандомному ключу экземпляр карты всегда будет уникальным
-				// center={[55.7522, 37.6156]}
-				center={centerMap || [55.7522, 37.6156]}
-				minZoom={data?.zoom_min}
-				maxZoom={data?.zoom_max}
+				center={[55.7522, 37.6156]}
+				// center={centerMap || [55.7522, 37.6156]}
+				// minZoom={data?.zoom_min}
+				// maxZoom={data?.zoom_max}
 				zoom={10}
-				maxBounds={
-					data?.bounds !== '[[null, null], [null, null]]'
-						? JSON.parse(data?.bounds || '')
-						: undefined
-				}
+				// maxBounds={bounds}
 				className={styles.custom_map}
 			>
+				<SaveMapCenter />
+				<UpdateMapSettings data={data} />
 				<ZoomTracker />
 				<MapClickHandler />
 				<MapResizeHandler />
