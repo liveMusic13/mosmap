@@ -113,9 +113,10 @@ const ListOfObjects: FC = () => {
 						width: '100%',
 						borderRadius: '0.675rem',
 					}}
+					className='button_mobile_header'
 					onClick={() => router.back()}
 				>
-					Назад
+					&larr; Назад
 				</Button>
 			)}
 			<h2 className={styles.title}>Список объектов</h2>
