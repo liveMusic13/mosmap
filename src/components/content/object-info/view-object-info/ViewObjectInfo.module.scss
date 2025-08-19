@@ -8,6 +8,7 @@
 	height: func.adapt(65px, 480px);
 	width: func.adapt(340px, 480px);
 	position: absolute;
+	// position: fixed;
 	z-index: 1000;
 	bottom: func.adapt(30px, 480px);
 	left: 50%;

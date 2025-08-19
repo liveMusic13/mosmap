@@ -54,6 +54,11 @@ const Filters: FC = () => {
 
 	return (
 		<div className={styles.wrapper_filters}>
+			{isMobile && (
+				<Button style={{ marginBottom: '2rem' }} onClick={() => router.back()}>
+					Назад
+				</Button>
+			)}
 			<div className={styles.block__title}>
 				<h2 className={styles.title}>Фильтры</h2>
 				<Button

@@ -1,4 +1,4 @@
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
 	ChangeEvent,
 	FC,
@@ -8,6 +8,7 @@ import {
 	useState,
 } from 'react';
 
+import Button from '@/components/ui/button/Button';
 import Input from '@/components/ui/input/Input';
 import Loader from '@/components/ui/loader/Loader';
 
@@ -22,6 +23,7 @@ import styles from './ListOfObjects.module.scss';
 import List from './list/List';
 
 const ListOfObjects: FC = () => {
+	const router = useRouter();
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const searchParams = useSearchParams();
@@ -103,6 +105,19 @@ const ListOfObjects: FC = () => {
 
 	return (
 		<div className={styles.wrapper_listOfObjects}>
+			{isMobile && (
+				<Button
+					style={{
+						marginBottom: '3rem',
+						minHeight: '3.5rem',
+						width: '100%',
+						borderRadius: '0.675rem',
+					}}
+					onClick={() => router.back()}
+				>
+					Назад
+				</Button>
+			)}
 			<h2 className={styles.title}>Список объектов</h2>
 			<div className={styles.block__counts}>
 				<div className={styles.block__description}>

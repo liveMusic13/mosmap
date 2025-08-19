@@ -104,6 +104,14 @@ const Content: FC<IContent> = ({ dataMap }) => {
 		isMobile && view === 'objectInfo',
 		150,
 	);
+	const viewObjectInfoAreaRef = useScrollToElement(
+		isMobile && isViewAreaInfo,
+		150,
+	);
+	const viewObjectInfoObjectRef = useScrollToElement(
+		isMobile && isViewObjectInfo,
+		150,
+	);
 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
 
@@ -189,8 +197,16 @@ const Content: FC<IContent> = ({ dataMap }) => {
 						)}
 						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
 
-						{isViewAreaInfo && <ViewObjectInfo area={true} />}
-						{isViewObjectInfo && <ViewObjectInfo area={false} />}
+						{isViewAreaInfo && (
+							<div ref={viewObjectInfoAreaRef}>
+								<ViewObjectInfo area={true} />
+							</div>
+						)}
+						{isViewObjectInfo && (
+							<div ref={viewObjectInfoObjectRef}>
+								<ViewObjectInfo area={false} />
+							</div>
+						)}
 						<div className={styles.block__buttons_map}>
 							{buttonsMap.map(el => (
 								<Button
