@@ -197,12 +197,12 @@ const Content: FC<IContent> = ({ dataMap }) => {
 						)}
 						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
 
-						{isViewAreaInfo && (
+						{isMobile && isViewAreaInfo && (
 							<div ref={viewObjectInfoAreaRef}>
 								<ViewObjectInfo area={true} />
 							</div>
 						)}
-						{isViewObjectInfo && (
+						{isMobile && isViewObjectInfo && (
 							<div ref={viewObjectInfoObjectRef}>
 								<ViewObjectInfo area={false} />
 							</div>

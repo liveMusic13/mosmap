@@ -2,7 +2,7 @@ export const TOKEN: string = 'token';
 export const USER_LOGIN: string = 'user_login';
 export const USER_MAP: string = 'user_map';
 export const ACCESSIBLYMAP: string = 'AccessiblyMap';
-export const API_URL = 'https://app.mosmap.ru';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const colors = {
 	green: '#117474',
