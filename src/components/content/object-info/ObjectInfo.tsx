@@ -73,8 +73,12 @@ const ObjectInfo: FC = () => {
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
 
-	const { refetch: refetch_getDataMap, data: data_getDataMap } =
-		useGetDataMap(queryString);
+	const {
+		refetch: refetch_getDataMap,
+		data: dataMap,
+		data: data_getDataMap,
+	} = useGetDataMap(queryString);
+
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
 	);
@@ -90,7 +94,7 @@ const ObjectInfo: FC = () => {
 		useGetFilters(map);
 
 	// const token = Cookies.get(TOKEN);
-	const token = checkMapAccess(Number(map)).hasMapAccess;
+	const token = checkMapAccess(dataMap?.map || null).hasMapAccess;
 	const findTargetObject = data_getDataMap?.points.find(
 		el => el.id === idObjectInfo,
 	); //HELP: Находим объект таргета

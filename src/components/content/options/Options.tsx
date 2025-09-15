@@ -7,7 +7,6 @@ import Button from '@/components/ui/button/Button';
 import Line from '@/components/ui/line/Line';
 
 import {
-	useActiveAddObjectStore,
 	useColorsIntervalStore,
 	// useFiltersStore,
 	useIdObjectInfoStore,
@@ -16,6 +15,7 @@ import {
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
+import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
@@ -27,9 +27,10 @@ import { settingsArr, standardArr } from '@/data/options.data';
 const Options: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
 	//HELP: Преобразование searchParams в строку
 	const queryString = new URLSearchParams(searchParams.toString()).toString();
+
+	const { data: dataMap } = useGetDataMap(queryString);
 
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
@@ -43,13 +44,11 @@ const Options: FC = () => {
 	const closeView = useViewStore(store => store.closeView);
 
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
-	const { isActiveAddObject, setIsActiveAddObject } = useActiveAddObjectStore(
-		store => store,
-	);
 
 	// const token = Cookies.get(TOKEN);
 	// const token = hasMapAccess(Number(map));
-	const token = checkMapAccess(Number(map)).hasMapAccess;
+	// Number(map)
+	const token = checkMapAccess(dataMap?.map || null).hasMapAccess;
 
 	const onClick = useCallback(
 		(id: number) => {

@@ -1,3 +1,4 @@
+import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 
 import Input from '@/components/ui/input/Input';
@@ -15,11 +16,15 @@ const BlockParam: FC<IBlockParam> = ({
 	functions,
 	inputValue,
 	absoluteOptionsForSelect,
+	forUrl,
+	inputErrorValid,
 }) => {
 	const formatOptions = select?.optionsSelect?.map((el, ind) => ({
 		item_name: el,
 		item_id: ind,
 	}));
+	const pathname = usePathname();
+	const isSettings = pathname === '/settings-map';
 
 	return (
 		<div className={styles.wrapper_filterBlock}>
@@ -42,9 +47,30 @@ const BlockParam: FC<IBlockParam> = ({
 							width: 'calc(300/1920*100vw)',
 							height: 'calc(40/1920*100vw)',
 							backgroundColor: colors.white,
+							paddingRight: isSettings ? 'calc(16/1920*100vw)' : undefined,
+							border:
+								forUrl?.url === 'valid'
+									? '1px solid green'
+									: forUrl?.url === 'invalid'
+										? '1px solid red'
+										: undefined,
 						}}
-						styleInput={{ height: '100%', fontSize: '1rem' }}
+						styleInput={{
+							height: '100%',
+							fontSize: '1rem',
+							width: '100%',
+						}}
 					/>
+				)}
+				{forUrl?.url === 'invalid' && (
+					<span
+						style={{
+							color: colors.red,
+							fontSize: '0.8rem',
+						}}
+					>
+						Такой URL уже занят. {inputErrorValid}
+					</span>
 				)}
 			</div>
 		</div>

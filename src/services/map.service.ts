@@ -31,6 +31,7 @@ export const mapService = {
 					bounds: '[[null, null], [null, null]]',
 					clastering: 0,
 					canvas_map: 0,
+					map: 0,
 					icons_ref: '',
 					color_ref: '',
 					icons: {
@@ -80,6 +81,7 @@ export const mapService = {
 					bounds: '[[null, null], [null, null]]',
 					clastering: 0,
 					canvas_map: 0,
+					map: 0,
 					icons_ref: '',
 					color_ref: '',
 					icons: { null: 'null' },
@@ -106,6 +108,7 @@ export const mapService = {
 					bounds: '[[null, null], [null, null]]',
 					clastering: 0,
 					canvas_map: 0,
+					map: 0,
 					icons_ref: '',
 					color_ref: '',
 					icons: {
@@ -155,6 +158,7 @@ export const mapService = {
 					bounds: '[[null, null], [null, null]]',
 					clastering: 0,
 					canvas_map: 0,
+					map: 0,
 					icons_ref: '',
 					color_ref: '',
 					icons: { null: 'null' },

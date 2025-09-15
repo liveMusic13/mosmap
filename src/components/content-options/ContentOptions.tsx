@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { FC, useRef } from 'react';
 
 import QueryProvider from '@/providers/QueryProvider';
@@ -18,23 +18,13 @@ import styles from './ContentOptions.module.scss';
 import BlockOptions from './block-options/BlockOptions';
 
 const ContentOptions: FC<IContentOptions> = ({ title }) => {
-	const router = useRouter();
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 
 	const blockOptionsRef = useRef<{ attemptNavigateBack: () => void }>(null);
 
 	const isBurgerMenu = useBurgerMenuStore(store => store.isBurgerMenu);
-
-	const handleBack = () => router.push(`/?map=${map}`);
-
-	console.log(
-		'	blockOptionsRef.current?.attemptNavigateBack',
-		blockOptionsRef.current,
-	);
 
 	return (
 		<QueryProvider>

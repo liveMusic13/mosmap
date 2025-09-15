@@ -7,8 +7,10 @@ import Checkbox from '@/components/ui/checkbox/Checkbox';
 import {
 	IItemFilter,
 	ISaveSettingsMapResponse,
+	TUrl,
 } from '@/types/requestData.types';
 
+import { useCheckUrl } from '@/hooks/useCheckUrl';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSaveEditingDataSettingsMap } from '@/hooks/useSaveEditingDataSettingsMap';
 import { useSaveSettingsMap } from '@/hooks/useSaveSettingsMap';
@@ -46,6 +48,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		'Размер значков': '',
 		'Радиус зоны в метрах для анализа местности:': '',
 		tiles_id: '',
+		'URL карты': '',
 	});
 	const [formStateCheck, setFormStateCheck] = useState<{
 		[key: string]: boolean;
@@ -56,6 +59,14 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		'Добавлять в карточку объекта анализ местности': false,
 	});
 	const [targetOption, setTargetOption] = useState<string>('');
+	const [isValidUrl, setIsValidUrl] = useState<TUrl>('standard');
+	const [errorText, setErrorText] = useState<string>('');
+
+	const {
+		data: data_url,
+		isSuccess: isSuccess_url,
+		isError: isError_url,
+	} = useCheckUrl(formState['URL карты']);
 
 	const findTargetSelect =
 		(data as ISaveSettingsMapResponse)?.tiles_list.find(
@@ -105,6 +116,21 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		}
 	}, [isSuccess_save, data_save]);
 
+	// Отслеживаем изменения результата проверки
+	useEffect(() => {
+		if (isSuccess_url && data_url) {
+			const status =
+				data_url.data.exists === 1
+					? 'valid'
+					: data_url.data.exists === 0
+						? 'invalid'
+						: 'standard';
+			setIsValidUrl(status);
+		} else if (isError_url) {
+			setIsValidUrl('invalid');
+		}
+	}, [isSuccess_url, data_url, isError_url]);
+
 	const handleChangeCheckbox = (name: string) => {
 		setFormStateCheck(prevState => ({
 			...prevState,
@@ -112,10 +138,49 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		}));
 		onDirtyChange(true);
 	};
+
+	const validateUrlInput = (
+		value: string,
+	): { isValid: boolean; error: string } => {
+		if (value.length > 250) {
+			return { isValid: false, error: 'Слишком длинный URL' };
+		}
+
+		// Базовая валидация URL символов
+		const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
+		if (value && !urlPattern.test(value)) {
+			return { isValid: false, error: 'Недопустимые символы в URL' };
+		}
+
+		return { isValid: true, error: '' };
+	};
+
 	const onChangeInputs = (e: ChangeEvent<HTMLInputElement>, name: string) => {
 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
 		onDirtyChange(true);
 	};
+	const onChangeInputsURL = async (
+		e: ChangeEvent<HTMLInputElement>,
+		name: string,
+	) => {
+		const value = e.target.value;
+		const { isValid, error } = validateUrlInput(value);
+
+		if (isValid) {
+			setFormState(prev => ({ ...prev, [name]: e.target.value }));
+			// Скрываем ошибку
+			setIsValidUrl('standard');
+		} else {
+			// Показываем ошибку визуально
+			setIsValidUrl('invalid');
+			// Можно также показать текст ошибки
+			console.log('Ошибка ввода:', error);
+			setErrorText(error);
+		}
+
+		onDirtyChange(true);
+	};
+
 	const onCallbackSelect = useCallback((el: IItemFilter | null) => {
 		if (!el) return;
 		setTargetOption(el.item_name);
@@ -224,7 +289,9 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 							field='input'
 							title={field}
 							inputValue={formState[field]}
-							functions={{ input: e => onChangeInputs(e, field) }}
+							functions={{
+								input: e => onChangeInputs(e, field),
+							}}
 						/>
 					))}
 					{arrayCheckboxName.map((checkbox, ind) => (
@@ -250,6 +317,21 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 								),
 						}}
 					/>
+
+					<BlockParam
+						field='input'
+						title={'URL карты'}
+						inputValue={formState['URL карты']}
+						inputErrorValid={errorText}
+						functions={{ input: e => onChangeInputsURL(e, 'URL карты') }}
+						forUrl={{
+							url: isValidUrl,
+							func: () => {
+								setIsValidUrl('standard');
+							},
+						}}
+					/>
+
 					<ChangePassword />
 					<BlockParam
 						field='select'

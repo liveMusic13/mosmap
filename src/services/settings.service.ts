@@ -190,4 +190,18 @@ export const settingsService = {
 			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
+
+	check_url: async (url: string): Promise<IApiResponse<{ exists: number }>> => {
+		try {
+			const response = await $axios.post(`/api/check_url.php`, { url: url });
+
+			return {
+				status: response.status,
+				data: response.data,
+			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
+		}
+	},
 };

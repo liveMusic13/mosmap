@@ -44,7 +44,6 @@ const BlockOptions: FC<IBlockOptions> = forwardRef((_, ref) => {
 	const [isDirty, setIsDirty] = useState(false);
 	const [saveFn, setSaveFn] = useState<(() => Promise<void>) | null>(null);
 
-	const handleBack = () => router.back();
 	const attemptNavigateBack = () => {
 		console.log('click');
 
@@ -103,8 +102,6 @@ const BlockOptions: FC<IBlockOptions> = forwardRef((_, ref) => {
 	useImperativeHandle(ref, () => ({
 		attemptNavigateBack,
 	}));
-
-	console.log('is', isDirty);
 
 	return (
 		<div className={styles.wrapper_options}>

@@ -61,6 +61,7 @@ export const renameKeys = (obj: {
 		'Описание карты': 'descr',
 		'Размер значков': 'iconsize',
 		'Радиус зоны в метрах для анализа местности:': 'radius',
+		'URL карты': 'url',
 	};
 
 	return Object.keys(obj).reduce(

@@ -33,15 +33,15 @@
 	font-weight: 500;
 	font-size: 1.42rem;
 	color: vars.$green;
-	transition: font-size 0.3s ease;
+	// transition: font-size 0.3s ease;
 
-	&:hover {
-		font-size: 1.5rem;
+	// &:hover {
+	// 	font-size: 1.5rem;
 
-		@media (max-width: 767.98px) {
-			font-size: 1.42rem;
-		}
-	}
+	// 	@media (max-width: 767.98px) {
+	// 		font-size: 1.42rem;
+	// 	}
+	// }
 }
 
 .icon_svg {

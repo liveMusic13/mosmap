@@ -76,14 +76,15 @@
 	> button {
 		@media (min-width: 767.98px) {
 			transition:
-				width 0.3s ease,
-				height 0.3s ease,
-				font-size 0.3s ease;
+				background-color 0.3s ease,
+				color 0.3s ease;
 
 			&:hover {
-				width: func.adapt(96px, 1920px) !important;
-				height: func.adapt(44px, 1920px) !important ;
-				font-size: 1.2rem !important;
+				background-color: vars.$green !important;
+				color: vars.$white !important;
+				// width: func.adapt(96px, 1920px) !important;
+				// height: func.adapt(44px, 1920px) !important ;
+				// font-size: 1.2rem !important;
 			}
 		}
 	}

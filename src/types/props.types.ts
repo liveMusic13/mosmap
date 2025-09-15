@@ -22,6 +22,7 @@ import {
 	INumAndSloiFieldsObject,
 	IRegistrResponse,
 	IValuesObjectInfo,
+	TUrl,
 } from './requestData.types';
 
 export interface IButton extends PropsWithChildren {
@@ -67,6 +68,7 @@ export interface IInput {
 	type: string;
 	value: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	onBlur?: any;
 	callback?: () => void;
 	placeholder?: string;
 	styleInput?: CSSProperties;
@@ -212,6 +214,8 @@ export interface IBlockParam {
 		input?: (e: ChangeEvent<HTMLInputElement>) => void;
 	};
 	absoluteOptionsForSelect?: boolean;
+	forUrl?: { url: TUrl; func: any };
+	inputErrorValid?: string;
 }
 
 export interface IRowDatabaseOptions {

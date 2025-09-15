@@ -38,6 +38,7 @@ export interface IDataMap {
 	canvas_map: number;
 	icons_ref: string;
 	color_ref: string;
+	map: number;
 	icons: {
 		[key: string]: string;
 	};
@@ -154,6 +155,7 @@ export interface ISaveSettingsMapResponse {
 	showhouses: string;
 	tiles_id: string;
 	title: string;
+	url: string;
 	tiles_list: {
 		name: string;
 		id: string;
@@ -249,3 +251,5 @@ export interface IAllFieldsResponse {
 	color?: number;
 	icon?: number;
 }
+
+export type TUrl = 'valid' | 'invalid' | 'standard';
