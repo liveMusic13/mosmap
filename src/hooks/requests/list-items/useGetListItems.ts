@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 
+import { ACTUAL_MAP } from '@/app.constants';
 import { settingsService } from '@/services/settings.service';
 
 export const useGetListItems = (
@@ -9,7 +11,9 @@ export const useGetListItems = (
 	column: string,
 ) => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || '';
+
 	// const itemsString = JSON.stringify(editListData);
 
 	const query = useQuery({

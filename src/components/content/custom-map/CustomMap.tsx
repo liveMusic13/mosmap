@@ -14,6 +14,8 @@ import { useCenterMapStore, useSelectAreaStore } from '@/store/store';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSelectArea } from '@/hooks/useSelectArea';
 
+import { getQueryString } from '@/utils/url';
+
 import CanvasMarkersLayer from './CanvasMarkersLayer';
 import ControlledPopup from './ControlledPopup';
 import styles from './CustomMap.module.scss';
@@ -29,9 +31,26 @@ import UpdateMapSettings from './UpdateMapSettings';
 import ZoomTracker from './ZoomTracker';
 
 const CustomMap: FC<ICustomMap> = () => {
+	// const map = Cookies.get(ACTUAL_MAP);
+
 	const searchParams = useSearchParams();
+	const queryString = getQueryString(searchParams); // включает map параметр
 	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
+	// const searchParams = useSearchParams();
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
+
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
 
 	const centerMap = useCenterMapStore(store => store.centerMap);

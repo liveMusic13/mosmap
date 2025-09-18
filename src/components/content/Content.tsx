@@ -2,7 +2,6 @@
 
 import 'leaflet-draw/dist/leaflet.draw.css';
 import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, useCallback, useEffect, useState } from 'react';
 
 import QueryProvider from '@/providers/QueryProvider';
@@ -76,9 +75,6 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	useEffect(() => {
 		setMounted(true);
 	}, []);
-
-	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
 
 	const windowSize = useCheckWidth();
 	const isMobile = mounted ? windowSize <= 767 : false; //HELP: Делаем эту часть + динамический импорты для списка и фильтров, что не выдавало ошибок гидратации при использовании условий зависящих от размера экрана при обращении к window на сервере

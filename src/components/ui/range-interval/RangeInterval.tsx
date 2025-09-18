@@ -14,7 +14,7 @@ import Button from '../button/Button';
 
 import styles from './RangeInterval.module.scss';
 import InputGroup from './input-group/InputGroup';
-import { TOKEN } from '@/app.constants';
+import { ACTUAL_MAP, TOKEN } from '@/app.constants';
 
 const RangeInterval: FC<IRangeIntervalProps> = ({
 	intervalsObject,
@@ -23,7 +23,9 @@ const RangeInterval: FC<IRangeIntervalProps> = ({
 	isValidTargetValues,
 }) => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
+
 	const { values: intervals, min_value, max_value } = intervalsObject;
 	const token = Cookies.get(TOKEN);
 

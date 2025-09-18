@@ -19,16 +19,34 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
+import { getQueryString } from '@/utils/url';
 
 import styles from './Options.module.scss';
 import { colors } from '@/app.constants';
 import { settingsArr, standardArr } from '@/data/options.data';
 
 const Options: FC = () => {
+	// const map = Cookies.get(ACTUAL_MAP);
+
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// //HELP: Преобразование searchParams в строку
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
+	// const searchParams = useSearchParams();
+	const queryString = getQueryString(searchParams); // включает map параметр
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
 
 	const { data: dataMap } = useGetDataMap(queryString);
 

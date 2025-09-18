@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FC, useEffect, useRef, useState } from 'react';
 
@@ -19,7 +20,7 @@ import { getType } from '@/utils/database';
 import styles from './DataBaseOptions.module.scss';
 import IconAndColorSettings from './icon-and-color-settings/IconAndColorSettings';
 import RowDatabaseOptions from './row-database-options/RowDatabaseOptions';
-import { colors } from '@/app.constants';
+import { ACTUAL_MAP, colors } from '@/app.constants';
 import { arrColumn } from '@/data/database.data';
 
 type Props = {
@@ -47,7 +48,9 @@ const DatabaseOptions: FC<Props> = ({
 }) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	const mapQuery = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || mapQuery || null;
+
 	const windowSize = useCheckWidth();
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => {

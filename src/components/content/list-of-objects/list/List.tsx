@@ -1,8 +1,9 @@
 'use client';
 
+import Cookies from 'js-cookie';
 import { LatLngExpression } from 'leaflet';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Ref, forwardRef, memo } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -20,7 +21,7 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetObjectInfo } from '@/hooks/useGetObjectInfo';
 
 import styles from './List.module.scss';
-import { colors } from '@/app.constants';
+import { ACTUAL_MAP, colors } from '@/app.constants';
 
 const List = memo(
 	forwardRef(
@@ -29,8 +30,7 @@ const List = memo(
 			ref: Ref<HTMLDivElement>,
 		) => {
 			const router = useRouter();
-			const searchParams = useSearchParams();
-			const map = searchParams.get('map');
+			const map = Cookies.get(ACTUAL_MAP) || null;
 			const windowSize = useCheckWidth();
 			const isMobile = windowSize <= 767;
 

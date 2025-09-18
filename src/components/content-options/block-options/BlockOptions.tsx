@@ -1,6 +1,7 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { usePathname, useRouter } from 'next/navigation';
 import { FC, forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
@@ -17,11 +18,11 @@ import ExportOptions from './export-options/ExportOptions';
 import ImportDoneOptions from './import-done-options/ImportDoneOptions';
 import ImportOptions from './import-options/ImportOptions';
 import SettingsOptions from './settings-options/SettingsOptions';
+import { ACTUAL_MAP } from '@/app.constants';
 
 const BlockOptions: FC<IBlockOptions> = forwardRef((_, ref) => {
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
 	const router = useRouter();
 	const title_text =
 		pathname === '/import'

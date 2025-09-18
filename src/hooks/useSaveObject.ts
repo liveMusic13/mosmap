@@ -1,15 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 
 import { IMarker } from '@/types/requestData.types';
 
 import { useIdObjectInfoStore } from '@/store/store';
 
+import { ACTUAL_MAP } from '@/app.constants';
 import { mapService } from '@/services/map.service';
 
 export const useSaveObject = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map') || '';
+	// const map = searchParams.get('map') || '';
+	const map = Cookies.get(ACTUAL_MAP) || '';
+
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 
 	return useMutation({

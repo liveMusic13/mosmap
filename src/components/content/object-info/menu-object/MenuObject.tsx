@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { LatLngExpression } from 'leaflet';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, memo } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -15,18 +15,36 @@ import {
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
+import { getQueryString } from '@/utils/url';
+
 import styles from './MenuObject.module.scss';
 import { TOKEN, colors } from '@/app.constants';
 import { arrMenuObject } from '@/data/menuObject.data';
 
 const MenuObject: FC = memo(() => {
+	// const map = Cookies.get(ACTUAL_MAP);
 	const token = Cookies.get(TOKEN);
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const isMobile_mini = windowSize <= 481;
+	const pathname = usePathname(); // "/map/renovation"
 	const searchParams = useSearchParams();
-	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
+	// const searchParams = useSearchParams();
+	// //HELP: Преобразование searchParams в строку
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const queryString = getQueryString(searchParams); // включает map параметр
+
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);

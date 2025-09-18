@@ -36,6 +36,7 @@ import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemove
 import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
+import { getMapId, getQueryString } from '@/utils/url';
 
 import styles from './ObjectInfo.module.scss';
 import InfoBlock from './info-block/InfoBlock';
@@ -68,10 +69,27 @@ const ObjectInfo: FC = () => {
 	const { isPopup, setIsPopup, setMessageInPopup, messageInPopup } =
 		usePopupStore(store => store);
 
+	// const searchParams = useSearchParams();
+	// const map = Cookies.get(ACTUAL_MAP) || null;
+	// //HELP: Преобразование searchParams в строку
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
-	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const queryString = getQueryString(searchParams); // включает map параметр
+
+	// const map = searchParams.get('map');
+	const map = getMapId(searchParams); // работает с SEO URL
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
 
 	const {
 		refetch: refetch_getDataMap,

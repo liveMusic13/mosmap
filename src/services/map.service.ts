@@ -47,7 +47,6 @@ export const mapService = {
 				},
 			};
 		}
-
 		try {
 			const response: AxiosResponse<IDataMap> = await $axios.get(
 				`/api/get_objects.php?map=${mapParam}`,

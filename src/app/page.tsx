@@ -9,8 +9,8 @@ export const revalidate = 200;
 export async function generateMetadata() {
 	//HELP: Доступ к параметрам из cookies
 	const cookieStore = cookies();
-	// const mapParam = (await cookieStore).get('map')?.value || '7';
-	const mapParam = (await cookieStore).get('map')?.value || null;
+	const mapParam = (await cookieStore).get('map')?.value || '7';
+	// const mapParam = (await cookieStore).get(ACTUAL_MAP)?.value || null;
 
 	//HELP: Получение данных
 	const { data: dataMap } = await mapService.getObjectISR(mapParam);

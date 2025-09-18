@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 
+import { ACTUAL_MAP } from '@/app.constants';
 import { settingsService } from '@/services/settings.service';
 
 export const useListItems = (
@@ -8,7 +10,9 @@ export const useListItems = (
 	items: { id: number; name: string }[],
 ) => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
+
 	const itemsString = JSON.stringify(items);
 
 	const mutate = useMutation({

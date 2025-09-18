@@ -3,13 +3,37 @@ import { FC } from 'react';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
+import { getMapId, getQueryString } from '@/utils/url';
+
 import styles from './Content.module.scss';
 
 const TitleContent: FC = () => {
+	// const map = Cookies.get(ACTUAL_MAP);
 	const searchParams = useSearchParams();
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const map = searchParams.get('map');
+	const map = getMapId(searchParams);
+	const queryString = getQueryString(searchParams); // включает map параметр
+	console.log('test map', map);
+
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
+	// const searchParams = useSearchParams();
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
 
 	const { data } = useGetDataMap(queryString);
+	// const { data } = useGetDataMap(resultQuery);
+
+	// const { data: data_test } = useTest();
 
 	return <h1 className={styles.title}>{data?.title}</h1>;
 };

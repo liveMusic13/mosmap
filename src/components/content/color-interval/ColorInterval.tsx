@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 
@@ -15,14 +14,18 @@ import { useSuccessSaveColorsIntervalStore } from '@/store/store';
 import { useGetColorInterval } from '@/hooks/useGetColorInterval';
 import { useGetColorMap } from '@/hooks/useGetColorMap';
 
+import { getMapId } from '@/utils/url';
+
 import styles from './ColorInterval.module.scss';
 import BlockIntervalParam from './block-interval-param/BlockIntervalParam';
-import { TOKEN } from '@/app.constants';
 
 const ColorInterval: FC = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
-	const token = Cookies.get(TOKEN);
+	const mapQuery = searchParams.get('map');
+	// const map = Cookies.get(ACTUAL_MAP) || mapQuery || null;
+	const map = getMapId(searchParams); // работает с SEO URL
+
+	// const token = Cookies.get(TOKEN);
 
 	const { data, isLoading, isSuccess } = useGetColorInterval(map);
 

@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import { Polygon } from 'react-leaflet';
@@ -11,11 +12,14 @@ import {
 
 import { useGetColorMap } from '@/hooks/useGetColorMap';
 
+import { ACTUAL_MAP } from '@/app.constants';
+
 //TODO: Я сделал чтобы при переходе на главную колор мап отправлялся, теперь осталось придумать как будет отображаться. Т.к. в пк версии логика в том что пока активно окно закраски, отображается закраска районов, а при закрытии окна выключается. А на мобильной версии у меня отображается на отдельной странице окно закраски, поэтому надо придумать логику для мобильной версии по которой будет отображаться закраска районов
 
 const RenderColorMap: FC = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
 	const sloiValue = searchParams.get('Слой карты');
 	const modeValue = searchParams.get('Способ раскраски');
 	const numFieldValue = searchParams.get('Числовое поле');

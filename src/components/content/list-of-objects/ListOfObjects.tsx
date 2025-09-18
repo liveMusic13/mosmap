@@ -18,6 +18,7 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { isMarkerInsidePolygon } from '@/utils/markersInsidePolygon';
+import { getQueryString } from '@/utils/url';
 
 import styles from './ListOfObjects.module.scss';
 import List from './list/List';
@@ -27,9 +28,26 @@ const ListOfObjects: FC = () => {
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const searchParams = useSearchParams();
-	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const map = Cookies.get(ACTUAL_MAP);
+	// //HELP: Преобразование searchParams в строку
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const queryString = getQueryString(searchParams); // включает map параметр
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
+	// const searchParams = useSearchParams();
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
+
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
+	console.log('in list', queryString, data);
 
 	const { arrayPolygons, indexTargetPolygon } = useMapLayersStore(
 		store => store,

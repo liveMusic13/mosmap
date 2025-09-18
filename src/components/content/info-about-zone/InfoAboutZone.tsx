@@ -24,16 +24,18 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSaveObject } from '@/hooks/useSaveObject';
 import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemoveMarker';
 
+import { getMapId, getQueryString } from '@/utils/url';
+
 import styles from './InfoAboutZone.module.scss';
 import InfoZone from './info-zone/InfoZone';
 import { TOKEN, colors } from '@/app.constants';
 
-//TODO: Проверить смогу ли я сюда попап добавить из информации об объекте, чтобы он выводился при сохранении новых координат
 const InfoAboutZone: FC = () => {
 	const windowSize = useCheckWidth();
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	const map = getMapId(searchParams); // работает с SEO URL
+
 	const token = Cookies.get(TOKEN);
 	const isMobile = windowSize <= 767;
 
@@ -52,8 +54,22 @@ const InfoAboutZone: FC = () => {
 
 	const { isPopup, messageInPopup, setIsPopup } = usePopupStore(store => store);
 
-	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// //HELP: Преобразование searchParams в строку
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const queryString = getQueryString(searchParams); // включает map параметр
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
+
 	const { data: data_getDataMap } = useGetDataMap(queryString);
 	const { data, isSuccess, isLoading } = useDotInfo(coords);
 	const { mutate, isSuccess: isSuccess_save } = useSaveObject();

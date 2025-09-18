@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FC, useEffect } from 'react';
 
@@ -13,6 +14,7 @@ import { truncateDescription } from '@/utils/editTexts';
 import BlockParam from '../block-param/BlockParam';
 
 import styles from './ImportOptions.module.scss';
+import { ACTUAL_MAP } from '@/app.constants';
 
 const dataEncoding = ['Автоопределение', 'UTF-8', 'Windows-1251'];
 
@@ -20,7 +22,8 @@ const ImportOptions: FC = () => {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
 
 	const setNewCache = useQueryKeysForGetCacheDataStore(
 		store => store.setNewCache,

@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 
 import QueryProvider from '@/providers/QueryProvider';
@@ -33,8 +33,6 @@ const ContentMobile: FC<IContent> = ({ dataMap }) => {
 	const pathname = usePathname();
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
-	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
 
 	// useAuthGuard(() => hasMapAccess(Number(map)));
 	// useAuthGuard(() => checkMapAccess(Number(map)).hasValidToken);

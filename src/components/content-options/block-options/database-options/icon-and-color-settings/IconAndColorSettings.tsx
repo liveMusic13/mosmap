@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 
@@ -14,7 +15,7 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import styles from './IconAndColorSettings.module.scss';
 import ColorSettings from './color-settings/ColorSettings';
 import IconsSettings from './icons-settings/IconsSettings';
-import { colors } from '@/app.constants';
+import { ACTUAL_MAP, colors } from '@/app.constants';
 
 const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 	column,
@@ -24,7 +25,8 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
 	const [editListData, setEditListData] = useState<IListItemsResponse[]>([]);
 
 	const { data, isSuccess, isLoading, isError, refetch } = useGetListItems(

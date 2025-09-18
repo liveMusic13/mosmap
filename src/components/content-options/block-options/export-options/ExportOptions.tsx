@@ -9,6 +9,8 @@ import { IExportResponse } from '@/types/requestData.types';
 import { useExport } from '@/hooks/useExport';
 import { useImportExport } from '@/hooks/useImportExport';
 
+import { getMapId } from '@/utils/url';
+
 import BlockParam from '../block-param/BlockParam';
 
 import styles from './ExportOptions.module.scss';
@@ -18,7 +20,9 @@ const dataEncoding = ['UTF-8', 'Windows-1251'];
 
 const ExportOptions: FC = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	// const map = Cookies.get(ACTUAL_MAP) || null;
+	const map = getMapId(searchParams);
 
 	const {
 		separator,

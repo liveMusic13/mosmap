@@ -17,6 +17,8 @@ import { getIconForMarker } from '@/utils/iconForMarker';
 import { colors } from '@/app.constants';
 
 const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
+	if (!dataMap.points || dataMap.points.length === 0) return null;
+
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIsViewObjectInfo = useViewObjectAbdAreaInfoStore(
 		store => store.setIsViewObjectInfo,

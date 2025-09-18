@@ -13,6 +13,8 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useGetFilters } from '@/hooks/useGetFilters';
 
+import { getMapId, getQueryString } from '@/utils/url';
+
 import styles from './Filters.module.scss';
 import FilterBlock from './filter-block/FilterBlock';
 import FilterCalendar from './filter-calendar/FilterCalendar';
@@ -23,9 +25,26 @@ const Filters: FC = () => {
 	const isMobile = windowSize <= 767;
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
-	//HELP: Преобразование searchParams в строку
-	const queryString = new URLSearchParams(searchParams.toString()).toString();
+	// const map = searchParams.get('map');
+	const map = getMapId(searchParams); // работает с SEO URL
+
+	// const map = Cookies.get(ACTUAL_MAP) || null;
+
+	// //HELP: Преобразование searchParams в строку
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const queryString = getQueryString(searchParams); // включает map параметр
+	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
+	// const pathname = usePathname(); // "/map/renovation"
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
 
 	const { refetch } = useGetDataMap(queryString);
 

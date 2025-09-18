@@ -16,6 +16,7 @@ import { useSaveEditingDataSettingsMap } from '@/hooks/useSaveEditingDataSetting
 import { useSaveSettingsMap } from '@/hooks/useSaveSettingsMap';
 
 import { renameKeys } from '@/utils/formatData';
+import { getMapId, getQueryString } from '@/utils/url';
 
 import BlockParam from '../block-param/BlockParam';
 
@@ -31,7 +32,22 @@ type Props = {
 const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = Cookies.get(ACTUAL_MAP) || null;
+	// const pathname = usePathname(); // "/map/renovation"
+	const map = getMapId(searchParams); // работает с SEO URL
+
+	// const seoUrl = pathname.startsWith('/map/')
+	// 	? pathname.split('/map/')[1]
+	// 	: null;
+
+	// const queryString = searchParams.toString();
+
+	// const resultQuery = seoUrl
+	// 	? `?url=${seoUrl}&${queryString}`
+	// 	: `?${queryString}`;
+
+	// const queryString = new URLSearchParams(searchParams.toString()).toString();
+	const queryString = getQueryString(searchParams); // включает map параметр
 
 	const { data, isSuccess } = useSaveSettingsMap();
 	const {
@@ -40,7 +56,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		isSuccess: isSuccess_save,
 		data: data_save,
 	} = useSaveEditingDataSettingsMap();
-	const { refetch } = useGetDataMap(map);
+	const { refetch } = useGetDataMap(queryString);
 
 	const [formState, setFormState] = useState<{ [key: string]: string }>({
 		'Название карты': '',

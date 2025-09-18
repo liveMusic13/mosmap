@@ -14,6 +14,7 @@ import { getDecodedTokenData } from '@/utils/jwtTokenDecoder';
 import { $axios } from '@/api';
 import {
 	ACCESSIBLYMAP,
+	ACTUAL_MAP,
 	API_URL,
 	TOKEN,
 	USER_LOGIN,
@@ -35,6 +36,7 @@ export const authService = {
 			if (data.access_token) {
 				Cookies.set(TOKEN, data.access_token);
 				Cookies.set(ACCESSIBLYMAP, data.user);
+				Cookies.set(ACTUAL_MAP, data.user);
 				router.push(`/?map=${data.user}`);
 				const decoderTokenData = getDecodedTokenData(TOKEN);
 

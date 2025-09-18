@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 
@@ -8,11 +9,13 @@ import { useNewpass } from '@/hooks/useNewpass';
 
 import BlockParam from '../../block-param/BlockParam';
 
+import { ACTUAL_MAP } from '@/app.constants';
 import { arrFields } from '@/data/changePassword.data';
 
 const ChangePassword: FC = () => {
 	const searchParams = useSearchParams();
-	const map = searchParams.get('map');
+	// const map = searchParams.get('map');
+	const map = Cookies.get(ACTUAL_MAP) || null;
 
 	const [valueFields, setValueFields] = useState<{
 		['Новый пароль:']: string;
