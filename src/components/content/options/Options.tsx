@@ -19,7 +19,7 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
-import { getQueryString } from '@/utils/url';
+import { getMapId, getQueryString } from '@/utils/url';
 
 import styles from './Options.module.scss';
 import { colors } from '@/app.constants';
@@ -27,9 +27,9 @@ import { settingsArr, standardArr } from '@/data/options.data';
 
 const Options: FC = () => {
 	// const map = Cookies.get(ACTUAL_MAP);
-
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const map = getMapId(searchParams);
 	// //HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 
@@ -66,7 +66,7 @@ const Options: FC = () => {
 	// const token = Cookies.get(TOKEN);
 	// const token = hasMapAccess(Number(map));
 	// Number(map)
-	const token = checkMapAccess(dataMap?.map || null).hasMapAccess;
+	const token = checkMapAccess(Number(map) || null).hasMapAccess;
 
 	const onClick = useCallback(
 		(id: number) => {
