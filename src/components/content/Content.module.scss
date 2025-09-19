@@ -88,18 +88,21 @@
 .icon_svg {
 	width: func.adapt(27px, 1920px);
 	height: func.adapt(27px, 1920px);
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+	// transition:
+	// 	width 0.3s ease,
+	// 	height 0.3s ease;
 
+	// &:hover {
+	// 	width: func.adapt(30px, 1920px);
+	// 	height: func.adapt(30px, 1920px);
+
+	// 	@media (max-width: 767.98px) {
+	// 		width: func.adapt(29px, 480px);
+	// 		height: func.adapt(29px, 480px);
+	// 	}
+	// }
 	&:hover {
-		width: func.adapt(30px, 1920px);
-		height: func.adapt(30px, 1920px);
-
-		@media (max-width: 767.98px) {
-			width: func.adapt(29px, 480px);
-			height: func.adapt(29px, 480px);
-		}
+		box-shadow: 0px 0px 2px 2px vars.$green_light;
 	}
 
 	@media (max-width: 767.98px) {

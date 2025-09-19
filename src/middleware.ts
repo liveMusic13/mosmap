@@ -92,10 +92,10 @@ async function getMapData(
 ): Promise<{ url?: string; map?: string } | null> {
 	try {
 		const authToken = req.cookies.get(TOKEN)?.value;
-		if (!authToken) {
-			console.error('No auth token found in cookies');
-			return null;
-		}
+		// if (!authToken) {
+		// 	// console.error('No auth token found in cookies');
+		// 	return null;
+		// }
 
 		// Используем переменную окружения для API URL
 		const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/get_objects.php?map=${mapId}`;
@@ -131,10 +131,10 @@ async function getMapIdByUrl(
 ): Promise<string | null> {
 	try {
 		const authToken = req.cookies.get(TOKEN)?.value;
-		if (!authToken) {
-			console.error('No auth token found in cookies');
-			return null;
-		}
+		// if (!authToken) {
+		// 	console.error('No auth token found in cookies');
+		// 	return null;
+		// }
 		// Используем переменную окружения для API URL
 		const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/get_objects.php?url=${seoSlug}`;
 

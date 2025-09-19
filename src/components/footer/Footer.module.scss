@@ -82,7 +82,8 @@
 	transition: font-size 0.3s ease;
 
 	&:hover {
-		font-size: 1.2rem;
+		// font-size: 1.2rem;
+		color: vars.$black;
 	}
 
 	@media (max-width: 767.98px) {
@@ -112,7 +113,8 @@
 	transition: font-size 0.3s ease;
 
 	&:hover {
-		font-size: 1.2rem;
+		// font-size: 1.2rem;
+		color: vars.$black;
 	}
 }
 
