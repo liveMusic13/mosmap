@@ -26,6 +26,7 @@ export const updateUrlParams = (newParams: Record<string, string | null>) => {
 export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 	// Сначала пробуем получить из query параметров
 	const mapFromQuery = searchParams.get('map');
+	console.log('searchParams', searchParams);
 	if (mapFromQuery) {
 		return mapFromQuery;
 	}
