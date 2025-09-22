@@ -164,7 +164,13 @@ const Options: FC = () => {
 		}
 	};
 
-	console.log('token', token);
+	console.log(
+		'token',
+		token,
+		checkMapAccess(Number(map) || null),
+		Number(map),
+		map,
+	);
 
 	return (
 		<div className={styles.block__options}>
