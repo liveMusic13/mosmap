@@ -170,7 +170,8 @@ const Options: FC = () => {
 				{standardArr.map(opt => {
 					const isDisabled =
 						((opt.id === 0 || opt.id === 1) && !token) ||
-						(opt.id === 4 && (!token || view !== 'objectInfo'));
+						(opt.id === 4 &&
+							(!token || (view !== 'objectInfo' && view !== 'zoneInfo')));
 
 					return (
 						<Button

@@ -105,6 +105,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 					data as ISaveSettingsMapResponse
 				).radius,
 				['tiles_id']: (data as ISaveSettingsMapResponse).tiles_id,
+				['URL карты']: (data as ISaveSettingsMapResponse).url,
 			};
 
 			checkboxState = {
@@ -138,7 +139,8 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 			const status =
 				data_url.data.exists === 1
 					? 'valid'
-					: data_url.data.exists === 0
+					: data_url.data.exists === 0 &&
+						  formState['URL карты'] !== (data as ISaveSettingsMapResponse).url
 						? 'invalid'
 						: 'standard';
 			setIsValidUrl(status);
