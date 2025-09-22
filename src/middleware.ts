@@ -138,6 +138,8 @@ async function getMapIdByUrl(
 		// Используем переменную окружения для API URL
 		const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/get_objects.php?url=${seoSlug}`;
 
+		console.log('midlvar', process.env.NEXT_PUBLIC_API_URL);
+
 		const headers: HeadersInit = {
 			'Content-Type': 'application/json',
 			'Access-Token': `${authToken}`,
