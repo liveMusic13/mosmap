@@ -37,6 +37,8 @@ export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
 
 		if (mapCookie) {
+			console.log('mapCookie.split', mapCookie.split('=')[1]);
+
 			return mapCookie.split('=')[1];
 		}
 	}
