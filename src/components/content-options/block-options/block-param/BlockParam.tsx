@@ -69,7 +69,9 @@ const BlockParam: FC<IBlockParam> = ({
 							fontSize: '0.8rem',
 						}}
 					>
-						Такой URL уже занят. {inputErrorValid}
+						Ошибка! Либо URL уже занят либо {inputErrorValid}. Доступные символы
+						a-z 0-9
+						{/* Такой URL уже занят. {inputErrorValid} */}
 					</span>
 				)}
 			</div>

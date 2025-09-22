@@ -161,13 +161,13 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		value: string,
 	): { isValid: boolean; error: string } => {
 		if (value.length > 250) {
-			return { isValid: false, error: 'Слишком длинный URL' };
+			return { isValid: false, error: 'слишком длинный URL' };
 		}
 
 		// Базовая валидация URL символов
 		const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
 		if (value && !urlPattern.test(value)) {
-			return { isValid: false, error: 'Недопустимые символы в URL' };
+			return { isValid: false, error: 'недопустимые символы в URL' };
 		}
 
 		return { isValid: true, error: '' };

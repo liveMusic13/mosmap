@@ -164,6 +164,8 @@ const Options: FC = () => {
 		}
 	};
 
+	console.log('token', token);
+
 	return (
 		<div className={styles.block__options}>
 			<div className={styles.one}>

@@ -105,10 +105,11 @@
 	}
 
 	&:hover {
-		@media (min-width: 767.98px) {
-			cursor: pointer;
-			width: func.adapt(30px, 1920px);
-			height: func.adapt(30px, 1920px);
-		}
+		cursor: pointer;
+		// @media (min-width: 767.98px) {
+		// 	cursor: pointer;
+		// 	width: func.adapt(30px, 1920px);
+		// 	height: func.adapt(30px, 1920px);
+		// }
 	}
 }

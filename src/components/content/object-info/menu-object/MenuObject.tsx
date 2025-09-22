@@ -108,7 +108,9 @@ const MenuObject: FC = memo(() => {
 						position: 'relative',
 					}}
 					onClick={() => onClick(el.id)}
-					disabled={!token && el.id === 1}
+					disabled={
+						(!token && el.id === 1) || el.id === 2 || el.id === 3 || el.id === 4
+					}
 				>
 					<svg className={styles.icon_svg} style={personActiveStyle(el.id)}>
 						<use xlinkHref={`/images/icons/sprite.svg#${el.src}`}></use>
