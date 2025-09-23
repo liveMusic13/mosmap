@@ -1,7 +1,6 @@
-import { Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useSearchParams } from 'next/navigation';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect } from 'react';
 import { FeatureGroup, MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { EditControl } from 'react-leaflet-draw';
@@ -84,12 +83,6 @@ const CustomMap: FC<ICustomMap> = () => {
 				'Нажмите первую точку, чтобы завершить область';
 		}
 	}, []);
-
-	const mapRef = useRef<Map | null>(null);
-	useEffect(
-		() => console.log('center', centerMap, mapRef.current),
-		[centerMap, mapRef],
-	);
 
 	return (
 		isSuccess && (

@@ -105,8 +105,6 @@ const InfoAboutZone: FC = () => {
 		setIsRemoveMarker(false);
 	}, [data_getDataMap, idObjectInfo]);
 
-	console.log('data', data);
-
 	return (
 		<div className={styles.wrapper__infoAboutZone}>
 			{isPopup && (

@@ -15,7 +15,6 @@ export const useGetSizeMarker = () => {
 				Number(sizeData || 22),
 				Number(sizeData || 22),
 			];
-			console.log('size icon', arrSize, sizeData, data);
 			setSize(arrSize);
 		}
 	}, [data, isSuccess]);
