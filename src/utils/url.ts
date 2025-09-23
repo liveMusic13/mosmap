@@ -39,7 +39,7 @@ export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 		const cookies = document.cookie.split(';');
 		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
 		const decodedToken = JSON.parse(Cookies.get(DECODED_TOKEN) || '{}');
-		console.log('заходит в проверку');
+		console.log('заходит в проверку', cookies);
 
 		if (mapCookie) {
 			console.log('mapCookie.split', mapCookie.split('=')[1]);
