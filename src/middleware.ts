@@ -19,6 +19,8 @@
 // };
 import { NextRequest, NextResponse } from 'next/server';
 
+import { TOKEN } from './app.constants';
+
 export async function middleware(req: NextRequest) {
 	const url = req.nextUrl;
 	const pathname = url.pathname;
@@ -45,6 +47,17 @@ export async function middleware(req: NextRequest) {
 			sameSite: 'lax',
 		});
 		console.log('Middleware - SET cookie map:', mapParam);
+	}
+
+	if (mapParam && pathname === '/') {
+		// Получаем данные для этой карты чтобы проверить наличие URL
+		const mapData = await getMapData(mapParam, req);
+
+		if (mapData?.url) {
+			// ЗДЕСЬ НАСТОЯЩИЙ 301 редирект на SEO URL
+			const seoUrl = new URL(`/map/${mapData.url}`, req.url);
+			return NextResponse.redirect(seoUrl, 301);
+		}
 	}
 
 	return res;
@@ -165,44 +178,44 @@ export const config = {
 // 	return res;
 // }
 
-// // Функция для получения данных карты (включая URL)
-// async function getMapData(
-// 	mapId: string,
-// 	req: NextRequest,
-// ): Promise<{ url?: string; map?: string } | null> {
-// 	try {
-// 		const authToken = req.cookies.get(TOKEN)?.value;
-// 		// if (!authToken) {
-// 		// 	// console.error('No auth token found in cookies');
-// 		// 	return null;
-// 		// }
+// Функция для получения данных карты (включая URL)
+async function getMapData(
+	mapId: string,
+	req: NextRequest,
+): Promise<{ url?: string; map?: string } | null> {
+	try {
+		const authToken = req.cookies.get(TOKEN)?.value;
+		// if (!authToken) {
+		// 	// console.error('No auth token found in cookies');
+		// 	return null;
+		// }
 
-// 		// Используем переменную окружения для API URL
-// 		const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/get_objects.php?map=${mapId}`;
+		// Используем переменную окружения для API URL
+		const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/get_objects.php?map=${mapId}`;
 
-// 		const headers: HeadersInit = {
-// 			'Content-Type': 'application/json',
-// 			'Access-Token': `${authToken}`,
-// 		};
+		const headers: HeadersInit = {
+			'Content-Type': 'application/json',
+			'Access-Token': `${authToken}`,
+		};
 
-// 		const response = await fetch(apiUrl, {
-// 			method: 'GET',
-// 			headers,
-// 		});
+		const response = await fetch(apiUrl, {
+			method: 'GET',
+			headers,
+		});
 
-// 		if (!response.ok) {
-// 			console.error(
-// 				`API request failed: ${response.status} ${response.statusText}`,
-// 			);
-// 			return null;
-// 		}
+		if (!response.ok) {
+			console.error(
+				`API request failed: ${response.status} ${response.statusText}`,
+			);
+			return null;
+		}
 
-// 		return response.json();
-// 	} catch (error) {
-// 		console.error('Error fetching map data:', error);
-// 		return null;
-// 	}
-// }
+		return response.json();
+	} catch (error) {
+		console.error('Error fetching map data:', error);
+		return null;
+	}
+}
 
 // // Функция для получения ID карты по SEO URL
 // async function getMapIdByUrl(
