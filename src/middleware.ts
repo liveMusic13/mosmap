@@ -35,6 +35,15 @@ export async function middleware(req: NextRequest) {
 	const pathname = url.pathname;
 	const mapParam = url.searchParams.get('map');
 
+	// Добавьте логирование
+	console.log('Middleware - pathname:', pathname);
+	console.log('Middleware - mapParam:', mapParam);
+	console.log(
+		'Middleware - existing map cookie:',
+		req.cookies.get('map')?.value,
+	);
+	console.log('Middleware - host:', req.headers.get('host'));
+
 	// Случай 1: Пользователь зашел по SEO URL (например /map/renovation)
 	const seoUrlMatch = pathname.match(/^\/map\/(.+)$/);
 
@@ -53,8 +62,16 @@ export async function middleware(req: NextRequest) {
 
 			const response = NextResponse.rewrite(newUrl);
 			response.headers.set('x-seo-url', seoSlug);
-			response.cookies.set('map', mapId);
+			// response.cookies.set('map', mapId);
+			// Исправьте установку куки
+			response.cookies.set('map', mapId, {
+				path: '/',
+				httpOnly: false, // Важно! Чтобы JavaScript мог читать
+				secure: process.env.MODE === 'production', // HTTPS только в продакшене
+				sameSite: 'lax',
+			});
 
+			console.log('Middleware - SET cookie map:', mapId);
 			return response;
 		} else {
 			return new NextResponse('Not Found', { status: 404 });
@@ -77,7 +94,13 @@ export async function middleware(req: NextRequest) {
 	const res = NextResponse.next();
 
 	if (mapParam) {
-		res.cookies.set('map', mapParam);
+		// res.cookies.set('map', mapParam);
+		res.cookies.set('map', mapParam, {
+			path: '/',
+			httpOnly: false,
+			secure: process.env.MODE === 'production',
+			sameSite: 'lax',
+		});
 	} else {
 		res.cookies.delete('map');
 	}
