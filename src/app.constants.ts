@@ -4,6 +4,7 @@ export const USER_MAP: string = 'user_map';
 export const ACCESSIBLYMAP: string = 'AccessiblyMap';
 export const ACTUAL_MAP: string = 'actual_map';
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const DECODED_TOKEN = 'decodedToken';
 
 export const colors = {
 	green: '#117474',

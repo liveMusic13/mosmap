@@ -16,6 +16,7 @@ import {
 	ACCESSIBLYMAP,
 	ACTUAL_MAP,
 	API_URL,
+	DECODED_TOKEN,
 	TOKEN,
 	USER_LOGIN,
 	USER_MAP,
@@ -46,6 +47,7 @@ export const authService = {
 				}
 
 				console.log(getDecodedTokenData(TOKEN));
+				Cookies.set(DECODED_TOKEN, JSON.stringify(getDecodedTokenData(TOKEN)));
 				//TODO: закончить с доступом. Нужно закинуть в куки что-то типа объекта с номером карты и юзером или просто номер карты и назвать мол доступы или что-то такое. А потом по этому сверять доступ к карте
 			}
 
