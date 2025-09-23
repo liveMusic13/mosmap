@@ -45,10 +45,11 @@ export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 			console.log('mapCookie.split', mapCookie.split('=')[1]);
 
 			return mapCookie.split('=')[1];
-		} else if (decodedToken.id) {
-			console.log('второй кук вариант', decodedToken);
-			return decodedToken.id;
 		}
+		// else if (decodedToken.id) {
+		// 	console.log('второй кук вариант', decodedToken);
+		// 	return decodedToken.id;
+		// }
 	}
 
 	return null;
