@@ -12,13 +12,15 @@ import Button from '@/components/ui/button/Button';
 import Input from '@/components/ui/input/Input';
 import Loader from '@/components/ui/loader/Loader';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { useIdObjectInfoStore, useMapLayersStore } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { isMarkerInsidePolygon } from '@/utils/markersInsidePolygon';
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import styles from './ListOfObjects.module.scss';
 import List from './list/List';
@@ -28,7 +30,11 @@ const ListOfObjects: FC = () => {
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	// const map = Cookies.get(ACTUAL_MAP);
 	// //HELP: Преобразование searchParams в строку
@@ -48,8 +54,8 @@ const ListOfObjects: FC = () => {
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
 
-	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
-	console.log('in list', queryString, data);
+	const { data, isLoading, isSuccess } = useGetDataMap(queryString, map);
+	console.log('test map ListOfObjects', queryString, map);
 
 	const { arrayPolygons, indexTargetPolygon } = useMapLayersStore(
 		store => store,
@@ -122,6 +128,10 @@ const ListOfObjects: FC = () => {
 		},
 		[],
 	);
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper_listOfObjects}>

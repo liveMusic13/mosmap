@@ -5,6 +5,8 @@ import Button from '@/components/ui/button/Button';
 import Checkbox from '@/components/ui/checkbox/Checkbox';
 import Popup from '@/components/ui/popup/Popup';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { IImportDoneResponse, IItemFilter } from '@/types/requestData.types';
 
 import { useImportResponseStore } from '@/store/store';
@@ -13,7 +15,7 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useImportDone } from '@/hooks/useImportDone';
 
 import { convertImportDoneField } from '@/utils/formatData';
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import BlockParam from '../block-param/BlockParam';
 
@@ -23,7 +25,12 @@ import { colors } from '@/app.constants';
 const ImportDoneOptions: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
+
 	// const map = Cookies.get(ACTUAL_MAP) || null;
 
 	// //HELP: Преобразование searchParams в строку
@@ -61,7 +68,9 @@ const ImportDoneOptions: FC = () => {
 		uploadfile,
 	};
 
-	const { refetch } = useGetDataMap(queryString);
+	const { refetch } = useGetDataMap(queryString, map);
+	console.log('test map ImportDoneOptions', queryString, map);
+
 	const { mutate, isPending, isSuccess, data } = useImportDone();
 	const [htmlString, setHtmlString] = useState<string>('');
 
@@ -215,6 +224,10 @@ const ImportDoneOptions: FC = () => {
 			/>
 		);
 	};
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper_importDoneOptions}>

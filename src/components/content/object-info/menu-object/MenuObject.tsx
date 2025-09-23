@@ -5,6 +5,8 @@ import { CSSProperties, FC, memo } from 'react';
 
 import Button from '@/components/ui/button/Button';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import {
 	useCenterMapStore,
 	useIdObjectInfoStore,
@@ -15,7 +17,7 @@ import {
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import styles from './MenuObject.module.scss';
 import { TOKEN, colors } from '@/app.constants';
@@ -28,7 +30,11 @@ const MenuObject: FC = memo(() => {
 	const isMobile = windowSize <= 767;
 	const isMobile_mini = windowSize <= 481;
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	// const seoUrl = pathname.startsWith('/map/')
 	// 	? pathname.split('/map/')[1]
@@ -51,7 +57,8 @@ const MenuObject: FC = memo(() => {
 	const { isViewArea, setIsViewArea } = useToggleViewAreaStore(store => store);
 	const { setIsPopup, setMessageInPopup } = usePopupStore(store => store);
 
-	const { data } = useGetDataMap(queryString);
+	const { data } = useGetDataMap(queryString, map);
+	console.log('test map MenuObject', queryString, map);
 
 	const findTargetObject = data?.points.find(el => el.id === idObjectInfo); //HELP: Находим объект таргета
 
@@ -83,6 +90,10 @@ const MenuObject: FC = memo(() => {
 			return { color: colors.green };
 		}
 	};
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.block__menu}>

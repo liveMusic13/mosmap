@@ -1,41 +1,74 @@
-import { ReadonlyURLSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function useMapId(searchParams: ReadonlyURLSearchParams): string | null {
-	const [mapId, setMapId] = useState<string | null>(() => {
-		// Инициализация только query параметрами (доступно на сервере)
-		return searchParams.get('map');
-	});
-
-	const [mounted, setMounted] = useState(false);
+export function useMapId(): string | null {
+	const [mapId, setMapId] = useState<string | null>(null);
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
 
 	useEffect(() => {
-		setMounted(true);
+		async function getMapId() {
+			// Сначала пробуем получить из query параметров
+			const mapFromQuery = searchParams.get('map');
+			console.log('searchParams', searchParams.toString());
 
-		// Если уже есть mapId из query, не проверяем cookies
-		const mapFromQuery = searchParams.get('map');
-		if (mapFromQuery) {
-			setMapId(mapFromQuery);
-			return;
-		}
+			if (mapFromQuery) {
+				setMapId(mapFromQuery);
+				return;
+			}
 
-		// Проверяем cookies только в браузере
-		const cookies = document.cookie.split(';');
-		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
+			// Проверяем SEO URL
+			const seoUrlMatch = pathname.match(/^\/map\/(.+)$/);
+			if (seoUrlMatch) {
+				const seoSlug = seoUrlMatch[1];
+				console.log('SEO slug detected:', seoSlug);
 
-		if (mapCookie) {
-			const cookieValue = mapCookie.split('=')[1];
-			console.log('mapCookie.split', cookieValue);
-			setMapId(cookieValue);
-		} else {
+				try {
+					const response = await fetch(
+						// `${process.env.NEXT_PUBLIC_API_URL}/api/get_objects.php?url=${seoSlug}`,
+						`/api/map-by-url?url=${seoSlug}`,
+					);
+					const data = await response.json();
+
+					if (data.mapId) {
+						console.log('Map ID from API:', data.mapId);
+						setMapId(data.mapId);
+						return;
+					}
+				} catch (error) {
+					console.error('Error fetching map ID from API:', error);
+				}
+			}
+
+			// Если нет в query и API, пробуем получить из cookies
+			const cookies = document.cookie.split(';');
+			const mapCookie = cookies.find(cookie =>
+				cookie.trim().startsWith('map='),
+			);
+
+			console.log('All cookies:', document.cookie);
+			console.log('заходит в проверку', cookies);
+
+			if (mapCookie) {
+				const cookieMapId = mapCookie.split('=')[1];
+				console.log('mapCookie.split', cookieMapId);
+				setMapId(cookieMapId);
+				return;
+			}
+
+			// // Последний fallback - decoded token
+			// const decodedToken = JSON.parse(Cookies.get(DECODED_TOKEN) || '{}');
+			// if (decodedToken.id) {
+			//     console.log('второй кук вариант', decodedToken);
+			//     setMapId(decodedToken.id);
+			//     return;
+			// }
+
 			setMapId(null);
 		}
-	}, [searchParams]);
 
-	// Возвращаем null до монтирования, если нет query параметра
-	if (!mounted && !searchParams.get('map')) {
-		return null;
-	}
+		getMapId();
+	}, [searchParams, pathname]);
 
 	return mapId;
 }

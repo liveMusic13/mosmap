@@ -5,15 +5,17 @@ import { FeatureGroup, MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { EditControl } from 'react-leaflet-draw';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { ICustomMap } from '@/types/props.types';
 import { IDataMap } from '@/types/requestData.types';
 
-import { useCenterMapStore, useSelectAreaStore } from '@/store/store';
+import { useSelectAreaStore } from '@/store/store';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSelectArea } from '@/hooks/useSelectArea';
 
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import CanvasMarkersLayer from './CanvasMarkersLayer';
 import ControlledPopup from './ControlledPopup';
@@ -33,7 +35,12 @@ const CustomMap: FC<ICustomMap> = () => {
 	// const map = Cookies.get(ACTUAL_MAP);
 
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams);
+	// const map = getMapId(searchParams);
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
+
 	const queryString = getQueryString(searchParams, map); // включает map параметр
 	//HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
@@ -50,10 +57,10 @@ const CustomMap: FC<ICustomMap> = () => {
 	// const resultQuery = seoUrl
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
+	console.log('test map CustomMap', queryString, map);
 
-	const { data, isLoading, isSuccess } = useGetDataMap(queryString);
+	const { data, isLoading, isSuccess } = useGetDataMap(queryString, map);
 
-	const centerMap = useCenterMapStore(store => store.centerMap);
 	const isSelectArea = useSelectAreaStore(store => store.isSelectArea);
 
 	const { _onCreated, _onDeleted } = useSelectArea();
@@ -83,6 +90,10 @@ const CustomMap: FC<ICustomMap> = () => {
 				'Нажмите первую точку, чтобы завершить область';
 		}
 	}, []);
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		isSuccess && (

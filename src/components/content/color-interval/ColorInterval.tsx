@@ -4,6 +4,8 @@ import { FC, useEffect, useState } from 'react';
 import Loader from '@/components/ui/loader/Loader';
 import RangeInterval from '@/components/ui/range-interval/RangeInterval';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import {
 	IColorIntervalResponse,
 	IIntervalObject,
@@ -14,8 +16,6 @@ import { useSuccessSaveColorsIntervalStore } from '@/store/store';
 import { useGetColorInterval } from '@/hooks/useGetColorInterval';
 import { useGetColorMap } from '@/hooks/useGetColorMap';
 
-import { getMapId } from '@/utils/url';
-
 import styles from './ColorInterval.module.scss';
 import BlockIntervalParam from './block-interval-param/BlockIntervalParam';
 
@@ -23,7 +23,11 @@ const ColorInterval: FC = () => {
 	const searchParams = useSearchParams();
 	const mapQuery = searchParams.get('map');
 	// const map = Cookies.get(ACTUAL_MAP) || mapQuery || null;
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	// const token = Cookies.get(TOKEN);
 
@@ -190,6 +194,10 @@ const ColorInterval: FC = () => {
 	}, [searchParams.toString(), data, isSuccess]);
 
 	// console.log('isValidTargetValues', isValidTargetValues, intervalsObject);
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper_colorInterval}>

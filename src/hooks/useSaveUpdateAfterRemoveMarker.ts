@@ -1,9 +1,11 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { useCenterMapStore } from '@/store/store';
 
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import { useGetDataMap } from './useGetDataMap';
 
@@ -11,7 +13,11 @@ export const useSaveUpdateAfterRemoveMarker = (isSuccess_save: boolean) => {
 	// const map = Cookies.get(ACTUAL_MAP);
 
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	// //HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
@@ -29,7 +35,8 @@ export const useSaveUpdateAfterRemoveMarker = (isSuccess_save: boolean) => {
 	// const resultQuery = seoUrl
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
-	const { refetch: refetch_getDataMap } = useGetDataMap(queryString);
+	const { refetch: refetch_getDataMap } = useGetDataMap(queryString, map);
+	console.log('test map useSaveUpdateAfterRemoveMarker', queryString, map);
 
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 

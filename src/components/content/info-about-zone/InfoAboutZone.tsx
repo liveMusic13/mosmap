@@ -7,6 +7,8 @@ import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 import Popup from '@/components/ui/popup/Popup';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { IDotInfoData } from '@/types/requestData.types';
 
 import {
@@ -24,7 +26,7 @@ import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSaveObject } from '@/hooks/useSaveObject';
 import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemoveMarker';
 
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import styles from './InfoAboutZone.module.scss';
 import InfoZone from './info-zone/InfoZone';
@@ -34,7 +36,11 @@ const InfoAboutZone: FC = () => {
 	const windowSize = useCheckWidth();
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	const token = Cookies.get(TOKEN);
 	const isMobile = windowSize <= 767;
@@ -70,7 +76,9 @@ const InfoAboutZone: FC = () => {
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
 
-	const { data: data_getDataMap } = useGetDataMap(queryString);
+	const { data: data_getDataMap } = useGetDataMap(queryString, map);
+	console.log('test map InfoAboutZone', queryString, map);
+
 	const { data, isSuccess, isLoading } = useDotInfo(coords);
 	const { mutate, isSuccess: isSuccess_save } = useSaveObject();
 
@@ -104,6 +112,10 @@ const InfoAboutZone: FC = () => {
 		setIsPopup(false);
 		setIsRemoveMarker(false);
 	}, [data_getDataMap, idObjectInfo]);
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper__infoAboutZone}>

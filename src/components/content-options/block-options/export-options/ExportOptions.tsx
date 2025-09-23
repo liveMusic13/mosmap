@@ -4,12 +4,12 @@ import { FC, useEffect } from 'react';
 import Button from '@/components/ui/button/Button';
 import Checkbox from '@/components/ui/checkbox/Checkbox';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { IExportResponse } from '@/types/requestData.types';
 
 import { useExport } from '@/hooks/useExport';
 import { useImportExport } from '@/hooks/useImportExport';
-
-import { getMapId } from '@/utils/url';
 
 import BlockParam from '../block-param/BlockParam';
 
@@ -22,7 +22,11 @@ const ExportOptions: FC = () => {
 	const searchParams = useSearchParams();
 	// const map = searchParams.get('map');
 	// const map = Cookies.get(ACTUAL_MAP) || null;
-	const map = getMapId(searchParams);
+	// const map = getMapId(searchParams);
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	const {
 		separator,
@@ -55,6 +59,10 @@ const ExportOptions: FC = () => {
 	}, [data]);
 
 	const handleExport = () => refetch();
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.block__exportOptions}>

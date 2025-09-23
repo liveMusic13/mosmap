@@ -4,7 +4,7 @@ import { mapService } from '@/services/map.service';
 
 export const useGetFilters = (mapParam: string | null) => {
 	const { data, error, isSuccess, isStale, isError, isLoading } = useQuery({
-		queryKey: ['filters'],
+		queryKey: ['filters', mapParam],
 		queryFn: () => mapService.getFiltersISR(mapParam),
 		staleTime: 5 * 60 * 1000, // кэширование на 5 минут
 		retry: 1,

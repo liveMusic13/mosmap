@@ -6,6 +6,8 @@ import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 import Popup from '@/components/ui/popup/Popup';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import {
 	IItemFilter,
 	IMarker,
@@ -36,7 +38,7 @@ import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemove
 import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import styles from './ObjectInfo.module.scss';
 import InfoBlock from './info-block/InfoBlock';
@@ -76,7 +78,12 @@ const ObjectInfo: FC = () => {
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 	// const pathname = usePathname(); // "/map/renovation"
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
+
 	const queryString = getQueryString(searchParams, map); // включает map параметр
 
 	// const map = searchParams.get('map');
@@ -95,7 +102,8 @@ const ObjectInfo: FC = () => {
 		refetch: refetch_getDataMap,
 		data: dataMap,
 		data: data_getDataMap,
-	} = useGetDataMap(queryString);
+	} = useGetDataMap(queryString, map);
+	console.log('test map ObjectInfo', queryString, map);
 
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
@@ -392,9 +400,9 @@ const ObjectInfo: FC = () => {
 		}
 	}, [isError]);
 
-	useEffect(() => {
-		console.log('messageInPopup', messageInPopup, messageSave);
-	}, [messageInPopup]);
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper_objectInfo}>

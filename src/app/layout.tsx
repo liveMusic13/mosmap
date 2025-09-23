@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import { MapProvider } from '@/providers/MapProvider';
+
 import '@/styles/global.scss';
 
 export const metadata: Metadata = {
@@ -17,7 +19,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='ru'>
-			<body>{children}</body>
+			<MapProvider>
+				<body>{children}</body>
+			</MapProvider>
 		</html>
 	);
 }

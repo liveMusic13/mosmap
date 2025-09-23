@@ -7,13 +7,15 @@ import { FC, useEffect } from 'react';
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import { useClearAllFiltersStore } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useGetFilters } from '@/hooks/useGetFilters';
 
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import styles from './Filters.module.scss';
 import FilterBlock from './filter-block/FilterBlock';
@@ -26,7 +28,11 @@ const Filters: FC = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	// const map = searchParams.get('map');
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	// const map = Cookies.get(ACTUAL_MAP) || null;
 
@@ -45,8 +51,9 @@ const Filters: FC = () => {
 	// const resultQuery = seoUrl
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
+	console.log('test map Filters', queryString, map);
 
-	const { refetch } = useGetDataMap(queryString);
+	const { refetch } = useGetDataMap(queryString, map);
 
 	const { isClear, setIsClear } = useClearAllFiltersStore(store => store);
 
@@ -70,6 +77,10 @@ const Filters: FC = () => {
 		}, 2000);
 		return () => clearTimeout(timeoutId);
 	};
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper_filters}>

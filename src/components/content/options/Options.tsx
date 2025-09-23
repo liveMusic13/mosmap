@@ -6,6 +6,8 @@ import { CSSProperties, FC, useCallback } from 'react';
 import Button from '@/components/ui/button/Button';
 import Line from '@/components/ui/line/Line';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import {
 	useColorsIntervalStore,
 	// useFiltersStore,
@@ -15,11 +17,10 @@ import {
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
-import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import styles from './Options.module.scss';
 import { colors } from '@/app.constants';
@@ -29,7 +30,12 @@ const Options: FC = () => {
 	// const map = Cookies.get(ACTUAL_MAP);
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const map = getMapId(searchParams);
+	// const map = getMapId(searchParams);
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
+
 	// //HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 
@@ -47,8 +53,6 @@ const Options: FC = () => {
 	// const resultQuery = seoUrl
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
-
-	const { data: dataMap } = useGetDataMap(queryString);
 
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
@@ -171,6 +175,10 @@ const Options: FC = () => {
 		Number(map),
 		map,
 	);
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.block__options}>

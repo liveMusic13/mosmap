@@ -4,6 +4,8 @@ import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import Button from '@/components/ui/button/Button';
 import Checkbox from '@/components/ui/checkbox/Checkbox';
 
+import { useMapContext } from '@/providers/MapProvider';
+
 import {
 	IItemFilter,
 	ISaveSettingsMapResponse,
@@ -16,7 +18,7 @@ import { useSaveEditingDataSettingsMap } from '@/hooks/useSaveEditingDataSetting
 import { useSaveSettingsMap } from '@/hooks/useSaveSettingsMap';
 
 import { renameKeys } from '@/utils/formatData';
-import { getMapId, getQueryString } from '@/utils/url';
+import { getQueryString } from '@/utils/url';
 
 import BlockParam from '../block-param/BlockParam';
 
@@ -34,7 +36,11 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	const searchParams = useSearchParams();
 	// const map = Cookies.get(ACTUAL_MAP) || null;
 	// const pathname = usePathname(); // "/map/renovation"
-	const map = getMapId(searchParams); // работает с SEO URL
+	// const map = getMapId(searchParams); // работает с SEO URL
+	// const map = useMapId();
+	const { mapId: map, loading } = useMapContext();
+
+	// const { mapId: map } = useContext(MapContext);
 
 	// const seoUrl = pathname.startsWith('/map/')
 	// 	? pathname.split('/map/')[1]
@@ -56,7 +62,8 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		isSuccess: isSuccess_save,
 		data: data_save,
 	} = useSaveEditingDataSettingsMap();
-	const { refetch } = useGetDataMap(queryString);
+	const { refetch } = useGetDataMap(queryString, map);
+	console.log('test map SettingsOptions', queryString, map);
 
 	const [formState, setFormState] = useState<{ [key: string]: string }>({
 		'Название карты': '',
@@ -296,6 +303,10 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		refetch,
 		router,
 	]);
+
+	if (loading) {
+		return <div>Loading map...</div>;
+	}
 
 	return (
 		<div className={styles.wrapper_settingsOptions}>

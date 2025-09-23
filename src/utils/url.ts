@@ -26,35 +26,6 @@ export const updateUrlParams = (newParams: Record<string, string | null>) => {
  * Получает номер карты из URL или headers
  * Работает как с обычными URL (?map=7), так и с SEO URL (/map/renovation)
  */
-// export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
-// 	// Сначала пробуем получить из query параметров
-// 	const mapFromQuery = searchParams.get('map');
-// 	console.log('searchParams', searchParams);
-// 	if (mapFromQuery) {
-// 		return mapFromQuery;
-// 	}
-
-// 	// Если нет в query, пробуем получить из cookies (установлено middleware)
-// 	if (typeof document !== 'undefined') {
-// 		const cookies = document.cookie.split(';');
-// 		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
-// 		const decodedToken = JSON.parse(Cookies.get(DECODED_TOKEN) || '{}');
-// 		console.log('заходит в проверку', cookies);
-
-// 		if (mapCookie) {
-// 			console.log('mapCookie.split', mapCookie.split('=')[1]);
-
-// 			return mapCookie.split('=')[1];
-// 		}
-// 		// else if (decodedToken.id) {
-// 		// 	console.log('второй кук вариант', decodedToken);
-// 		// 	return decodedToken.id;
-// 		// }
-// 	}
-
-// 	return null;
-// }
-
 export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 	// Сначала пробуем получить из query параметров
 	const mapFromQuery = searchParams.get('map');
@@ -63,40 +34,69 @@ export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 		return mapFromQuery;
 	}
 
-	// Проверяем header (установленный middleware)
-	if (typeof window !== 'undefined') {
-		// Проверяем meta tag, который мы установим
-		const mapMeta = document.querySelector('meta[name="x-map-id"]');
-		if (mapMeta) {
-			const mapId = mapMeta.getAttribute('content');
-			console.log('Map ID from meta:', mapId);
-			return mapId;
-		}
-	}
-
-	// Если нет в query и meta, пробуем получить из cookies
+	// Если нет в query, пробуем получить из cookies (установлено middleware)
 	if (typeof document !== 'undefined') {
 		const cookies = document.cookie.split(';');
 		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
-
-		console.log('All cookies:', document.cookie);
+		const decodedToken = JSON.parse(Cookies.get(DECODED_TOKEN) || '{}');
 		console.log('заходит в проверку', cookies);
 
 		if (mapCookie) {
-			const mapId = mapCookie.split('=')[1];
-			console.log('mapCookie.split', mapId);
-			return mapId;
-		}
+			console.log('mapCookie.split', mapCookie.split('=')[1]);
 
-		const decodedToken = JSON.parse(Cookies.get(DECODED_TOKEN) || '{}');
-		if (decodedToken.id) {
-			console.log('второй кук вариант', decodedToken);
-			return decodedToken.id;
+			return mapCookie.split('=')[1];
 		}
+		// else if (decodedToken.id) {
+		// 	console.log('второй кук вариант', decodedToken);
+		// 	return decodedToken.id;
+		// }
 	}
 
 	return null;
 }
+
+// export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
+// 	// Сначала пробуем получить из query параметров
+// 	const mapFromQuery = searchParams.get('map');
+// 	console.log('searchParams', searchParams);
+// 	if (mapFromQuery) {
+// 		return mapFromQuery;
+// 	}
+
+// 	// Проверяем header (установленный middleware)
+// 	if (typeof window !== 'undefined') {
+// 		// Проверяем meta tag, который мы установим
+// 		const mapMeta = document.querySelector('meta[name="x-map-id"]');
+// 		if (mapMeta) {
+// 			const mapId = mapMeta.getAttribute('content');
+// 			console.log('Map ID from meta:', mapId);
+// 			return mapId;
+// 		}
+// 	}
+
+// 	// Если нет в query и meta, пробуем получить из cookies
+// 	if (typeof document !== 'undefined') {
+// 		const cookies = document.cookie.split(';');
+// 		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
+
+// 		console.log('All cookies:', document.cookie);
+// 		console.log('заходит в проверку', cookies);
+
+// 		if (mapCookie) {
+// 			const mapId = mapCookie.split('=')[1];
+// 			console.log('mapCookie.split', mapId);
+// 			return mapId;
+// 		}
+
+// 		const decodedToken = JSON.parse(Cookies.get(DECODED_TOKEN) || '{}');
+// 		if (decodedToken.id) {
+// 			console.log('второй кук вариант', decodedToken);
+// 			return decodedToken.id;
+// 		}
+// 	}
+
+// 	return null;
+// }
 /**
  * Формирует query string с учетом SEO URL
  */
