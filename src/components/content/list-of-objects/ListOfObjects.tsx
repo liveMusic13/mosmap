@@ -18,7 +18,7 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { isMarkerInsidePolygon } from '@/utils/markersInsidePolygon';
-import { getQueryString } from '@/utils/url';
+import { getMapId, getQueryString } from '@/utils/url';
 
 import styles from './ListOfObjects.module.scss';
 import List from './list/List';
@@ -28,10 +28,12 @@ const ListOfObjects: FC = () => {
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const searchParams = useSearchParams();
+	const map = getMapId(searchParams); // работает с SEO URL
+
 	// const map = Cookies.get(ACTUAL_MAP);
 	// //HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 	// const pathname = usePathname(); // "/map/renovation"
 	// const searchParams = useSearchParams();

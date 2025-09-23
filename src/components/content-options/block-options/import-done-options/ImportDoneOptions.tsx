@@ -28,7 +28,7 @@ const ImportDoneOptions: FC = () => {
 
 	// //HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 

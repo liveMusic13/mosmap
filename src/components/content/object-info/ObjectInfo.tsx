@@ -76,10 +76,10 @@ const ObjectInfo: FC = () => {
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 	// const pathname = usePathname(); // "/map/renovation"
 	const searchParams = useSearchParams();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const map = getMapId(searchParams); // работает с SEO URL
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 
 	// const map = searchParams.get('map');
-	const map = getMapId(searchParams); // работает с SEO URL
 
 	// const seoUrl = pathname.startsWith('/map/')
 	// 	? pathname.split('/map/')[1]

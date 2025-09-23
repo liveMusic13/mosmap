@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { useCenterMapStore } from '@/store/store';
 
-import { getQueryString } from '@/utils/url';
+import { getMapId, getQueryString } from '@/utils/url';
 
 import { useGetDataMap } from './useGetDataMap';
 
@@ -11,9 +11,11 @@ export const useSaveUpdateAfterRemoveMarker = (isSuccess_save: boolean) => {
 	// const map = Cookies.get(ACTUAL_MAP);
 
 	const searchParams = useSearchParams();
+	const map = getMapId(searchParams); // работает с SEO URL
+
 	// //HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 	// const pathname = usePathname(); // "/map/renovation"
 	// const searchParams = useSearchParams();

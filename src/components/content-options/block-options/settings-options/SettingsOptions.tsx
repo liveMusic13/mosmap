@@ -47,7 +47,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	// 	: `?${queryString}`;
 
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 
 	const { data, isSuccess } = useSaveSettingsMap();
 	const {

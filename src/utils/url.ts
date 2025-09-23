@@ -46,11 +46,49 @@ export function getMapId(searchParams: ReadonlyURLSearchParams): string | null {
 	return null;
 }
 
+// // Серверная версия
+// export function getMapIdServer(searchParams: ReadonlyURLSearchParams): string | null {
+// 	const mapFromQuery = searchParams.get('map');
+// 	if (mapFromQuery) {
+// 		return mapFromQuery;
+// 	}
+
+// 	try {
+// 		const cookieStore = cookies();
+// 		const mapCookie = cookieStore.get('map');
+// 		return mapCookie?.value || null;
+// 	} catch (error) {
+// 		console.error('Error reading server cookies:', error);
+// 		return null;
+// 	}
+// }
+
+// // Клиентская версия
+// export function getMapIdClient(searchParams: ReadonlyURLSearchParams): string | null {
+// 	const mapFromQuery = searchParams.get('map');
+// 	if (mapFromQuery) {
+// 		return mapFromQuery;
+// 	}
+
+// 	if (typeof document !== 'undefined') {
+// 		const cookies = document.cookie.split(';');
+// 		const mapCookie = cookies.find(cookie => cookie.trim().startsWith('map='));
+
+// 		if (mapCookie) {
+// 			return mapCookie.split('=')[1];
+// 		}
+// 	}
+
+// 	return null;
+// }
 /**
  * Формирует query string с учетом SEO URL
  */
-export function getQueryString(searchParams: ReadonlyURLSearchParams): string {
-	const mapId = getMapId(searchParams);
+export function getQueryString(
+	searchParams: ReadonlyURLSearchParams,
+	mapId: string | null,
+): string {
+	// const mapId = getMapId(searchParams);
 
 	if (!mapId) {
 		return searchParams.toString();

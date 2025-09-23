@@ -36,7 +36,7 @@ const Options: FC = () => {
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 	// const pathname = usePathname(); // "/map/renovation"
 	// const searchParams = useSearchParams();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 
 	// const seoUrl = pathname.startsWith('/map/')
 	// 	? pathname.split('/map/')[1]

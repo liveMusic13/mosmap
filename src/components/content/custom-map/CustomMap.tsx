@@ -14,7 +14,7 @@ import { useCenterMapStore, useSelectAreaStore } from '@/store/store';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSelectArea } from '@/hooks/useSelectArea';
 
-import { getQueryString } from '@/utils/url';
+import { getMapId, getQueryString } from '@/utils/url';
 
 import CanvasMarkersLayer from './CanvasMarkersLayer';
 import ControlledPopup from './ControlledPopup';
@@ -34,7 +34,8 @@ const CustomMap: FC<ICustomMap> = () => {
 	// const map = Cookies.get(ACTUAL_MAP);
 
 	const searchParams = useSearchParams();
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const map = getMapId(searchParams);
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 	//HELP: Преобразование searchParams в строку
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;

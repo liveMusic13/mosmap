@@ -13,7 +13,7 @@ const TitleContent: FC = () => {
 	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 	// const map = searchParams.get('map');
 	const map = getMapId(searchParams);
-	const queryString = getQueryString(searchParams); // включает map параметр
+	const queryString = getQueryString(searchParams, map); // включает map параметр
 	console.log('test map', map);
 
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
