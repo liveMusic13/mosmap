@@ -55,23 +55,43 @@ export async function middleware(req: NextRequest) {
 		const mapId = await getMapIdByUrl(seoSlug, req);
 		// console.log('test mapid', mapId);
 
+		// if (mapId) {
+		// 	// Внутренне перенаправляем на обычный URL для работы логики
+		// 	const newUrl = new URL('/', req.url);
+		// 	newUrl.searchParams.set('map', mapId);
+
+		// 	const response = NextResponse.rewrite(newUrl);
+		// 	response.headers.set('x-seo-url', seoSlug);
+		// 	// response.cookies.set('map', mapId);
+		// 	// Исправьте установку куки
+		// 	response.cookies.set('map', mapId, {
+		// 		path: '/',
+		// 		httpOnly: false, // Важно! Чтобы JavaScript мог читать
+		// 		secure: process.env.MODE === 'production', // HTTPS только в продакшене
+		// 		sameSite: 'lax',
+		// 	});
+
+		// 	console.log('Middleware - SET cookie map:', mapId);
+		// 	return response;
+		// }
+
 		if (mapId) {
-			// Внутренне перенаправляем на обычный URL для работы логики
 			const newUrl = new URL('/', req.url);
-			newUrl.searchParams.set('map', mapId);
+			// НЕ добавляем map в query, оставляем SEO URL
 
 			const response = NextResponse.rewrite(newUrl);
 			response.headers.set('x-seo-url', seoSlug);
-			// response.cookies.set('map', mapId);
-			// Исправьте установку куки
+			response.headers.set('x-map-id', mapId); // Передаем через header
+
+			// Установка куки для последующих запросов
 			response.cookies.set('map', mapId, {
 				path: '/',
-				httpOnly: false, // Важно! Чтобы JavaScript мог читать
-				secure: process.env.MODE === 'production', // HTTPS только в продакшене
+				httpOnly: false,
+				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'lax',
 			});
 
-			console.log('Middleware - SET cookie map:', mapId);
+			console.log('Middleware - SET cookie and header map:', mapId);
 			return response;
 		} else {
 			return new NextResponse('Not Found', { status: 404 });
