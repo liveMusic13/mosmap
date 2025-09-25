@@ -204,6 +204,7 @@ export interface IBlockOptions {
 export interface IBlockParam {
 	field: string;
 	title: string;
+	inputHelperText?: string;
 	select?: {
 		optionsSelect: string[];
 		targetValue: string;

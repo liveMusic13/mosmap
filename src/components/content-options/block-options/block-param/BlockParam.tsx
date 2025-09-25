@@ -18,6 +18,7 @@ const BlockParam: FC<IBlockParam> = ({
 	absoluteOptionsForSelect,
 	forUrl,
 	inputErrorValid,
+	inputHelperText,
 }) => {
 	const formatOptions = select?.optionsSelect?.map((el, ind) => ({
 		item_name: el,
@@ -38,7 +39,7 @@ const BlockParam: FC<IBlockParam> = ({
 						forInfo={{ isInfo: true, value: select?.targetValue || '' }}
 					/>
 				)}
-				{field === 'input' && functions?.input && (
+				{/* {field === 'input' && functions?.input && (
 					<Input
 						type='text'
 						value={inputValue || ''}
@@ -71,7 +72,54 @@ const BlockParam: FC<IBlockParam> = ({
 					>
 						Ошибка! Либо URL уже занят либо {inputErrorValid}. Доступные символы
 						a-z 0-9
-						{/* Такой URL уже занят. {inputErrorValid} */}
+					</span>
+				)} */}
+				{field === 'input' && functions?.input && (
+					<Input
+						type='text'
+						value={inputValue || ''}
+						onChange={functions.input}
+						style={{
+							width: 'calc(300/1920*100vw)',
+							height: 'calc(40/1920*100vw)',
+							backgroundColor: colors.white,
+							paddingRight: isSettings ? 'calc(16/1920*100vw)' : undefined,
+							border:
+								forUrl?.url === 'valid'
+									? '1px solid green'
+									: forUrl?.url === 'invalid'
+										? '1px solid red'
+										: undefined,
+						}}
+						styleInput={{
+							height: '100%',
+							fontSize: '1rem',
+							width: '100%',
+						}}
+					/>
+				)}
+
+				{/* Показываем ошибку только если есть текст ошибки */}
+				{forUrl?.url === 'invalid' && inputErrorValid && (
+					<span
+						style={{
+							color: colors.red,
+							fontSize: '0.8rem',
+						}}
+					>
+						{inputErrorValid}
+					</span>
+				)}
+
+				{/* Показываем подсказку с разрешенными символами */}
+				{inputHelperText && (
+					<span
+						style={{
+							color: colors.grey, // используйте подходящий серый цвет из вашей палитры
+							fontSize: '0.8rem',
+						}}
+					>
+						{inputHelperText}
 					</span>
 				)}
 			</div>

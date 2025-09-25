@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { LatLngExpression } from 'leaflet';
 import { useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, memo } from 'react';
@@ -17,15 +16,16 @@ import {
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 
+import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { getQueryString } from '@/utils/url';
 
 import styles from './MenuObject.module.scss';
-import { TOKEN, colors } from '@/app.constants';
+import { colors } from '@/app.constants';
 import { arrMenuObject } from '@/data/menuObject.data';
 
 const MenuObject: FC = memo(() => {
 	// const map = Cookies.get(ACTUAL_MAP);
-	const token = Cookies.get(TOKEN);
+	// const token = Cookies.get(TOKEN);
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const isMobile_mini = windowSize <= 481;
@@ -33,6 +33,7 @@ const MenuObject: FC = memo(() => {
 	// const map = getMapId(searchParams); // работает с SEO URL
 	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
+	const token = checkMapAccess(Number(map) || null).hasMapAccess;
 
 	// const { mapId: map } = useContext(MapContext);
 

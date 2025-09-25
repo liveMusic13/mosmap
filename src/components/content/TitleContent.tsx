@@ -1,4 +1,4 @@
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { FC } from 'react';
 
 import { useMapContext } from '@/providers/MapProvider';
@@ -24,7 +24,8 @@ const TitleContent: FC = () => {
 	console.log('test map TitleContent', queryString, map);
 
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
-	// const pathname = usePathname(); // "/map/renovation"
+	const pathname = usePathname(); // "/map/renovation"
+	console.log('pathname', pathname);
 	// const searchParams = useSearchParams();
 
 	// const seoUrl = pathname.startsWith('/map/')

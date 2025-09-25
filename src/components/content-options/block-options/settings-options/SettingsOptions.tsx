@@ -39,6 +39,8 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	// const map = getMapId(searchParams); // работает с SEO URL
 	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
+	const [showHelperText, setShowHelperText] = useState<boolean>(false);
+	const [lastCheckedUrl, setLastCheckedUrl] = useState<string>('');
 
 	// const { mapId: map } = useContext(MapContext);
 
@@ -140,21 +142,69 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		}
 	}, [isSuccess_save, data_save]);
 
-	// Отслеживаем изменения результата проверки
+	// // Отслеживаем изменения результата проверки
+	// useEffect(() => {
+	// 	if (isSuccess_url && data_url) {
+	// 		const status =
+	// 			data_url.data.exists === 1
+	// 				? 'valid'
+	// 				: data_url.data.exists === 0 &&
+	// 					  formState['URL карты'] !== (data as ISaveSettingsMapResponse).url
+	// 					? 'invalid'
+	// 					: 'standard';
+	// 		setIsValidUrl(status);
+	// 	} else if (isError_url) {
+	// 		setIsValidUrl('invalid');
+	// 	}
+	// }, [isSuccess_url, data_url, isError_url]);
+	// Отслеживаем изменения результата проверки на занятость URL
 	useEffect(() => {
-		if (isSuccess_url && data_url) {
-			const status =
-				data_url.data.exists === 1
-					? 'valid'
-					: data_url.data.exists === 0 &&
-						  formState['URL карты'] !== (data as ISaveSettingsMapResponse).url
-						? 'invalid'
-						: 'standard';
-			setIsValidUrl(status);
-		} else if (isError_url) {
+		// Проверяем результат только если он соответствует текущему значению в поле
+		if (
+			isSuccess_url &&
+			data_url &&
+			formState['URL карты'] &&
+			formState['URL карты'] === lastCheckedUrl
+		) {
+			const originalUrl = (data as ISaveSettingsMapResponse)?.url || '';
+
+			console.log('URL Check Debug:', {
+				currentUrl: formState['URL карты'],
+				originalUrl: originalUrl,
+				exists: data_url.data.exists,
+				lastCheckedUrl: lastCheckedUrl,
+				isEqual: formState['URL карты'] === originalUrl,
+			});
+
+			if (data_url.data.exists === 0) {
+				// URL занят - проверяем, не является ли он исходным URL карты
+				if (formState['URL карты'] === originalUrl) {
+					// Это исходный URL карты - показываем подсказку
+					console.log('Setting helper text for original URL');
+					setIsValidUrl('standard');
+					setErrorText('');
+					setShowHelperText(true);
+				} else {
+					// URL занят другим объектом
+					console.log('URL is taken by another object');
+					setIsValidUrl('invalid');
+					setErrorText('URL занят');
+					setShowHelperText(false);
+				}
+			} else if (data_url.data.exists === 1) {
+				// URL свободен
+				console.log('URL is free');
+				setIsValidUrl('standard');
+				setErrorText('');
+				setShowHelperText(true);
+			}
+		} else if (isError_url && formState['URL карты'] === lastCheckedUrl) {
+			console.log('URL check error');
 			setIsValidUrl('invalid');
+			setErrorText('Ошибка проверки URL');
+			setShowHelperText(false);
 		}
-	}, [isSuccess_url, data_url, isError_url]);
+	}, [isSuccess_url, data_url, isError_url, lastCheckedUrl, data]);
 
 	const handleChangeCheckbox = (name: string) => {
 		setFormStateCheck(prevState => ({
@@ -164,6 +214,21 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		onDirtyChange(true);
 	};
 
+	// const validateUrlInput = (
+	// 	value: string,
+	// ): { isValid: boolean; error: string } => {
+	// 	if (value.length > 250) {
+	// 		return { isValid: false, error: 'слишком длинный URL' };
+	// 	}
+
+	// 	// Базовая валидация URL символов
+	// 	const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
+	// 	if (value && !urlPattern.test(value)) {
+	// 		return { isValid: false, error: 'недопустимые символы в URL' };
+	// 	}
+
+	// 	return { isValid: true, error: '' };
+	// };
 	const validateUrlInput = (
 		value: string,
 	): { isValid: boolean; error: string } => {
@@ -174,7 +239,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		// Базовая валидация URL символов
 		const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
 		if (value && !urlPattern.test(value)) {
-			return { isValid: false, error: 'недопустимые символы в URL' };
+			return { isValid: false, error: 'Введен недопустимый символ' };
 		}
 
 		return { isValid: true, error: '' };
@@ -184,6 +249,28 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
 		onDirtyChange(true);
 	};
+	// const onChangeInputsURL = async (
+	// 	e: ChangeEvent<HTMLInputElement>,
+	// 	name: string,
+	// ) => {
+	// 	const value = e.target.value;
+	// 	const { isValid, error } = validateUrlInput(value);
+
+	// 	if (isValid) {
+	// 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
+	// 		// Скрываем ошибку
+	// 		setIsValidUrl('standard');
+	// 	} else {
+	// 		// Показываем ошибку визуально
+	// 		setIsValidUrl('invalid');
+	// 		// Можно также показать текст ошибки
+	// 		console.log('Ошибка ввода:', error);
+	// 		setErrorText(error);
+	// 	}
+
+	// 	onDirtyChange(true);
+	// };
+
 	const onChangeInputsURL = async (
 		e: ChangeEvent<HTMLInputElement>,
 		name: string,
@@ -191,16 +278,32 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		const value = e.target.value;
 		const { isValid, error } = validateUrlInput(value);
 
-		if (isValid) {
-			setFormState(prev => ({ ...prev, [name]: e.target.value }));
-			// Скрываем ошибку
-			setIsValidUrl('standard');
-		} else {
-			// Показываем ошибку визуально
+		console.log('onChangeInputsURL:', { value, isValid, error });
+
+		// Всегда обновляем значение в состоянии
+		setFormState(prev => ({ ...prev, [name]: value }));
+
+		if (!isValid) {
+			// Недопустимый символ - показываем ошибку сразу
+			console.log('Invalid input, showing error');
 			setIsValidUrl('invalid');
-			// Можно также показать текст ошибки
-			console.log('Ошибка ввода:', error);
 			setErrorText(error);
+			setShowHelperText(false);
+			setLastCheckedUrl(''); // Сбрасываем последний проверенный URL
+		} else if (value === '') {
+			// Пустое поле - сбрасываем всё
+			console.log('Empty input, resetting');
+			setIsValidUrl('standard');
+			setErrorText('');
+			setShowHelperText(false);
+			setLastCheckedUrl('');
+		} else {
+			// Валидные символы - показываем подсказку и запоминаем что проверяем этот URL
+			console.log('Valid input, setting helper and lastCheckedUrl:', value);
+			setIsValidUrl('standard');
+			setErrorText('');
+			setShowHelperText(true);
+			setLastCheckedUrl(value); // Запоминаем какой URL отправили на проверку
 		}
 
 		onDirtyChange(true);
@@ -308,6 +411,14 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		return <div>Loading map...</div>;
 	}
 
+	// Функция для получения текста подсказки
+	const getHelperText = () => {
+		if (showHelperText) {
+			return 'Разрешенные символы: a-z, A-Z, 0-9, -, _, ., /, :';
+		}
+		return '';
+	};
+
 	return (
 		<div className={styles.wrapper_settingsOptions}>
 			{isSuccess && data && (
@@ -351,6 +462,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 						field='input'
 						title={'URL карты'}
 						inputValue={formState['URL карты']}
+						inputHelperText={getHelperText()}
 						inputErrorValid={errorText}
 						functions={{ input: e => onChangeInputsURL(e, 'URL карты') }}
 						forUrl={{

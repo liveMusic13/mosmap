@@ -32,7 +32,7 @@ const ContentOptions: FC<IContentOptions> = ({ title }) => {
 				<BurgerMenu />
 			) : (
 				<div className={styles.wrapper_contentOptions}>
-					<h1 className={styles.title}>{title}</h1>
+					{/* <h1 className={styles.title}>{title}</h1> */}
 					<Button
 						onClick={
 							() => blockOptionsRef.current?.attemptNavigateBack()
