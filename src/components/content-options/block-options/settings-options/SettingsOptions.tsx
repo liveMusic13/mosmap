@@ -207,7 +207,8 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		}
 
 		// Базовая валидация URL символов
-		const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
+		// const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
+		const urlPattern = /^[a-zA-Z0-9\-_]*$/;
 		if (value && !urlPattern.test(value)) {
 			return { isValid: false, error: 'Введен недопустимый символ' };
 		}
@@ -363,7 +364,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	// Функция для получения текста подсказки
 	const getHelperText = () => {
 		if (showHelperText) {
-			return 'Разрешенные символы: a-z, A-Z, 0-9, -, _, ., /, :';
+			return 'Разрешенные символы: a-z, A-Z, 0-9, -, _';
 		}
 		return '';
 	};
