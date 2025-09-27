@@ -55,7 +55,6 @@ const ListOfObjects: FC = () => {
 	// 	: `?${queryString}`;
 
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString, map);
-	console.log('test map ListOfObjects', queryString, map);
 
 	const { arrayPolygons, indexTargetPolygon } = useMapLayersStore(
 		store => store,

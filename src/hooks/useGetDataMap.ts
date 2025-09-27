@@ -15,8 +15,6 @@ export const useGetDataMap = (
 			select: data => data.data,
 		});
 
-	console.log('in hook data', queryParams, map);
-
 	return {
 		data,
 		error,

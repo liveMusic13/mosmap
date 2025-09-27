@@ -1,4 +1,4 @@
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { FC } from 'react';
 
 import { useMapContext } from '@/providers/MapProvider';
@@ -21,11 +21,8 @@ const TitleContent: FC = () => {
 
 	// const { mapId: map } = useContext(MapContext);
 	const queryString = getQueryString(searchParams, map); // включает map параметр
-	console.log('test map TitleContent', queryString, map);
 
 	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
-	const pathname = usePathname(); // "/map/renovation"
-	console.log('pathname', pathname);
 	// const searchParams = useSearchParams();
 
 	// const seoUrl = pathname.startsWith('/map/')

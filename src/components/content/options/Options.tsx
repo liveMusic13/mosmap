@@ -168,14 +168,6 @@ const Options: FC = () => {
 		}
 	};
 
-	console.log(
-		'token',
-		token,
-		checkMapAccess(Number(map) || null),
-		Number(map),
-		map,
-	);
-
 	if (loading) {
 		return <div>Loading map...</div>;
 	}

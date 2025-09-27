@@ -50,7 +50,6 @@ const Filters: FC = () => {
 	// const resultQuery = seoUrl
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
-	console.log('test map Filters', queryString, map);
 
 	const { refetch } = useGetDataMap(queryString, map);
 

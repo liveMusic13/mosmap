@@ -57,7 +57,6 @@ const CustomMap: FC<ICustomMap> = () => {
 	// const resultQuery = seoUrl
 	// 	? `?url=${seoUrl}&${queryString}`
 	// 	: `?${queryString}`;
-	console.log('test map CustomMap', queryString, map);
 
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString, map);
 
