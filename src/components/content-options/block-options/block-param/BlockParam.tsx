@@ -110,9 +110,16 @@ const BlockParam: FC<IBlockParam> = ({
 						{inputErrorValid}
 					</span>
 				)}
-
+				<span
+					style={{
+						color: colors.grey, // используйте подходящий серый цвет из вашей палитры
+						fontSize: '0.8rem',
+					}}
+				>
+					{inputHelperText}
+				</span>
 				{/* Показываем подсказку с разрешенными символами */}
-				{inputHelperText && (
+				{/* {inputHelperText && (
 					<span
 						style={{
 							color: colors.grey, // используйте подходящий серый цвет из вашей палитры
@@ -121,7 +128,7 @@ const BlockParam: FC<IBlockParam> = ({
 					>
 						{inputHelperText}
 					</span>
-				)}
+				)} */}
 			</div>
 		</div>
 	);

@@ -32,8 +32,10 @@ export async function middleware(req: NextRequest) {
 	// Случай 1: SEO URL - просто пропускаем, обработка будет в клиенте
 	const seoUrlMatch = pathname.match(/^\/map\/(.+)$/);
 	if (seoUrlMatch) {
+		const response = NextResponse.next();
 		// Просто пропускаем запрос без изменений
-		return NextResponse.next();
+		response.headers.set('x-pathname', pathname);
+		return response;
 	}
 
 	// Случай 2: Обычная логика для параметра map
@@ -66,117 +68,6 @@ export async function middleware(req: NextRequest) {
 export const config = {
 	matcher: ['/', '/map/:path*'],
 };
-
-//HELP: Новый вариант
-// import { NextRequest, NextResponse } from 'next/server';
-
-// import { TOKEN } from './app.constants';
-
-// // Типы для работы с API
-// interface GetObjectsResponse {
-// 	url?: string;
-// 	map?: string;
-// 	points: any;
-// 	// другие поля ответа
-// }
-
-// export async function middleware(req: NextRequest) {
-// 	const url = req.nextUrl;
-// 	const pathname = url.pathname;
-// 	const mapParam = url.searchParams.get('map');
-
-// 	// Добавьте логирование
-// 	console.log('Middleware - pathname:', pathname);
-// 	console.log('Middleware - mapParam:', mapParam);
-// 	console.log(
-// 		'Middleware - existing map cookie:',
-// 		req.cookies.get('map')?.value,
-// 	);
-// 	console.log('Middleware - host:', req.headers.get('host'));
-
-// 	// Случай 1: Пользователь зашел по SEO URL (например /map/renovation)
-// 	const seoUrlMatch = pathname.match(/^\/map\/(.+)$/);
-
-// 	if (seoUrlMatch) {
-// 		// Пользователь зашел по ЧПУ URL - просто обрабатываем как обычно
-// 		const seoSlug = seoUrlMatch[1];
-
-// 		// Делаем запрос к API чтобы получить номер карты по URL
-// 		const mapId = await getMapIdByUrl(seoSlug, req);
-// 		// console.log('test mapid', mapId);
-
-// 		// if (mapId) {
-// 		// 	// Внутренне перенаправляем на обычный URL для работы логики
-// 		// 	const newUrl = new URL('/', req.url);
-// 		// 	newUrl.searchParams.set('map', mapId);
-
-// 		// 	const response = NextResponse.rewrite(newUrl);
-// 		// 	response.headers.set('x-seo-url', seoSlug);
-// 		// 	// response.cookies.set('map', mapId);
-// 		// 	// Исправьте установку куки
-// 		// 	response.cookies.set('map', mapId, {
-// 		// 		path: '/',
-// 		// 		httpOnly: false, // Важно! Чтобы JavaScript мог читать
-// 		// 		secure: process.env.MODE === 'production', // HTTPS только в продакшене
-// 		// 		sameSite: 'lax',
-// 		// 	});
-
-// 		// 	console.log('Middleware - SET cookie map:', mapId);
-// 		// 	return response;
-// 		// }
-
-// 		if (mapId) {
-// 			const newUrl = new URL('/', req.url);
-// 			// НЕ добавляем map в query, оставляем SEO URL
-
-// 			const response = NextResponse.rewrite(newUrl);
-// 			response.headers.set('x-seo-url', seoSlug);
-// 			response.headers.set('x-map-id', mapId); // Передаем через header
-
-// 			// Установка куки для последующих запросов
-// 			response.cookies.set('map', mapId, {
-// 				path: '/',
-// 				httpOnly: false,
-// 				secure: process.env.NODE_ENV === 'production',
-// 				sameSite: 'lax',
-// 			});
-
-// 			console.log('Middleware - SET cookie and header map:', mapId);
-// 			return response;
-// 		} else {
-// 			return new NextResponse('Not Found', { status: 404 });
-// 		}
-// 	}
-
-// 	// Случай 2: Пользователь зашел с ?map= - нужно проверить, есть ли SEO URL
-// 	if (mapParam && pathname === '/') {
-// 		// Получаем данные для этой карты чтобы проверить наличие URL
-// 		const mapData = await getMapData(mapParam, req);
-
-// 		if (mapData?.url) {
-// 			// ЗДЕСЬ НАСТОЯЩИЙ 301 редирект на SEO URL
-// 			const seoUrl = new URL(`/map/${mapData.url}`, req.url);
-// 			return NextResponse.redirect(seoUrl, 301);
-// 		}
-// 	}
-
-// 	// Обычная логика для параметра map
-// 	const res = NextResponse.next();
-
-// 	if (mapParam) {
-// 		// res.cookies.set('map', mapParam);
-// 		res.cookies.set('map', mapParam, {
-// 			path: '/',
-// 			httpOnly: false,
-// 			secure: process.env.MODE === 'production',
-// 			sameSite: 'lax',
-// 		});
-// 	} else {
-// 		res.cookies.delete('map');
-// 	}
-
-// 	return res;
-// }
 
 // Функция для получения данных карты (включая URL)
 async function getMapData(

@@ -19,7 +19,6 @@ import { getQueryString } from '@/utils/url';
 
 import styles from './Filters.module.scss';
 import FilterBlock from './filter-block/FilterBlock';
-import FilterCalendar from './filter-calendar/FilterCalendar';
 import { colors } from '@/app.constants';
 
 const Filters: FC = () => {
@@ -138,7 +137,7 @@ const Filters: FC = () => {
 							return <FilterBlock key={el.id} filter={el} />;
 						}
 					})}
-				{!isLoading && <FilterCalendar />}
+				{/* {!isLoading && <FilterCalendar />} */}
 			</div>
 			<Button
 				onClick={() => {

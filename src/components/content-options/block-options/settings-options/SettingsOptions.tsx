@@ -39,7 +39,7 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 	// const map = getMapId(searchParams); // работает с SEO URL
 	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
-	const [showHelperText, setShowHelperText] = useState<boolean>(false);
+	const [showHelperText, setShowHelperText] = useState<boolean>(true);
 	const [lastCheckedUrl, setLastCheckedUrl] = useState<string>('');
 
 	// const { mapId: map } = useContext(MapContext);
@@ -142,21 +142,6 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		}
 	}, [isSuccess_save, data_save]);
 
-	// // Отслеживаем изменения результата проверки
-	// useEffect(() => {
-	// 	if (isSuccess_url && data_url) {
-	// 		const status =
-	// 			data_url.data.exists === 1
-	// 				? 'valid'
-	// 				: data_url.data.exists === 0 &&
-	// 					  formState['URL карты'] !== (data as ISaveSettingsMapResponse).url
-	// 					? 'invalid'
-	// 					: 'standard';
-	// 		setIsValidUrl(status);
-	// 	} else if (isError_url) {
-	// 		setIsValidUrl('invalid');
-	// 	}
-	// }, [isSuccess_url, data_url, isError_url]);
 	// Отслеживаем изменения результата проверки на занятость URL
 	useEffect(() => {
 		// Проверяем результат только если он соответствует текущему значению в поле
@@ -214,21 +199,6 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		onDirtyChange(true);
 	};
 
-	// const validateUrlInput = (
-	// 	value: string,
-	// ): { isValid: boolean; error: string } => {
-	// 	if (value.length > 250) {
-	// 		return { isValid: false, error: 'слишком длинный URL' };
-	// 	}
-
-	// 	// Базовая валидация URL символов
-	// 	const urlPattern = /^[a-zA-Z0-9\-_\.\/:]*$/;
-	// 	if (value && !urlPattern.test(value)) {
-	// 		return { isValid: false, error: 'недопустимые символы в URL' };
-	// 	}
-
-	// 	return { isValid: true, error: '' };
-	// };
 	const validateUrlInput = (
 		value: string,
 	): { isValid: boolean; error: string } => {
@@ -249,27 +219,6 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
 		onDirtyChange(true);
 	};
-	// const onChangeInputsURL = async (
-	// 	e: ChangeEvent<HTMLInputElement>,
-	// 	name: string,
-	// ) => {
-	// 	const value = e.target.value;
-	// 	const { isValid, error } = validateUrlInput(value);
-
-	// 	if (isValid) {
-	// 		setFormState(prev => ({ ...prev, [name]: e.target.value }));
-	// 		// Скрываем ошибку
-	// 		setIsValidUrl('standard');
-	// 	} else {
-	// 		// Показываем ошибку визуально
-	// 		setIsValidUrl('invalid');
-	// 		// Можно также показать текст ошибки
-	// 		console.log('Ошибка ввода:', error);
-	// 		setErrorText(error);
-	// 	}
-
-	// 	onDirtyChange(true);
-	// };
 
 	const onChangeInputsURL = async (
 		e: ChangeEvent<HTMLInputElement>,
@@ -485,7 +434,9 @@ const SettingsOptions: FC<Props> = ({ onDirtyChange, provideSave }) => {
 					/>
 				</>
 			)}
-			<Button onClick={handleSaveSettings}>сохранить</Button>
+			<Button disabled={isValidUrl === 'invalid'} onClick={handleSaveSettings}>
+				сохранить
+			</Button>
 		</div>
 	);
 };
