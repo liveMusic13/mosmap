@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { useSearchParams } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { FeatureGroup, MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { EditControl } from 'react-leaflet-draw';
@@ -10,7 +10,11 @@ import { useMapContext } from '@/providers/MapProvider';
 import { ICustomMap } from '@/types/props.types';
 import { IDataMap } from '@/types/requestData.types';
 
-import { useSelectAreaStore } from '@/store/store';
+import {
+	useCenterMapStore,
+	useSelectAreaStore,
+	useZoomLevelStore,
+} from '@/store/store';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSelectArea } from '@/hooks/useSelectArea';
@@ -64,6 +68,17 @@ const CustomMap: FC<ICustomMap> = () => {
 
 	const { _onCreated, _onDeleted } = useSelectArea();
 
+	// const isFirstLoad = useRef(true);
+	const zoomLevel = useZoomLevelStore(state => state.zoomLevel);
+	const setZoomLevel = useZoomLevelStore(state => state.setZoomLevel);
+	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
+	const centerMap = useCenterMapStore(store => store.centerMap);
+	// Создаем стабильный ключ основанный на mapId
+	const mapKey = useMemo(() => `map-${map}`, [map]);
+	// useEffect(() => {
+	// 	isFirstLoad.current = false;
+	// }, []);
+
 	useEffect(() => {
 		const L = (window as any).L;
 
@@ -103,7 +118,7 @@ const CustomMap: FC<ICustomMap> = () => {
 				// center={centerMap || [55.7522, 37.6156]}
 				// minZoom={data?.zoom_min}
 				// maxZoom={data?.zoom_max}
-				zoom={10}
+				zoom={zoomLevel || 10}
 				// maxBounds={bounds}
 				className={styles.custom_map}
 			>
@@ -135,6 +150,7 @@ const CustomMap: FC<ICustomMap> = () => {
 					</>
 				)}
 				<FlyToLocation toZoom={data?.zoom_max} />
+
 				<RenderColorMap />
 				{isSelectArea && (
 					<FeatureGroup>

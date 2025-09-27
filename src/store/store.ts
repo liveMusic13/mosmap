@@ -85,7 +85,7 @@ export const useSearchAddressStore = create<ISearchAddressStore>(set => ({
 }));
 
 export const useZoomLevelStore = create<IZoomLevelStore>(set => ({
-	zoomLevel: 13,
+	zoomLevel: 10,
 	setZoomLevel: num => set({ zoomLevel: num }),
 }));
 
