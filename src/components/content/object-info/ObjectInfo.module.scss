@@ -127,15 +127,27 @@
 		height: func.adapt(40px, 1920px);
 		border-radius: func.adapt(8px, 1920px);
 		box-shadow: 0px 0px 20px rgba($color: vars.$green, $alpha: 0.1);
+		// transition:
+		// 	font-size 0.3s ease,
+		// 	width 0.3s ease,
+		// 	height 0.3s ease;
+
+		height: func.adapt(40px, 1920px);
+		font-size: 1rem;
 		transition:
-			font-size 0.3s ease,
-			width 0.3s ease,
-			height 0.3s ease;
+			background-color 0.3s ease,
+			color 0.3s ease;
 
 		&:hover {
-			width: func.adapt(92px, 1920px);
-			height: func.adapt(41px, 1920px);
-			font-size: 1.02rem;
+			cursor: pointer;
+			background-color: vars.$white !important;
+			color: vars.$green !important;
+			border: 1px solid vars.$green;
+
+			// &:hover {
+			// 	width: func.adapt(92px, 1920px);
+			// 	height: func.adapt(41px, 1920px);
+			// 	font-size: 1.02rem;
 
 			@media (max-width: 767.98px) {
 				width: func.adapt(90px, 480px);

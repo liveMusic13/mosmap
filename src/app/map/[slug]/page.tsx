@@ -35,7 +35,8 @@ import { Metadata } from 'next';
 
 import Home from '@/components/screens/home/Home';
 
-export const revalidate = 200;
+// export const revalidate = 200;
+export const dynamic = 'force-dynamic';
 
 // helper-функция
 async function fetchMapBySeo(seoSlug: string) {

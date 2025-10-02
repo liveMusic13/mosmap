@@ -11,7 +11,8 @@ import { ACTUAL_MAP } from '@/app.constants';
 import NotFound from '@/app/not-found/page';
 import { mapService } from '@/services/map.service';
 
-export const revalidate = 200;
+// export const revalidate = 200;
+export const dynamic = 'force-dynamic';
 
 const Home: FC = async () => {
 	//HELP: Доступ к параметрам search через headers или cookies

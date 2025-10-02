@@ -4,7 +4,8 @@ import Home from '@/components/screens/home/Home';
 
 import { mapService } from '@/services/map.service';
 
-export const revalidate = 200;
+// export const revalidate = 200;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
 	//HELP: Доступ к параметрам из cookies

@@ -80,6 +80,8 @@ const Filters: FC = () => {
 		return <div>Loading map...</div>;
 	}
 
+	console.log('dataFilters', dataFilters);
+
 	return (
 		<div className={styles.wrapper_filters}>
 			{isMobile && (
@@ -127,6 +129,8 @@ const Filters: FC = () => {
 				)}
 				{isSuccess &&
 					typeof dataFilters !== 'string' &&
+					//@ts-ignore
+					!dataFilters?.error &&
 					dataFilters?.map(el => {
 						if (
 							el.type === 'number' ||
