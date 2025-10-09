@@ -242,53 +242,71 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 
 			<div className={styles.wrapper_rowDatabaseOptions_mobile}>
 				{generalOptions.length > 0 && (
-					<div className={styles.block__generalOptions}>
-						<p
-							className={styles.position}
-							style={
-								isTarget
-									? {
-											color: colors.green,
-											fontSize: '2rem',
-										}
-									: {}
-							}
-						>
-							{position + 1}
-						</p>
-						<Input
-							value={editableData?.name || ''}
-							onChange={handleInputChange}
-							type='text'
-							style={{
-								width: 'calc(310/480*100vw)',
-								backgroundColor: colors.white,
-							}}
-							styleInput={{
-								fontSize: '1rem',
-							}}
-							disabled={getDisabledState(type, generalOptions[0].name)}
-						/>
-						<Button
-							style={{
-								backgroundColor: 'transparent',
-							}}
-							onClick={() =>
-								handleDelete ? handleDelete(Number(data.id)) : undefined
-							}
-							disabled={
-								data.name === 'Районы Москвы' ||
-								data.name === 'Округа' ||
-								data.name === 'Районы области'
-							}
-						>
-							<Image
-								src='/images/icons/exit.svg'
-								alt='exit'
-								width={14}
-								height={14}
+					<div className={styles.wrapper__generalOptions}>
+						<div className={styles.block__generalOptions}>
+							<p
+								className={styles.position}
+								style={
+									isTarget
+										? {
+												color: colors.green,
+												fontSize: '2rem',
+											}
+										: {}
+								}
+							>
+								{position + 1}
+							</p>
+							<Input
+								value={editableData?.name || ''}
+								onChange={handleInputChange}
+								type='text'
+								style={{
+									width: 'calc(310/480*100vw)',
+									backgroundColor: colors.white,
+								}}
+								styleInput={{
+									fontSize: '1rem',
+								}}
+								disabled={getDisabledState(type, generalOptions[0].name)}
 							/>
-						</Button>
+							<Button
+								style={{
+									backgroundColor: 'transparent',
+								}}
+								onClick={() =>
+									handleDelete ? handleDelete(Number(data.id)) : undefined
+								}
+								disabled={
+									data.name === 'Районы Москвы' ||
+									data.name === 'Округа' ||
+									data.name === 'Районы области'
+								}
+							>
+								<Image
+									src='/images/icons/exit.svg'
+									alt='exit'
+									width={14}
+									height={14}
+								/>
+							</Button>
+						</div>
+						<div>
+							<button
+								onClick={() =>
+									handleMovePriority(Number(data.id), Number(data.priority) + 1)
+								}
+							>
+								&uArr;
+							</button>
+							<button
+								onClick={() =>
+									handleMovePriority(Number(data.id), Number(data.priority) - 1)
+								}
+							>
+								&dArr;
+							</button>
+						</div>
 					</div>
 				)}
 
