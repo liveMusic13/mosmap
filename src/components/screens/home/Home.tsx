@@ -7,21 +7,35 @@ import Header from '@/components/header/Header';
 import Layout from '@/components/layout/Layout';
 
 import ClientWrapper from './ClientWrapper';
-import { ACTUAL_MAP } from '@/app.constants';
 import NotFound from '@/app/not-found/page';
 import { mapService } from '@/services/map.service';
 
 // export const revalidate = 200;
 export const dynamic = 'force-dynamic';
 
-const Home: FC = async () => {
+// helper-функция
+async function fetchMapBySeo(seoSlug: string) {
+	const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/get_objects.php?url=${encodeURIComponent(seoSlug)}`;
+	const res = await fetch(apiUrl, { method: 'GET', cache: 'no-store' });
+	if (!res.ok) return null;
+	return res.json();
+}
+
+const Home: FC<{ slug?: any }> = async ({ slug }) => {
 	//HELP: Доступ к параметрам search через headers или cookies
 	const cookieStore = cookies();
-	// const mapParam = (await cookieStore).get('map')?.value || null;
-	const mapParam = (await cookieStore).get(ACTUAL_MAP)?.value || null;
+	const mapParam = (await cookieStore).get('map')?.value || null;
+	// const mapParam = (await cookieStore).get(ACTUAL_MAP)?.value || null;
+	let mapData;
+
+	if (!mapParam) {
+		mapData = await fetchMapBySeo(slug);
+	}
 
 	//HELP: Получение данных на сервере
-	const { data: dataMap, status } = await mapService.getObjectISR(mapParam);
+	const { data: dataMap, status } = await mapService.getObjectISR(
+		mapParam || mapData?.map,
+	);
 
 	if (status > 400) {
 		return NotFound(status);

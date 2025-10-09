@@ -66,5 +66,5 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
 // сам компонент страницы
 export default function HomePageCustomUrl({ params }: any) {
-	return <Home />;
+	return <Home slug={params.slug} />;
 }

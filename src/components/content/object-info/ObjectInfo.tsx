@@ -71,32 +71,10 @@ const ObjectInfo: FC = () => {
 	const { isPopup, setIsPopup, setMessageInPopup, messageInPopup } =
 		usePopupStore(store => store);
 
-	// const searchParams = useSearchParams();
-	// const map = Cookies.get(ACTUAL_MAP) || null;
-	// //HELP: Преобразование searchParams в строку
-	// const queryString = new URLSearchParams(searchParams.toString()).toString();
-	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
-	// const pathname = usePathname(); // "/map/renovation"
 	const searchParams = useSearchParams();
-	// const map = getMapId(searchParams); // работает с SEO URL
-	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
 
-	// const { mapId: map } = useContext(MapContext);
-
 	const queryString = getQueryString(searchParams, map); // включает map параметр
-
-	// const map = searchParams.get('map');
-
-	// const seoUrl = pathname.startsWith('/map/')
-	// 	? pathname.split('/map/')[1]
-	// 	: null;
-
-	// const queryString = searchParams.toString();
-
-	// const resultQuery = seoUrl
-	// 	? `?url=${seoUrl}&${queryString}`
-	// 	: `?${queryString}`;
 
 	const {
 		refetch: refetch_getDataMap,
@@ -255,28 +233,6 @@ const ObjectInfo: FC = () => {
 		setIsDirty(false);
 	};
 
-	// const handleSaveValues = () => {
-	// 	let objectToSave = null;
-
-	// 	if (isPopup) {
-	// 		objectToSave = prevObjectRef.current;
-	// 	} else {
-	// 		objectToSave = editValuesObject;
-	// 	}
-
-	// 	console.log(objectToSave, prevObjectRef.current, editValuesObject, isPopup);
-
-	// 	mutate(objectToSave as IMarker);
-
-	// 	// mutate(editValuesObject as IMarker);
-	// 	const timeoutId = setTimeout(() => refetch_getDataMap(), 1500);
-
-	// 	setIsActiveAddObject(false);
-	// 	setIsPopup(false);
-	// 	setIsDirty(false);
-	// 	return () => clearTimeout(timeoutId);
-	// };
-
 	// Сохранение из попапа
 
 	const onConfirm = () => {
@@ -298,33 +254,6 @@ const ObjectInfo: FC = () => {
 			},
 		});
 	};
-
-	// const onConfirm = async () => {
-	// 	const toSave = snapshotRef.current;
-	// 	if (!toSave) {
-	// 		// если вдруг нет снимка, просто переходим
-	// 		setIsDirty(false);
-	// 		setIsPopup(false);
-	// 		if (pendingIdRef.current != null) setIdObjectInfo(pendingIdRef.current);
-	// 		return;
-	// 	}
-
-	// 	mutate(toSave, {
-	// 		onSuccess: () => {
-	// 			setIsDirty(false);
-	// 			setIsPopup(false);
-	// 			console.log('onSuccess');
-	// 			// только после успешного сохранения меняем id
-	// 			if (pendingIdRef.current != null) {
-	// 				setIdObjectInfo(pendingIdRef.current);
-	// 				prevIdRef.current = pendingIdRef.current;
-	// 			}
-	// 			// чистим ref’ы
-	// 			pendingIdRef.current = null;
-	// 			snapshotRef.current = null;
-	// 		},
-	// 	});
-	// };
 
 	useEffect(() => {
 		console.log('isPopup', isPopup, isDirty);

@@ -227,6 +227,7 @@ export interface IRowDatabaseOptions {
 	handleDelete?: (id: number) => void;
 	editableData?: IEditableData;
 	onUpdate: (id: number, field: keyof IEditableData, value: any) => void;
+	handleMovePriority: (id: number, value: any) => void;
 	handleViewSettings: (el: { id: number; name: string }) => void;
 }
 

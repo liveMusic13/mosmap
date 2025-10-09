@@ -161,6 +161,19 @@ const DatabaseOptions: FC<Props> = ({
 
 	const { mutate, mutateAsync } = useSaveAllFields();
 
+	const handleMovePriority = (id: number, value: string) => {
+		setTargetIdObject(id);
+		setMapFullData(prev =>
+			prev.map(item =>
+				Number(item.id) === id ? { ...item, priority: value } : item,
+			),
+		);
+		setEditableData(prev =>
+			prev.map(item => (item.id === id ? { ...item, priority: value } : item)),
+		);
+		onDirtyChange(true);
+	};
+
 	const handleUpdate = (
 		id: number,
 		field: keyof IEditableData,
@@ -297,20 +310,23 @@ const DatabaseOptions: FC<Props> = ({
 						}}
 					/>
 				)}
-				{mapFullData.map((el, ind) => (
-					<RowDatabaseOptions
-						key={ind}
-						data={el}
-						position={ind}
-						editableData={editableData.find(
-							d => Number(d.id) === Number(el.id),
-						)}
-						onUpdate={handleUpdate}
-						handleDelete={handleDelete}
-						targetIdObject={targetIdObject}
-						handleViewSettings={handleViewSettings}
-					/>
-				))}
+				{mapFullData
+					.sort((a, b) => (Number(b.priority) || 0) - (Number(a.priority) || 0))
+					.map((el, ind) => (
+						<RowDatabaseOptions
+							key={ind}
+							data={el}
+							position={ind}
+							editableData={editableData.find(
+								d => Number(d.id) === Number(el.id),
+							)}
+							onUpdate={handleUpdate}
+							handleMovePriority={handleMovePriority}
+							handleDelete={handleDelete}
+							targetIdObject={targetIdObject}
+							handleViewSettings={handleViewSettings}
+						/>
+					))}
 			</div>
 			<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
 			<Button onClick={saveDatabaseData}>Сохранить</Button>

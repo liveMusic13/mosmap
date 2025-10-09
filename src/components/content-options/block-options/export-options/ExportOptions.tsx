@@ -1,4 +1,3 @@
-import { useSearchParams } from 'next/navigation';
 import { FC, useEffect } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -19,14 +18,7 @@ import { API_URL } from '@/app.constants';
 const dataEncoding = ['UTF-8', 'Windows-1251'];
 
 const ExportOptions: FC = () => {
-	const searchParams = useSearchParams();
-	// const map = searchParams.get('map');
-	// const map = Cookies.get(ACTUAL_MAP) || null;
-	// const map = getMapId(searchParams);
-	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
-
-	// const { mapId: map } = useContext(MapContext);
 
 	const {
 		separator,
@@ -98,7 +90,7 @@ const ExportOptions: FC = () => {
 			))}
 			<div className={styles.line}></div>
 
-			<Button onClick={handleExport}>Загрузить</Button>
+			<Button onClick={handleExport}>Выгрузить</Button>
 		</div>
 	);
 };

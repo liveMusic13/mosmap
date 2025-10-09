@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { MapProvider } from '@/providers/MapProvider';
 
+//@ts-ignore
 import '@/styles/global.scss';
 
 export const metadata: Metadata = {

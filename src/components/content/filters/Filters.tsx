@@ -80,7 +80,7 @@ const Filters: FC = () => {
 		return <div>Loading map...</div>;
 	}
 
-	console.log('dataFilters', dataFilters);
+	// console.log('dataFilters', dataFilters);
 
 	return (
 		<div className={styles.wrapper_filters}>

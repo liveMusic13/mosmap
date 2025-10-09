@@ -15,11 +15,14 @@ export async function generateMetadata() {
 
 	//HELP: Получение данных
 	const { data: dataMap } = await mapService.getObjectISR(mapParam);
-
 	//HELP: Возвращаем метаданные
 	return {
-		title: dataMap.title || 'Придумать заголовок интерфейса',
-		description: dataMap.description || 'Придумать описание интерфейса',
+		title:
+			dataMap.title ||
+			'MosMap-Marker. Программное обеспечение для геоаналитики',
+		description:
+			dataMap.description ||
+			'MosMap-Marker. Программное обеспечение для геоаналитики',
 	};
 }
 

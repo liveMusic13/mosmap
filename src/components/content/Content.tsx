@@ -1,5 +1,6 @@
 'use client';
 
+//@ts-ignore
 import 'leaflet-draw/dist/leaflet.draw.css';
 import dynamic from 'next/dynamic';
 import { CSSProperties, FC, useCallback, useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ import {
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDisabledRemoveMarker } from '@/hooks/useDisabledRemoveMarker';
 import { useDisabledStatesForMobile } from '@/hooks/useDisabledStatesForMobile';
+import { usePushUserToMap } from '@/hooks/usePushUserToMap';
 import { useScrollToElement } from '@/hooks/useScrollToElement';
 
 import { srcStandard } from '@/utils/pathSvg';
@@ -110,6 +112,7 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	);
 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
+	usePushUserToMap();
 
 	const handleClickButtonInMap = useCallback((id: number) => {
 		if (id === 0) {

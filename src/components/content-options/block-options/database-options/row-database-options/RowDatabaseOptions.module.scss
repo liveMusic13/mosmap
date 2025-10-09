@@ -90,3 +90,17 @@
 		}
 	}
 }
+
+.end__buttons {
+	display: flex;
+	gap: 0.3rem;
+
+	> button {
+		background-color: transparent;
+		color: vars.$green;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}

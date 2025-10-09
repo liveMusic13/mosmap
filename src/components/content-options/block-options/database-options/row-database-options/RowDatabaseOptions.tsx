@@ -24,6 +24,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	handleDelete,
 	targetIdObject,
 	handleViewSettings,
+	handleMovePriority,
 }) => {
 	const optionsSelect: IItemFilter[] = [
 		{
@@ -181,23 +182,45 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 							data.name === 'Районы области';
 
 						return (
-							<Button
-								key={el.id}
-								style={{
-									backgroundColor: 'transparent',
-								}}
-								onClick={() =>
-									handleDelete ? handleDelete(Number(data.id)) : undefined
-								}
-								disabled={isDisabled}
-							>
-								<Image
-									src='/images/icons/exit.svg'
-									alt='exit'
-									width={8}
-									height={8}
-								/>
-							</Button>
+							<div key={el.id} className={styles.end__buttons}>
+								<button
+									onClick={() =>
+										handleMovePriority(
+											Number(data.id),
+											Number(data.priority) + 1,
+										)
+									}
+								>
+									&uArr;
+								</button>
+								<button
+									onClick={() =>
+										handleMovePriority(
+											Number(data.id),
+											Number(data.priority) - 1,
+										)
+									}
+								>
+									&dArr;
+								</button>
+								<Button
+									// key={el.id}
+									style={{
+										backgroundColor: 'transparent',
+									}}
+									onClick={() =>
+										handleDelete ? handleDelete(Number(data.id)) : undefined
+									}
+									disabled={isDisabled}
+								>
+									<Image
+										src='/images/icons/exit.svg'
+										alt='exit'
+										width={8}
+										height={8}
+									/>
+								</Button>
+							</div>
 						);
 					} else {
 						return (
