@@ -194,6 +194,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 									&uArr;
 								</button>
 								<button
+									className={styles.last_button}
 									onClick={() =>
 										handleMovePriority(
 											Number(data.id),

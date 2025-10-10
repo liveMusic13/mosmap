@@ -53,7 +53,7 @@
 
 .block__dataBaseOptions {
 	display: grid;
-	grid-template-columns: 1.42rem repeat(9, 1fr) 4.42rem;
+	grid-template-columns: 1.42rem repeat(9, 1fr) 7.42rem;
 	gap: func.adapt(15px, 1920px);
 
 	@media (max-width: 767.98px) {

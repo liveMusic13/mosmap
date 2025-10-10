@@ -311,7 +311,7 @@ const DatabaseOptions: FC<Props> = ({
 					/>
 				)}
 				{mapFullData
-					.sort((a, b) => (Number(b.priority) || 0) - (Number(a.priority) || 0))
+					.sort((a, b) => (Number(a.priority) || 0) - (Number(b.priority) || 0))
 					.map((el, ind) => (
 						<RowDatabaseOptions
 							key={ind}
