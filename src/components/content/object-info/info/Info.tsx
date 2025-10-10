@@ -20,8 +20,21 @@ const Info: FC<IInfo> = memo(({ value_info }) => {
 			};
 		}
 
-		// Проверка на телефон
-		if (/^[\d\s+()-]+$/.test(value) && value.replace(/\D/g, '').length >= 10) {
+		// // Проверка на телефон
+		// if (/^[\d\s+()-]+$/.test(value) && value.replace(/\D/g, '').length >= 10) {
+		// 	return {
+		// 		href: `tel:${value.replace(/\s/g, '')}`,
+		// 		display: value,
+		// 		isExternal: false,
+		// 	};
+		// }
+		// Проверка на телефон - должен содержать + или скобки
+		const hasPhoneIndicators =
+			value.includes('+') || value.includes('(') || value.includes(')');
+		const onlyPhoneChars = /^[\d\s+()-]+$/.test(value);
+		const hasEnoughDigits = value.replace(/\D/g, '').length >= 10;
+
+		if (hasPhoneIndicators && onlyPhoneChars && hasEnoughDigits) {
 			return {
 				href: `tel:${value.replace(/\s/g, '')}`,
 				display: value,
