@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ChangeEvent, FC, useMemo } from 'react';
+import { ChangeEvent, FC, useEffect, useMemo, useRef } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import CheckboxCircle from '@/components/ui/checkbox-circle/CheckboxCircle';
@@ -45,6 +45,21 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 		},
 	];
 	const isTarget = targetIdObject === Number(data.id);
+	const mobileWrapperRef = useRef<HTMLDivElement>(null);
+	const prevPriorityRef = useRef<number>(Number(data.priority));
+	// Отслеживаем изменение priority и скроллим
+	useEffect(() => {
+		if (prevPriorityRef.current !== Number(data.priority)) {
+			// Небольшая задержка для завершения перерисовки
+			setTimeout(() => {
+				mobileWrapperRef.current?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center', // или 'nearest'
+				});
+			}, 100);
+			prevPriorityRef.current = Number(data.priority);
+		}
+	}, [data.priority]);
 
 	//HELP: Выделим элементы, удовлетворяющие условию
 	const generalOptions = useMemo(
@@ -191,7 +206,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 										)
 									}
 								>
-									&uArr;
+									&dArr;
 								</button>
 								<button
 									className={styles.last_button}
@@ -202,7 +217,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 										)
 									}
 								>
-									&dArr;
+									&uArr;
 								</button>
 								<Button
 									// key={el.id}
@@ -243,71 +258,53 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 
 			<div className={styles.wrapper_rowDatabaseOptions_mobile}>
 				{generalOptions.length > 0 && (
-					<div className={styles.wrapper__generalOptions}>
-						<div className={styles.block__generalOptions}>
-							<p
-								className={styles.position}
-								style={
-									isTarget
-										? {
-												color: colors.green,
-												fontSize: '2rem',
-											}
-										: {}
-								}
-							>
-								{position + 1}
-							</p>
-							<Input
-								value={editableData?.name || ''}
-								onChange={handleInputChange}
-								type='text'
-								style={{
-									width: 'calc(310/480*100vw)',
-									backgroundColor: colors.white,
-								}}
-								styleInput={{
-									fontSize: '1rem',
-								}}
-								disabled={getDisabledState(type, generalOptions[0].name)}
+					<div className={styles.block__generalOptions}>
+						<p
+							className={styles.position}
+							style={
+								isTarget
+									? {
+											color: colors.green,
+											fontSize: '2rem',
+										}
+									: {}
+							}
+						>
+							{position + 1}
+						</p>
+						<Input
+							value={editableData?.name || ''}
+							onChange={handleInputChange}
+							type='text'
+							style={{
+								width: 'calc(310/480*100vw)',
+								backgroundColor: colors.white,
+							}}
+							styleInput={{
+								fontSize: '1rem',
+							}}
+							disabled={getDisabledState(type, generalOptions[0].name)}
+						/>
+						<Button
+							style={{
+								backgroundColor: 'transparent',
+							}}
+							onClick={() =>
+								handleDelete ? handleDelete(Number(data.id)) : undefined
+							}
+							disabled={
+								data.name === 'Районы Москвы' ||
+								data.name === 'Округа' ||
+								data.name === 'Районы области'
+							}
+						>
+							<Image
+								src='/images/icons/exit.svg'
+								alt='exit'
+								width={14}
+								height={14}
 							/>
-							<Button
-								style={{
-									backgroundColor: 'transparent',
-								}}
-								onClick={() =>
-									handleDelete ? handleDelete(Number(data.id)) : undefined
-								}
-								disabled={
-									data.name === 'Районы Москвы' ||
-									data.name === 'Округа' ||
-									data.name === 'Районы области'
-								}
-							>
-								<Image
-									src='/images/icons/exit.svg'
-									alt='exit'
-									width={14}
-									height={14}
-								/>
-							</Button>
-						</div>
-						<div>
-							<button
-								onClick={() =>
-									handleMovePriority(Number(data.id), Number(data.priority) + 1)
-								}
-							>
-								&uArr;
-							</button>
-							<button
-								onClick={() =>
-									handleMovePriority(Number(data.id), Number(data.priority) - 1)
-								}
-							>
-								&dArr;
-							</button>
-						</div>
+						</Button>
 					</div>
 				)}
 
@@ -374,6 +371,22 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 						);
 					}
 				})}
+				<div className={styles.block__arrowButtons} ref={mobileWrapperRef}>
+					<button
+						onClick={() =>
+							handleMovePriority(Number(data.id), Number(data.priority) + 1)
+						}
+					>
+						&dArr;
+					</button>
+					<button
+						onClick={() =>
+							handleMovePriority(Number(data.id), Number(data.priority) - 1)
+						}
+					>
+						&uArr;
+					</button>
+				</div>
 			</div>
 		</>
 	);

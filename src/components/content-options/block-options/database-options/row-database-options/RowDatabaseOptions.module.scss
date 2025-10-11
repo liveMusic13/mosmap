@@ -118,6 +118,7 @@
 	> button {
 		background-color: transparent;
 		color: vars.$green;
+		font-size: 2rem;
 
 		&:hover {
 			cursor: pointer;
@@ -127,4 +128,21 @@
 
 .last_button {
 	margin-right: 3rem;
+}
+
+.block__arrowButtons {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	> button {
+		background-color: transparent;
+		color: vars.$green;
+		font-size: 3rem;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
 }
