@@ -4,10 +4,21 @@
 
 .wrapper_rowDatabaseOptions {
 	display: contents;
+	position: relative;
 
 	@media (max-width: 767.98px) {
 		display: none;
 	}
+}
+
+.line {
+	display: none;
+	height: 1px;
+	width: 100%;
+	background-color: vars.$green;
+	position: absolute;
+	left: 0;
+	bottom: 0;
 }
 
 .position {

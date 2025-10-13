@@ -16,6 +16,25 @@ import styles from './RowDatabaseOptions.module.scss';
 import { colors } from '@/app.constants';
 import { arrColumn } from '@/data/database.data';
 
+const optionsSelect: IItemFilter[] = [
+	{
+		item_id: 0,
+		item_name: 'Строка',
+	},
+	{
+		item_id: 1,
+		item_name: 'Число',
+	},
+	{
+		item_id: 2,
+		item_name: 'Текст',
+	},
+	{
+		item_id: 3,
+		item_name: 'Список',
+	},
+];
+
 const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	data,
 	position,
@@ -25,28 +44,17 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	targetIdObject,
 	handleViewSettings,
 	handleMovePriority,
+	activeMoveButton,
+	setActiveMoveButton,
 }) => {
-	const optionsSelect: IItemFilter[] = [
-		{
-			item_id: 0,
-			item_name: 'Строка',
-		},
-		{
-			item_id: 1,
-			item_name: 'Число',
-		},
-		{
-			item_id: 2,
-			item_name: 'Текст',
-		},
-		{
-			item_id: 3,
-			item_name: 'Список',
-		},
-	];
 	const isTarget = targetIdObject === Number(data.id);
 	const mobileWrapperRef = useRef<HTMLDivElement>(null);
 	const prevPriorityRef = useRef<number>(Number(data.priority));
+
+	useEffect(() => {
+		return () => setActiveMoveButton(prev => ({ ...prev, isView: false }));
+	}, []);
+
 	// Отслеживаем изменение priority и скроллим
 	useEffect(() => {
 		if (prevPriorityRef.current !== Number(data.priority)) {
@@ -114,22 +122,24 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 					? 6
 					: selectedItem.item_id,
 		);
-		console.log(
-			'selectedItem',
-			selectedItem,
-			String(
-				selectedItem.item_id === 2
-					? 5
-					: selectedItem.item_id === 3
-						? 6
-						: selectedItem.item_id,
-			),
-		);
 	};
 
 	return (
 		<>
-			<div className={styles.wrapper_rowDatabaseOptions}>
+			<div
+				className={styles.wrapper_rowDatabaseOptions}
+				style={
+					activeMoveButton.isView && isTarget
+						? { borderBottom: `1px solid ${colors.green}` }
+						: {}
+				}
+			>
+				<div
+					className={styles.line}
+					style={
+						activeMoveButton.isView && isTarget ? { display: 'block' } : {}
+					}
+				/>
 				{arrColumn.map(el => {
 					const isDisabled = getDisabledState(type, el.name);
 
@@ -197,24 +207,50 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 							data.name === 'Районы области';
 
 						return (
-							<div key={el.id} className={styles.end__buttons}>
+							<div
+								key={el.id}
+								className={styles.end__buttons}
+								// style={
+								// 	activeMoveButton.isView && isTarget
+								// 		? { borderBottom: `1px solid ${colors.green}` }
+								// 		: {}
+								// }
+							>
 								<button
-									onClick={() =>
+									onClick={() => {
 										handleMovePriority(
 											Number(data.id),
 											Number(data.priority) + 1,
-										)
+										);
+										setActiveMoveButton({
+											isView: true,
+											id: Number(data.id),
+										});
+									}}
+									style={
+										activeMoveButton.isView && isTarget
+											? { textShadow: `0px 0px 10px ${colors.green}` }
+											: {}
 									}
 								>
 									&dArr;
 								</button>
 								<button
 									className={styles.last_button}
-									onClick={() =>
+									onClick={() => {
 										handleMovePriority(
 											Number(data.id),
 											Number(data.priority) - 1,
-										)
+										);
+										setActiveMoveButton({
+											isView: true,
+											id: Number(data.id),
+										});
+									}}
+									style={
+										activeMoveButton.isView && isTarget
+											? { textShadow: `0px 0px 10px ${colors.green}` }
+											: {}
 									}
 								>
 									&uArr;
@@ -373,16 +409,29 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 				})}
 				<div className={styles.block__arrowButtons} ref={mobileWrapperRef}>
 					<button
-						onClick={() =>
-							handleMovePriority(Number(data.id), Number(data.priority) + 1)
-						}
+						onClick={() => {
+							handleMovePriority(Number(data.id), Number(data.priority) + 1);
+						}}
 					>
 						&dArr;
 					</button>
-					<button
-						onClick={() =>
-							handleMovePriority(Number(data.id), Number(data.priority) - 1)
+					<p
+						className={styles.position}
+						style={
+							isTarget
+								? {
+										color: colors.green,
+										fontSize: '2rem',
+									}
+								: {}
 						}
+					>
+						{position + 1}
+					</p>
+					<button
+						onClick={() => {
+							handleMovePriority(Number(data.id), Number(data.priority) - 1);
+						}}
 					>
 						&uArr;
 					</button>

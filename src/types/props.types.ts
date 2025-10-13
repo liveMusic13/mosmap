@@ -229,6 +229,10 @@ export interface IRowDatabaseOptions {
 	onUpdate: (id: number, field: keyof IEditableData, value: any) => void;
 	handleMovePriority: (id: number, value: any) => void;
 	handleViewSettings: (el: { id: number; name: string }) => void;
+	activeMoveButton: { isView: boolean; id: number | null };
+	setActiveMoveButton: Dispatch<
+		SetStateAction<{ isView: boolean; id: number | null }>
+	>;
 }
 
 export interface IBlockIntervalParam {

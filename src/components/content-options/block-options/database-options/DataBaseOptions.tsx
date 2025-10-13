@@ -70,6 +70,10 @@ const DatabaseOptions: FC<Props> = ({
 	const [editableData, setEditableData] = useState<IEditableData[]>([]);
 	const [targetIdObject, setTargetIdObject] = useState<number>(0);
 	const [targetNewAddObject, setTargetNewAddObject] = useState();
+	const [activeMoveButton, setActiveMoveButton] = useState<{
+		isView: boolean;
+		id: number | null;
+	}>({ isView: false, id: null });
 	const [isDeleteObj, setIsDeleteObj] = useState<boolean>(false);
 	const [targetColumn, setTargetColumn] = useState({
 		isTarget: false,
@@ -159,7 +163,13 @@ const DatabaseOptions: FC<Props> = ({
 	// 	}
 	// }, [mapFullData]);
 
-	const { mutate, mutateAsync } = useSaveAllFields();
+	const { mutate, mutateAsync, isSuccess: isSuccess_save } = useSaveAllFields();
+
+	useEffect(() => {
+		if (isSuccess_save) {
+			router.back();
+		}
+	}, [isSuccess_save]);
 
 	const handleMovePriority = (id: number, value: string) => {
 		setTargetIdObject(id);
@@ -325,6 +335,8 @@ const DatabaseOptions: FC<Props> = ({
 							handleDelete={handleDelete}
 							targetIdObject={targetIdObject}
 							handleViewSettings={handleViewSettings}
+							activeMoveButton={activeMoveButton}
+							setActiveMoveButton={setActiveMoveButton}
 						/>
 					))}
 			</div>
