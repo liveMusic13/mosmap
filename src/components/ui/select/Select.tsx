@@ -7,6 +7,8 @@ import { IItemFilter } from '@/types/requestData.types';
 
 import { useClearAllFiltersStore } from '@/store/store';
 
+import { useClickOutside } from '@/hooks/useClickOutside';
+
 import styles from './Select.module.scss';
 
 const Select: FC<ISelect> = ({
@@ -45,6 +47,8 @@ const Select: FC<ISelect> = ({
 	useEffect(() => {
 		if (isClear) setTarget('Выберите значение');
 	}, [isClear]);
+
+	useClickOutside(selectRef, () => setIsOptions(false));
 
 	const onClick = (el: IItemFilter) => {
 		console.log('in select', el);

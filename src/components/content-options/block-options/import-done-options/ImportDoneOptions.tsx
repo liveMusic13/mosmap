@@ -146,10 +146,12 @@ const ImportDoneOptions: FC = () => {
 
 		return Object.keys(fields).map((key, ind) => {
 			const value = fields[key]; //HELP: Получаем значение по ключу
+			const targetSelect = data.find(el => el === value) || data[0];
+
 			return (
 				<BlockParam
 					key={ind}
-					select={{ optionsSelect: data, targetValue: data[0] }}
+					select={{ optionsSelect: data, targetValue: targetSelect }}
 					functions={{
 						select: (el: IItemFilter | null) => {
 							if (!el) return;
