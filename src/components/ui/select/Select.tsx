@@ -136,6 +136,9 @@ const Select: FC<ISelect> = ({
 							key={el.item_id}
 							className={styles.option}
 							onClick={() => onClick(el)}
+							style={
+								target === el.item_name ? { backgroundColor: 'white' } : {}
+							}
 						>
 							{el.item_name}
 						</p>

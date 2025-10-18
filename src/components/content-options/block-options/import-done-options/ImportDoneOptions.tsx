@@ -87,6 +87,8 @@ const ImportDoneOptions: FC = () => {
 	}>({});
 	const [isCheckbox, setIsCheckbox] = useState<boolean>(false);
 
+	useEffect(() => console.log('targetOptions', targetOptions), [targetOptions]);
+
 	useEffect(() => {
 		//HELP: Устанавливаем дефолтные значения в targetOptions чтобы он не был пустым, если пользователь не будет вручную устанавливать все значения в селектах и чекбоксе
 		const fields = { ...data_import.text_field, ...data_import.list_field };
@@ -96,11 +98,19 @@ const ImportDoneOptions: FC = () => {
 
 		// Устанавливаем значение по умолчанию для text и list полей
 		Object.keys(data_import.text_field || {}).forEach(key => {
-			defaultOptions[key] = { value: 'Не загружать', type: 'text' };
-		});
+			const data = ['Не загружать', ...(data_import.file_field || [])];
+			const value = fields[key]; //HELP: Получаем значение по ключу
+			const targetSelect = data.find(el => el === value) || data[0];
 
+			defaultOptions[key] = { value: targetSelect, type: 'text' };
+		});
+		console.log(Object.keys(data_import.list_field || {}));
 		Object.keys(data_import.list_field || {}).forEach(key => {
-			defaultOptions[key] = { value: 'Не загружать', type: 'list' };
+			// const data = ['Не загружать', ...(data_import.list_field || [])];
+			const value = fields[key]; //HELP: Получаем значение по ключу
+			const targetSelect = value || 'Не загружать';
+
+			defaultOptions[key] = { value: targetSelect, type: 'list' };
 		});
 
 		// Устанавливаем значение по умолчанию для координат и идентификаторов
