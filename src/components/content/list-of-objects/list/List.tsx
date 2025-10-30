@@ -74,7 +74,10 @@ const List = memo(
 					ref={ref}
 					className={styles.block__name}
 					style={isTarget ? { backgroundColor: colors.blue_very_light } : {}}
-					onClick={handleClickInfo}
+					onClick={() => {
+						onClick(el);
+						handleClickInfo();
+					}}
 				>
 					<p className={styles.name}>{el.name}</p>
 					<Button
