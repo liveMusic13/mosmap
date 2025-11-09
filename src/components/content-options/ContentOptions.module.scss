@@ -5,8 +5,11 @@
 .wrapper_contentOptions {
 	padding: 0px func.adapt(60px, 1920px);
 	width: 100%;
+	// height: calc(
+	// 	100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(163px, 1920px)}
+	// );
 	height: calc(
-		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(163px, 1920px)}
+		100vh - #{func.adapt(80px, 1920px)} - #{func.adapt(93px, 1920px)}
 	);
 	display: flex;
 	flex-direction: column;

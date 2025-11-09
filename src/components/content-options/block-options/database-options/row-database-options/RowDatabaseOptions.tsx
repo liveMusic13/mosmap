@@ -46,6 +46,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	handleMovePriority,
 	activeMoveButton,
 	setActiveMoveButton,
+	setTargetIdObject,
 }) => {
 	const isTarget = targetIdObject === Number(data.id);
 	const mobileWrapperRef = useRef<HTMLDivElement>(null);
@@ -123,6 +124,18 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 					: selectedItem.item_id,
 		);
 	};
+	const typeName =
+		editableData?.type || editableData?.type === 0
+			? optionsSelect[
+					editableData.type === 5
+						? 2
+						: editableData.type === 6
+							? 3
+							: editableData.type
+				]?.item_name
+			: ' ';
+	const isList = typeName === 'Список';
+	const isActiveSettings = editableData?.id === targetIdObject;
 
 	return (
 		<>
@@ -162,50 +175,6 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 							</p>
 						);
 					} else if (el.name === 'Наименование столбца') {
-						return (
-							<Input
-								key={el.id}
-								value={editableData?.name || ''}
-								onChange={handleInputChange}
-								type='text'
-								style={{
-									width: 'calc(227/1920*100vw)',
-									backgroundColor: colors.white,
-								}}
-								styleInput={{
-									fontSize: '1rem',
-								}}
-								disabled={isDisabled}
-							/>
-						);
-					} else if (el.name === 'Тип') {
-						return (
-							<Select
-								key={el.id}
-								forInfo={{
-									isInfo: true,
-									value:
-										editableData?.type || editableData?.type === 0
-											? optionsSelect[
-													editableData.type === 5
-														? 2
-														: editableData.type === 6
-															? 3
-															: editableData.type
-												]?.item_name
-											: ' ',
-								}}
-								handleClick={handleSelectChange}
-								items={optionsSelect}
-								disabled={isDisabled}
-							/>
-						);
-					} else if (el.name === '') {
-						const isDisabled =
-							data.name === 'Районы Москвы' ||
-							data.name === 'Округа' ||
-							data.name === 'Районы области';
-
 						return (
 							<div
 								key={el.id}
@@ -255,24 +224,85 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 								>
 									&uArr;
 								</button>
-								<Button
-									// key={el.id}
+								<Input
+									key={el.id}
+									value={editableData?.name || ''}
+									onChange={handleInputChange}
+									type='text'
 									style={{
-										backgroundColor: 'transparent',
+										width: 'calc(227/1920*100vw)',
+										backgroundColor: colors.white,
 									}}
-									onClick={() =>
-										handleDelete ? handleDelete(Number(data.id)) : undefined
-									}
+									styleInput={{
+										fontSize: '1rem',
+									}}
 									disabled={isDisabled}
-								>
-									<Image
-										src='/images/icons/exit.svg'
-										alt='exit'
-										width={8}
-										height={8}
-									/>
-								</Button>
+								/>
+								{isList && (
+									<svg
+										className={styles.icon_svg}
+										style={{
+											color: colors.green,
+											boxShadow: isActiveSettings
+												? `0px 0px 4px ${colors.green}`
+												: undefined,
+										}}
+										onClick={() => {
+											setTargetIdObject?.(Number(data.id));
+											new Promise(resolve => setTimeout(resolve, 1000));
+											handleViewSettings(el);
+										}}
+									>
+										<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
+									</svg>
+								)}
 							</div>
+						);
+					} else if (el.name === 'Тип') {
+						if (data.id === '0') {
+							return (
+								<Select
+									key={el.id}
+									forInfo={{
+										isInfo: true,
+										value: typeName,
+									}}
+									handleClick={handleSelectChange}
+									items={optionsSelect}
+									disabled={isDisabled}
+								/>
+							);
+						} else {
+							return (
+								<p key={el.id} className={styles.nonSelect}>
+									{typeName}
+								</p>
+							);
+						}
+					} else if (el.name === '') {
+						const isDisabled =
+							data.name === 'Районы Москвы' ||
+							data.name === 'Округа' ||
+							data.name === 'Районы области';
+
+						return (
+							<Button
+								key={el.id}
+								style={{
+									backgroundColor: 'transparent',
+								}}
+								onClick={() =>
+									handleDelete ? handleDelete(Number(data.id)) : undefined
+								}
+								disabled={isDisabled}
+							>
+								<Image
+									src='/images/icons/exit.svg'
+									alt='exit'
+									width={8}
+									height={8}
+								/>
+							</Button>
 						);
 					} else {
 						return (
@@ -294,53 +324,78 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 
 			<div className={styles.wrapper_rowDatabaseOptions_mobile}>
 				{generalOptions.length > 0 && (
-					<div className={styles.block__generalOptions}>
-						<p
-							className={styles.position}
-							style={
-								isTarget
-									? {
-											color: colors.green,
-											fontSize: '2rem',
-										}
-									: {}
-							}
-						>
-							{position + 1}
-						</p>
-						<Input
-							value={editableData?.name || ''}
-							onChange={handleInputChange}
-							type='text'
-							style={{
-								width: 'calc(310/480*100vw)',
-								backgroundColor: colors.white,
-							}}
-							styleInput={{
-								fontSize: '1rem',
-							}}
-							disabled={getDisabledState(type, generalOptions[0].name)}
-						/>
-						<Button
-							style={{
-								backgroundColor: 'transparent',
-							}}
-							onClick={() =>
-								handleDelete ? handleDelete(Number(data.id)) : undefined
-							}
-							disabled={
-								data.name === 'Районы Москвы' ||
-								data.name === 'Округа' ||
-								data.name === 'Районы области'
-							}
-						>
-							<Image
-								src='/images/icons/exit.svg'
-								alt='exit'
-								width={14}
-								height={14}
+					<div className={styles.blockWithSettings}>
+						<div className={styles.block__generalOptions}>
+							<p
+								className={styles.position}
+								style={
+									isTarget
+										? {
+												color: colors.green,
+												fontSize: '2rem',
+											}
+										: {}
+								}
+							>
+								{position + 1}
+							</p>
+							<Input
+								value={editableData?.name || ''}
+								onChange={handleInputChange}
+								type='text'
+								style={{
+									width: 'calc(310/480*100vw)',
+									backgroundColor: colors.white,
+								}}
+								styleInput={{
+									fontSize: '1rem',
+								}}
+								disabled={getDisabledState(type, generalOptions[0].name)}
 							/>
-						</Button>
+							<Button
+								style={{
+									backgroundColor: 'transparent',
+								}}
+								onClick={() =>
+									handleDelete ? handleDelete(Number(data.id)) : undefined
+								}
+								disabled={
+									data.name === 'Районы Москвы' ||
+									data.name === 'Округа' ||
+									data.name === 'Районы области'
+								}
+							>
+								<Image
+									src='/images/icons/exit.svg'
+									alt='exit'
+									width={14}
+									height={14}
+								/>
+							</Button>
+						</div>
+						{isList && (
+							<div className={styles.block__svg}>
+								<svg
+									className={styles.icon_svg}
+									style={{
+										color: colors.green,
+										boxShadow: isActiveSettings
+											? `0px 0px 4px ${colors.green}`
+											: undefined,
+									}}
+									onClick={() => {
+										setTargetIdObject?.(Number(data.id));
+										new Promise(resolve => setTimeout(resolve, 1000));
+										handleViewSettings({
+											id: 2,
+											name: 'Наименование столбца',
+										});
+									}}
+								>
+									<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
+								</svg>
+							</div>
+						)}
 					</div>
 				)}
 

@@ -13,47 +13,58 @@
 		gap: func.adapt(15px, 480px);
 	}
 
-	> button {
-		align-self: flex-end;
-		width: func.adapt(190px, 1920px);
-		height: func.adapt(40px, 1920px);
-		font-size: 1rem;
-		box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
+	> .block__buttons_options {
+		display: flex;
+		flex-direction: column;
+		gap: func.adapt(15px, 1920px);
+		position: sticky;
+		bottom: 0;
+		background-color: vars.$blue_very_light;
+		z-index: 10;
 
-		transition:
-			background-color 0.3s ease,
-			color 0.3s ease;
+		> button {
+			align-self: flex-end;
+			width: func.adapt(190px, 1920px);
+			height: func.adapt(40px, 1920px);
+			font-size: 1rem;
+			box-shadow: 0px 4px 15px rgba($color: vars.$green_light, $alpha: 0.3);
 
-		&:hover {
-			cursor: pointer;
-			background-color: vars.$white !important;
-			color: vars.$green !important;
-			border: 1px solid vars.$green;
+			transition:
+				background-color 0.3s ease,
+				color 0.3s ease;
+
+			&:hover {
+				cursor: pointer;
+				background-color: vars.$white !important;
+				color: vars.$green !important;
+				border: 1px solid vars.$green;
+
+				@media (max-width: 767.98px) {
+					width: 100%;
+					height: func.adapt(40px, 480px);
+				}
+				@media (max-width: 479.98px) {
+					height: func.adapt(40px, 360px);
+				}
+			}
 
 			@media (max-width: 767.98px) {
 				width: 100%;
 				height: func.adapt(40px, 480px);
+				border-radius: func.adapt(8px, 480px);
 			}
 			@media (max-width: 479.98px) {
 				height: func.adapt(40px, 360px);
+				border-radius: func.adapt(8px, 360px);
 			}
-		}
-
-		@media (max-width: 767.98px) {
-			width: 100%;
-			height: func.adapt(40px, 480px);
-			border-radius: func.adapt(8px, 480px);
-		}
-		@media (max-width: 479.98px) {
-			height: func.adapt(40px, 360px);
-			border-radius: func.adapt(8px, 360px);
 		}
 	}
 }
 
 .block__dataBaseOptions {
 	display: grid;
-	grid-template-columns: 1.42rem repeat(9, 1fr) 7.42rem;
+	// grid-template-columns: 1.42rem repeat(9, 1fr) 7.42rem;
+	grid-template-columns: 1.42rem 3fr 2.5fr repeat(7, 1fr) 7.42rem;
 	gap: func.adapt(15px, 1920px);
 
 	@media (max-width: 767.98px) {
@@ -67,7 +78,17 @@
 }
 
 .block__titles {
-	display: contents;
+	// display: contents;
+	display: grid;
+	// grid-template-columns: 1.42rem repeat(9, 1fr) 7.42rem;
+	grid-template-columns: 1.42rem 3fr 2.5fr repeat(7, 1fr) 7.42rem;
+	gap: func.adapt(15px, 1920px);
+	position: sticky;
+	top: 0;
+	background-color: vars.$blue_very_light;
+	z-index: 10;
+	padding: func.adapt(10px, 1920px) 0;
+	margin: calc(-1 * func.adapt(10px, 1920px)) 0;
 
 	@media (max-width: 767.98px) {
 		display: none;

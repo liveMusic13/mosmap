@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import { useSearchParams } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
@@ -24,8 +23,6 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 }) => {
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
-	const searchParams = useSearchParams();
-	// const map = searchParams.get('map');
 	const map = Cookies.get(ACTUAL_MAP) || null;
 	const [editListData, setEditListData] = useState<IListItemsResponse[]>([]);
 
@@ -90,15 +87,17 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 						}}
 					/>
 				)}
-				{isSuccess && column === 'Иконка' && (
-					<>
-						<IconsSettings
-							editListData={editListData}
-							onUpdate={handleUpdate}
-							handleDelete={handleDelete}
-						/>
-					</>
-				)}
+				{isSuccess &&
+					(column === 'Иконка' || column === 'Наименование столбца') && (
+						<>
+							<IconsSettings
+								isOnlyList={column === 'Наименование столбца'}
+								editListData={editListData}
+								onUpdate={handleUpdate}
+								handleDelete={handleDelete}
+							/>
+						</>
+					)}
 				{isSuccess && column === 'Цвет' && (
 					<ColorSettings
 						editListData={editListData}

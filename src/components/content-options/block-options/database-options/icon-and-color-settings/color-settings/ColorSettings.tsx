@@ -14,7 +14,7 @@ import styles from './ColorSettings.module.scss';
 import { colors } from '@/app.constants';
 import { arrColumnPopupColor } from '@/data/database.data';
 
-const ColorSettings: FC<IColorSettingsProps> = ({
+const ColorSettings: FC<Omit<IColorSettingsProps, 'isOnlyList'>> = ({
 	editListData,
 	onUpdate,
 	handleDelete,

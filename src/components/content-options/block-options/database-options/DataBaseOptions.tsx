@@ -265,53 +265,51 @@ const DatabaseOptions: FC<Props> = ({
 					/>
 				</>
 			)}
-			<div className={styles.block__dataBaseOptions}>
-				<div className={styles.block__titles}>
-					{arrColumn.map(el => {
-						const arrList = editableData.filter(
-							el => el.type_object === 'list',
-						);
-						const isActive = arrList.some(elem => elem.id === targetIdObject);
-						const isShadow =
-							isActive && (el.name === 'Иконка' || el.name === 'Цвет');
+			<div className={styles.block__titles}>
+				{arrColumn.map(el => {
+					const arrList = editableData.filter(el => el.type_object === 'list');
+					const isActive = arrList.some(elem => elem.id === targetIdObject);
+					const isShadow =
+						isActive && (el.name === 'Иконка' || el.name === 'Цвет');
 
-						return (
-							<h2
-								className={styles.title}
-								key={el.id}
-								style={
-									el.name !== 'Наименование столбца' &&
-									el.name !== 'Тип' &&
-									el.name !== '#'
-										? {
-												textAlign: 'center',
-												textShadow: isShadow
-													? `0px 0px 10px ${colors.green_shadow}`
-													: 'none',
-											}
-										: {
-												textShadow: isShadow
-													? `0px 0px 30px ${colors.green_shadow}`
-													: 'none',
-											}
-								}
-							>
-								{el.name}
-								{(el.id === 9 || el.id === 8) && (
-									<svg
-										className={styles.icon_svg}
-										style={{ color: colors.green }}
-										onClick={() =>
-											isActive ? handleViewSettings(el) : undefined
+					return (
+						<h2
+							className={styles.title}
+							key={el.id}
+							style={
+								el.name !== 'Наименование столбца' &&
+								el.name !== 'Тип' &&
+								el.name !== '#'
+									? {
+											textAlign: 'center',
+											textShadow: isShadow
+												? `0px 0px 10px ${colors.green_shadow}`
+												: 'none',
 										}
-									>
-										<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
-									</svg>
-								)}
-							</h2>
-						);
-					})}
-				</div>
+									: {
+											textShadow: isShadow
+												? `0px 0px 30px ${colors.green_shadow}`
+												: 'none',
+										}
+							}
+						>
+							{el.name}
+							{(el.id === 9 || el.id === 8) && (
+								<svg
+									className={styles.icon_svg}
+									style={{ color: colors.green }}
+									onClick={() =>
+										isActive ? handleViewSettings(el) : undefined
+									}
+								>
+									<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
+								</svg>
+							)}
+						</h2>
+					);
+				})}
+			</div>
+			<div className={styles.block__dataBaseOptions}>
 				{(isLoadingAllFields || query_icons.isLoading) && (
 					<Loader
 						style={{
@@ -337,22 +335,25 @@ const DatabaseOptions: FC<Props> = ({
 							handleViewSettings={handleViewSettings}
 							activeMoveButton={activeMoveButton}
 							setActiveMoveButton={setActiveMoveButton}
+							setTargetIdObject={setTargetIdObject}
 						/>
 					))}
 			</div>
-			<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
-			<Button onClick={saveDatabaseData}>Сохранить</Button>
-			<Button
-				style={
-					isMobile
-						? { alignSelf: 'flex-start', marginTop: 'calc(20/480*100vw)' }
-						: { alignSelf: 'flex-start' }
-				}
-				// onClick={handleSettingsMap}
-				onClick={onNavigateSettings}
-			>
-				Настройка карты
-			</Button>
+			<div className={styles.block__buttons_options}>
+				<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
+				<Button onClick={saveDatabaseData}>Сохранить</Button>
+				<Button
+					style={
+						isMobile
+							? { alignSelf: 'flex-start', marginTop: 'calc(20/480*100vw)' }
+							: { alignSelf: 'flex-start' }
+					}
+					// onClick={handleSettingsMap}
+					onClick={onNavigateSettings}
+				>
+					Настройка карты
+				</Button>
+			</div>
 		</div>
 	);
 };

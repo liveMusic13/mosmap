@@ -224,6 +224,7 @@ export interface IRowDatabaseOptions {
 	data: IAllFieldsResponse;
 	position: number;
 	targetIdObject: number;
+	setTargetIdObject?: Dispatch<SetStateAction<number>>;
 	handleDelete?: (id: number) => void;
 	editableData?: IEditableData;
 	onUpdate: (id: number, field: keyof IEditableData, value: any) => void;
@@ -318,6 +319,7 @@ export interface IIconAndColorSettings {
 }
 
 export interface IIconsSettingsProps {
+	isOnlyList: boolean;
 	editListData: IListItemsResponse[];
 	onUpdate: (id: number, field: keyof IListItemsResponse, value: any) => void;
 	handleDelete: (id: number) => void;

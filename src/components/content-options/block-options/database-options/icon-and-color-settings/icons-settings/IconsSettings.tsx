@@ -15,6 +15,7 @@ import { colors } from '@/app.constants';
 import { arrColumnPopup } from '@/data/database.data';
 
 const IconsSettings: FC<IIconsSettingsProps> = ({
+	isOnlyList,
 	editListData,
 	onUpdate,
 	handleDelete,
@@ -38,10 +39,16 @@ const IconsSettings: FC<IIconsSettingsProps> = ({
 
 	console.log('editListData', editListData);
 
+	const arrColumn = isOnlyList
+		? arrColumnPopup.filter(el => el.name !== 'Иконка')
+		: arrColumnPopup;
+
 	return (
-		<div className={styles.block__iconsSettings}>
+		<div
+			className={`${styles.block__iconsSettings} ${isOnlyList ? styles.isOnlyList : ''}`}
+		>
 			<div className={styles.block__titles_table}>
-				{arrColumnPopup.map(el => (
+				{arrColumn.map(el => (
 					<h2
 						key={el.id}
 						className={styles.title_table}
@@ -59,9 +66,10 @@ const IconsSettings: FC<IIconsSettingsProps> = ({
 			</div>
 
 			{editListData &&
+				Array.isArray(editListData) &&
 				editListData?.map((el, index) => (
 					<div key={index} className={styles.table__body}>
-						{arrColumnPopup.map(col => {
+						{arrColumn.map(col => {
 							if (col.name === '#') {
 								return (
 									<p key={col.id} className={styles.position}>

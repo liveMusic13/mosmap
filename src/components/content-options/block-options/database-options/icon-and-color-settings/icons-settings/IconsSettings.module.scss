@@ -20,6 +20,10 @@
 	}
 }
 
+.isOnlyList {
+	grid-template-columns: 1.42rem func.adapt(400px, 1920px) 1fr;
+}
+
 .block__titles_table {
 	display: contents;
 }
