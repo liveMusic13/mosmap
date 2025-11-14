@@ -7,6 +7,7 @@ import { IItemFilter } from '@/types/requestData.types';
 
 import { useClearAllFiltersStore } from '@/store/store';
 
+import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 import styles from './Select.module.scss';
@@ -23,6 +24,8 @@ const Select: FC<ISelect> = ({
 	const searchParams = useSearchParams();
 	const nameSelect = searchParams.get(queryName || '');
 	const isClear = useClearAllFiltersStore(store => store.isClear);
+	const width = useCheckWidth();
+	const isMobile = width === 768;
 
 	const selectRef = useRef<HTMLDivElement>(null);
 	const optionsRef = useRef<HTMLDivElement>(null);
@@ -93,7 +96,7 @@ const Select: FC<ISelect> = ({
 
 	// Вызываем скролл после того как состояние обновилось
 	useEffect(() => {
-		if (isOptions) {
+		if (isOptions && isMobile) {
 			// Небольшая задержка чтобы DOM успел обновиться
 			setTimeout(scrollIntoView, 0);
 		}

@@ -41,24 +41,24 @@
 		width: func.adapt(125px, 1920px);
 		height: func.adapt(40px, 1920px);
 		font-size: 1rem;
-		transition:
-			font-size 0.3s ease,
-			width 0.3s ease,
-			height 0.3s ease;
+		// transition:
+		// 	font-size 0.3s ease,
+		// 	width 0.3s ease,
+		// 	height 0.3s ease;
 
 		&:hover {
-			font-size: 1.08rem;
-			width: func.adapt(130px, 1920px);
-			height: func.adapt(45px, 1920px);
+			// font-size: 1.08rem;
+			// width: func.adapt(130px, 1920px);
+			// height: func.adapt(45px, 1920px);
 
-			@media (max-width: 767.98px) {
-				width: func.adapt(130px, 480px);
-				height: func.adapt(40px, 480px);
-			}
-			@media (max-width: 479.98px) {
-				width: func.adapt(130px, 360px);
-				height: func.adapt(40px, 360px);
-			}
+			// @media (max-width: 767.98px) {
+			// 	width: func.adapt(130px, 480px);
+			// 	height: func.adapt(40px, 480px);
+			// }
+			// @media (max-width: 479.98px) {
+			// 	width: func.adapt(130px, 360px);
+			// 	height: func.adapt(40px, 360px);
+			// }
 		}
 
 		@media (max-width: 767.98px) {

@@ -171,16 +171,53 @@ const DatabaseOptions: FC<Props> = ({
 		}
 	}, [isSuccess_save]);
 
-	const handleMovePriority = (id: number, value: string) => {
+	const handleMovePriority = (id: number, direction: string) => {
 		setTargetIdObject(id);
+
+		// Получаем отсортированный массив
+		const sortedData = [...mapFullData].sort(
+			(a, b) => (Number(a.priority) || 0) - (Number(b.priority) || 0),
+		);
+
+		const currentIndex = sortedData.findIndex(item => Number(item.id) === id);
+
+		if (currentIndex === -1) return;
+
+		const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+
+		// Проверяем границы
+		if (newIndex < 0 || newIndex >= sortedData.length) return;
+
+		// Перемещаем элемент в массиве
+		const [movedItem] = sortedData.splice(currentIndex, 1);
+		sortedData.splice(newIndex, 0, movedItem);
+
+		// Пересчитываем priority для всех элементов (1, 2, 3, ...)
+		const updatedData = sortedData.map((item, index) => ({
+			...item,
+			priority: String(index + 1),
+		}));
+
+		// Создаем Map для быстрого поиска новых priority
+		const priorityMap = new Map(
+			updatedData.map(item => [Number(item.id), item.priority]),
+		);
+
+		// Обновляем состояния
 		setMapFullData(prev =>
-			prev.map(item =>
-				Number(item.id) === id ? { ...item, priority: value } : item,
-			),
+			prev.map(item => ({
+				...item,
+				priority: priorityMap.get(Number(item.id)) || item.priority,
+			})),
 		);
+
 		setEditableData(prev =>
-			prev.map(item => (item.id === id ? { ...item, priority: value } : item)),
+			prev.map(item => ({
+				...item,
+				priority: priorityMap.get(item.id) || item.priority,
+			})),
 		);
+
 		onDirtyChange(true);
 	};
 
@@ -340,8 +377,6 @@ const DatabaseOptions: FC<Props> = ({
 					))}
 			</div>
 			<div className={styles.block__buttons_options}>
-				<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
-				<Button onClick={saveDatabaseData}>Сохранить</Button>
 				<Button
 					style={
 						isMobile
@@ -353,6 +388,10 @@ const DatabaseOptions: FC<Props> = ({
 				>
 					Настройка карты
 				</Button>
+				<div className={styles.block__buttons_right}>
+					<Button onClick={handleAddObjectData}>Добавить новое поле</Button>
+					<Button onClick={saveDatabaseData}>Сохранить</Button>
+				</div>
 			</div>
 		</div>
 	);

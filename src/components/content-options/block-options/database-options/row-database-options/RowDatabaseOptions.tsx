@@ -187,10 +187,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 							>
 								<button
 									onClick={() => {
-										handleMovePriority(
-											Number(data.id),
-											Number(data.priority) + 1,
-										);
+										handleMovePriority(Number(data.id), 'down');
 										setActiveMoveButton({
 											isView: true,
 											id: Number(data.id),
@@ -207,10 +204,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 								<button
 									className={styles.last_button}
 									onClick={() => {
-										handleMovePriority(
-											Number(data.id),
-											Number(data.priority) - 1,
-										);
+										handleMovePriority(Number(data.id), 'up');
 										setActiveMoveButton({
 											isView: true,
 											id: Number(data.id),
@@ -250,7 +244,18 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 										onClick={() => {
 											setTargetIdObject?.(Number(data.id));
 											new Promise(resolve => setTimeout(resolve, 1000));
-											handleViewSettings(el);
+											const forSettingData =
+												data?.color === 1
+													? { id: 9, name: 'Цвет' }
+													: data?.icon === 1
+														? { id: 8, name: 'Иконка' }
+														: {
+																id: 2,
+																name: 'Наименование столбца',
+															};
+											console.log('zdec', data);
+
+											handleViewSettings(forSettingData);
 										}}
 									>
 										<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
@@ -386,10 +391,17 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 									onClick={() => {
 										setTargetIdObject?.(Number(data.id));
 										new Promise(resolve => setTimeout(resolve, 1000));
-										handleViewSettings({
-											id: 2,
-											name: 'Наименование столбца',
-										});
+										const forSettingData =
+											data?.color === 1
+												? { id: 9, name: 'Цвет' }
+												: data?.icon === 1
+													? { id: 8, name: 'Иконка' }
+													: {
+															id: 2,
+															name: 'Наименование столбца',
+														};
+
+										handleViewSettings(forSettingData);
 									}}
 								>
 									<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
@@ -465,7 +477,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 				<div className={styles.block__arrowButtons} ref={mobileWrapperRef}>
 					<button
 						onClick={() => {
-							handleMovePriority(Number(data.id), Number(data.priority) + 1);
+							handleMovePriority(Number(data.id), 'down');
 						}}
 					>
 						&dArr;
@@ -485,7 +497,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 					</p>
 					<button
 						onClick={() => {
-							handleMovePriority(Number(data.id), Number(data.priority) - 1);
+							handleMovePriority(Number(data.id), 'up');
 						}}
 					>
 						&uArr;
