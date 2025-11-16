@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
@@ -10,6 +10,7 @@ import { IListItemsResponse } from '@/types/requestData.types';
 import { useGetListItems } from '@/hooks/requests/list-items/useGetListItems';
 import { useMutateListItems } from '@/hooks/requests/list-items/useMutateListItems';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 import styles from './IconAndColorSettings.module.scss';
 import ColorSettings from './color-settings/ColorSettings';
@@ -20,7 +21,9 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 	column,
 	targetIdObject,
 	closeFunc,
+	viewTargetHandler,
 }) => {
+	const ref = useRef(null);
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const map = Cookies.get(ACTUAL_MAP) || null;
@@ -51,6 +54,8 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 		}
 	}, [isSuccess_mutate]);
 
+	useClickOutside(ref, () => viewTargetHandler(false));
+
 	const handleUpdate = (
 		id: number,
 		field: keyof IListItemsResponse,
@@ -72,7 +77,7 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 	};
 
 	return (
-		<div className={styles.wrapper_iconAndColorSettings}>
+		<div className={styles.wrapper_iconAndColorSettings} ref={ref}>
 			<div className={styles.block__title}>
 				<h2 className={styles.title}>Настроить группу</h2>
 				<Button onClick={closeFunc}>Назад</Button>

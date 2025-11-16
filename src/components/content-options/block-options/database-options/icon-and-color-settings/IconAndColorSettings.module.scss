@@ -45,8 +45,14 @@
 		// 	font-size 0.3s ease,
 		// 	width 0.3s ease,
 		// 	height 0.3s ease;
+		transition:
+			background-color 0.3s ease,
+			color 0.3s ease;
 
 		&:hover {
+			background-color: vars.$white !important;
+			color: vars.$green !important;
+			border: 1px solid vars.$green;
 			// font-size: 1.08rem;
 			// width: func.adapt(130px, 1920px);
 			// height: func.adapt(45px, 1920px);
@@ -119,8 +125,14 @@
 		// 	font-size 0.3s ease,
 		// 	width 0.3s ease,
 		// 	height 0.3s ease;
+		transition:
+			background-color 0.3s ease,
+			color 0.3s ease;
 
 		&:hover {
+			background-color: vars.$white !important;
+			color: vars.$green !important;
+			border: 1px solid vars.$green;
 			// font-size: 1.08rem;
 			// width: func.adapt(130px, 1920px);
 			// height: func.adapt(45px, 1920px);

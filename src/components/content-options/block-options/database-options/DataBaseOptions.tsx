@@ -268,6 +268,8 @@ const DatabaseOptions: FC<Props> = ({
 		// 	});
 		// }
 	};
+	const viewTargetHandler = (bol: boolean) =>
+		setTargetColumn(prev => ({ ...prev, isTarget: bol }));
 
 	// отдадим наверх функцию сохранения, оборачивая её в async:
 	useEffect(() => {
@@ -299,6 +301,7 @@ const DatabaseOptions: FC<Props> = ({
 						column={targetColumn.column}
 						targetIdObject={targetIdObject}
 						closeFunc={handleCloseTargetPopup}
+						viewTargetHandler={viewTargetHandler}
 					/>
 				</>
 			)}

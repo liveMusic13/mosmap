@@ -316,6 +316,7 @@ export interface IIconAndColorSettings {
 	targetIdObject: number;
 	// editableData: IEditableData[];
 	closeFunc: () => void;
+	viewTargetHandler: (bol: boolean) => void;
 }
 
 export interface IIconsSettingsProps {
