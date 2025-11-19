@@ -1,5 +1,4 @@
-import Cookies from 'js-cookie';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FC, useEffect, useRef, useState } from 'react';
 
 import BackgroundOpacity from '@/components/ui/background-opacity/BackgroundOpacity';
@@ -20,7 +19,7 @@ import { getType } from '@/utils/database';
 import styles from './DataBaseOptions.module.scss';
 import IconAndColorSettings from './icon-and-color-settings/IconAndColorSettings';
 import RowDatabaseOptions from './row-database-options/RowDatabaseOptions';
-import { ACTUAL_MAP, colors } from '@/app.constants';
+import { colors } from '@/app.constants';
 import { arrColumn } from '@/data/database.data';
 
 type Props = {
@@ -47,9 +46,6 @@ const DatabaseOptions: FC<Props> = ({
 	onNavigateSettings,
 }) => {
 	const router = useRouter();
-	const searchParams = useSearchParams();
-	const mapQuery = searchParams.get('map');
-	const map = Cookies.get(ACTUAL_MAP) || mapQuery || null;
 
 	const windowSize = useCheckWidth();
 	const [mounted, setMounted] = useState(false);
@@ -69,7 +65,6 @@ const DatabaseOptions: FC<Props> = ({
 	const cacheFullDataRef = useRef<IEditableData[]>([]);
 	const [editableData, setEditableData] = useState<IEditableData[]>([]);
 	const [targetIdObject, setTargetIdObject] = useState<number>(0);
-	const [targetNewAddObject, setTargetNewAddObject] = useState();
 	const [activeMoveButton, setActiveMoveButton] = useState<{
 		isView: boolean;
 		id: number | null;
@@ -107,62 +102,6 @@ const DatabaseOptions: FC<Props> = ({
 		}
 	}, [mapFullData]);
 
-	// useEffect(() => {
-	// 	//HELP:Для маппинга всех элементов
-	// 	if (
-	// 		query_fields.isSuccess &&
-	// 		query_maps.isSuccess &&
-	// 		query_lists.isSuccess
-	// 	) {
-	// 		const mapFullData = [
-	// 			...(query_fields?.data as IFieldsResponse[]),
-	// 			...(query_lists?.data as IListsResponse[]),
-	// 			...(query_maps?.data as IMapResponse[]),
-	// 		];
-
-	// 		setMapFullData(mapFullData);
-	// 	}
-	// }, [
-	// 	query_fields.data as IFieldsResponse[],
-	// 	query_maps.data as IMapResponse[],
-	// 	query_lists.data as IListsResponse[],
-	// ]);
-
-	// useEffect(() => {
-	// 	if (mapFullData.length) {
-	// 		const initialData = mapFullData.map(item => ({
-	// 			id: item.id,
-	// 			name: item.name,
-	// 			...((item as IFieldsResponse).namefield !== undefined && {
-	// 				namefield: (item as IFieldsResponse).namefield,
-	// 			}),
-	// 			...((item as IFieldsResponse).nameonmap !== undefined && {
-	// 				nameonmap: (item as IFieldsResponse).nameonmap,
-	// 			}),
-	// 			...((item as IFieldsResponse).address !== undefined && {
-	// 				address: (item as IFieldsResponse).address,
-	// 			}),
-	// 			...((item as IFieldsResponse).type !== undefined && {
-	// 				type: (item as IFieldsResponse).type,
-	// 			}),
-	// 			...((item as IListsResponse).mode !== undefined && {
-	// 				mode: (item as IListsResponse).mode,
-	// 			}),
-	// 			...((item as IListsResponse).color !== undefined && {
-	// 				color: (item as IListsResponse).color,
-	// 			}),
-	// 			...((item as IListsResponse).icon !== undefined && {
-	// 				icon: (item as IListsResponse).icon,
-	// 			}),
-	// 			...((item as IMapResponse).visible !== undefined && {
-	// 				visible: (item as IMapResponse).visible,
-	// 			}),
-	// 			type_object: getType(item),
-	// 		}));
-	// 		setEditableData(initialData);
-	// 	}
-	// }, [mapFullData]);
-
 	const { mutate, mutateAsync, isSuccess: isSuccess_save } = useSaveAllFields();
 
 	useEffect(() => {
@@ -171,6 +110,30 @@ const DatabaseOptions: FC<Props> = ({
 		}
 	}, [isSuccess_save]);
 
+	// Функция для обеспечения уникальности активного поля (color или icon)
+	const ensureUniqueActiveField = (
+		data: IEditableData[],
+		changedId: number,
+		field: 'color' | 'icon',
+		newValue: string | number,
+	): IEditableData[] => {
+		// Если новое значение не равно 1, просто обновляем без дополнительных проверок
+		if (Number(newValue) !== 1) {
+			return data;
+		}
+
+		// Если новое значение равно 1, деактивируем это поле у всех остальных объектов
+		return data.map(item => {
+			if (item.id === changedId) {
+				return item; // Оставляем измененный объект как есть
+			}
+			// Для всех остальных объектов сбрасываем поле на 0
+			return {
+				...item,
+				[field]: 0,
+			};
+		});
+	};
 	const handleMovePriority = (id: number, direction: string) => {
 		setTargetIdObject(id);
 
@@ -227,11 +190,34 @@ const DatabaseOptions: FC<Props> = ({
 		value: string,
 	) => {
 		setTargetIdObject(id);
-		setEditableData(prev =>
-			prev.map(item => (item.id === id ? { ...item, [field]: value } : item)),
-		);
+
+		setEditableData(prev => {
+			// Сначала обновляем значение
+			const updated = prev.map(item =>
+				item.id === id ? { ...item, [field]: value } : item,
+			);
+
+			// Если изменяется поле color или icon, применяем проверку уникальности
+			if (field === 'color' || field === 'icon') {
+				return ensureUniqueActiveField(updated, id, field, value);
+			}
+
+			return updated;
+		});
+
 		onDirtyChange(true);
 	};
+	// const handleUpdate = (
+	// 	id: number,
+	// 	field: keyof IEditableData,
+	// 	value: string,
+	// ) => {
+	// 	setTargetIdObject(id);
+	// 	setEditableData(prev =>
+	// 		prev.map(item => (item.id === id ? { ...item, [field]: value } : item)),
+	// 	);
+	// 	onDirtyChange(true);
+	// };
 	const handleDelete = (id: number) => {
 		setIsDeleteObj(true);
 		console.log('id', id);
@@ -239,34 +225,15 @@ const DatabaseOptions: FC<Props> = ({
 		setMapFullData(prev => prev.filter(el => Number(el.id) !== id));
 		onDirtyChange(true);
 	};
-	const handleSettingsMap = () => router.push(`/settings-map?map=${map}`);
 	const handleViewSettings = (el: { id: number; name: string }) =>
 		setTargetColumn({ isTarget: true, column: el.name });
 	const handleCloseTargetPopup = () =>
 		setTargetColumn(prev => ({ ...prev, isTarget: false }));
 	const handleAddObjectData = () => {
-		const findTargetObject = editableData.find(el => el.id === targetIdObject);
-		const typeTarget = findTargetObject?.type_object;
-		const typeCategory = findTargetObject?.type || 0;
-
 		setMapFullData(prev => {
 			return [...prev, newObj];
 		});
 		onDirtyChange(true);
-
-		// if (typeTarget === 'field') {
-		// 	setMapFullData(prev => {
-		// 		return [...prev, clearFieldObject(typeTarget, typeCategory)];
-		// 	});
-		// } else if (typeTarget === 'list') {
-		// 	setMapFullData(prev => {
-		// 		return [...prev, clearListObject(typeTarget, typeCategory)];
-		// 	});
-		// } else if (typeTarget === 'map') {
-		// 	setMapFullData(prev => {
-		// 		return [...prev, clearMapObject(typeTarget, typeCategory)];
-		// 	});
-		// }
 	};
 	const viewTargetHandler = (bol: boolean) =>
 		setTargetColumn(prev => ({ ...prev, isTarget: bol }));
@@ -386,7 +353,6 @@ const DatabaseOptions: FC<Props> = ({
 							? { alignSelf: 'flex-start', marginTop: 'calc(20/480*100vw)' }
 							: { alignSelf: 'flex-start' }
 					}
-					// onClick={handleSettingsMap}
 					onClick={onNavigateSettings}
 				>
 					Настройка карты
