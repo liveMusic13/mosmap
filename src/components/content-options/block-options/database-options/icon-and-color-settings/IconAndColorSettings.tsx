@@ -110,26 +110,30 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 						handleDelete={handleDelete}
 					/>
 				)}
-				<Button
-					onClick={
-						isSuccess && column === 'Цвет'
-							? handleAddNewObjectColor
-							: handleAddNewObject
-					}
-					style={{ marginTop: 'calc(16/1920*100vw)' }}
-				>
-					ДОБАВИТЬ
-				</Button>
-				<Button
-					onClick={handleSaveIcons}
-					style={{
-						marginTop: isMobile ? 'calc(16/480*100vw)' : 'calc(16/1920*100vw)',
-						width: '100%',
-						boxShadow: `0px 0px 15px ${colors.green_light}`,
-					}}
-				>
-					Сохранить
-				</Button>
+				<div className={styles.block__buttons}>
+					<Button
+						onClick={
+							isSuccess && column === 'Цвет'
+								? handleAddNewObjectColor
+								: handleAddNewObject
+						}
+						style={{ marginTop: 'calc(16/1920*100vw)' }}
+					>
+						ДОБАВИТЬ
+					</Button>
+					<Button
+						onClick={handleSaveIcons}
+						style={{
+							marginTop: isMobile
+								? 'calc(16/480*100vw)'
+								: 'calc(16/1920*100vw)',
+							width: '100%',
+							boxShadow: `0px 0px 15px ${colors.green_light}`,
+						}}
+					>
+						Сохранить
+					</Button>
+				</div>
 			</div>
 		</div>
 	);
