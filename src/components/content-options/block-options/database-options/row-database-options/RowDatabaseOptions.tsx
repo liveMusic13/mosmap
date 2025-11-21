@@ -47,6 +47,7 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	activeMoveButton,
 	setActiveMoveButton,
 	setTargetIdObject,
+	saveDatabaseData,
 }) => {
 	const isTarget = targetIdObject === Number(data.id);
 	const mobileWrapperRef = useRef<HTMLDivElement>(null);
@@ -105,6 +106,8 @@ const RowDatabaseOptions: FC<IRowDatabaseOptions> = ({
 	const handleCheckboxChange =
 		(field: keyof IEditableData) => (e: ChangeEvent<HTMLInputElement>) => {
 			onUpdate(Number(data.id), field, e.target.checked ? 1 : 0);
+			// const timeoutId = setTimeout(() => saveDatabaseData(), 1500);
+			// return () => clearTimeout(timeoutId);
 		};
 
 	//HELP: Для селекта - принимаем IItemFilter, извлекаем значение

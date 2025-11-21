@@ -234,6 +234,7 @@ export interface IRowDatabaseOptions {
 	setActiveMoveButton: Dispatch<
 		SetStateAction<{ isView: boolean; id: number | null }>
 	>;
+	saveDatabaseData: () => void;
 }
 
 export interface IBlockIntervalParam {
@@ -317,6 +318,7 @@ export interface IIconAndColorSettings {
 	// editableData: IEditableData[];
 	closeFunc: () => void;
 	viewTargetHandler: (bol: boolean) => void;
+	editableData: IEditableData[];
 }
 
 export interface IIconsSettingsProps {

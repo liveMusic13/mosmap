@@ -37,11 +37,11 @@ const IconsSettings: FC<IIconsSettingsProps> = ({
 	const handleOpenChoiceIcon = (el: IListItemsResponse) =>
 		setViewIcon({ id: el.id, isView: true });
 
-	console.log('editListData', editListData);
-
 	const arrColumn = isOnlyList
 		? arrColumnPopup.filter(el => el.name !== 'Иконка')
 		: arrColumnPopup;
+
+	console.log('editListData', editListData);
 
 	return (
 		<div

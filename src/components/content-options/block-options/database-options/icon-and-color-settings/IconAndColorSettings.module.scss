@@ -14,10 +14,11 @@
 	box-shadow: 0px 0px 10px rgba($color: vars.$green_light, $alpha: 0.3);
 	background-color: vars.$white;
 
-	overflow-y: auto;
-	overflow-x: hidden;
-	@include mix.scrollbar();
-	max-height: 70%; //HELP: Ограничить максимальную высоту, чтобы когда компонент не помещается по высоте , то появлялся скролбар. А когда в компоненте мало контента, то он просто стоял маленький по центру экрана.
+	// overflow-y: auto;
+	// overflow-x: hidden;
+	// @include mix.scrollbar();
+	overflow: hidden;
+	max-height: 70vh; //HELP: Ограничить максимальную высоту, чтобы когда компонент не помещается по высоте , то появлялся скролбар. А когда в компоненте мало контента, то он просто стоял маленький по центру экрана.
 
 	@media (max-width: 767.98px) {
 		padding: func.adapt(20px, 480px);
@@ -41,10 +42,6 @@
 		width: func.adapt(125px, 1920px);
 		height: func.adapt(40px, 1920px);
 		font-size: 1rem;
-		// transition:
-		// 	font-size 0.3s ease,
-		// 	width 0.3s ease,
-		// 	height 0.3s ease;
 		transition:
 			background-color 0.3s ease,
 			color 0.3s ease;
@@ -53,18 +50,6 @@
 			background-color: vars.$white !important;
 			color: vars.$green !important;
 			border: 1px solid vars.$green;
-			// font-size: 1.08rem;
-			// width: func.adapt(130px, 1920px);
-			// height: func.adapt(45px, 1920px);
-
-			// @media (max-width: 767.98px) {
-			// 	width: func.adapt(130px, 480px);
-			// 	height: func.adapt(40px, 480px);
-			// }
-			// @media (max-width: 479.98px) {
-			// 	width: func.adapt(130px, 360px);
-			// 	height: func.adapt(40px, 360px);
-			// }
 		}
 
 		@media (max-width: 767.98px) {
@@ -109,6 +94,10 @@
 	border-radius: func.adapt(11px, 1920px);
 	background-color: vars.$blue_very_light;
 	position: relative;
+	// overflow-y: auto; // вертикальный скролл
+	max-height: calc(70vh - 120px); // вычитаем высоту заголовка и кнопок
+
+	// @include mix.scrollbar(); // твой кастомный скроллбар
 
 	@media (max-width: 767.98px) {
 		border-radius: func.adapt(11px, 480px);
@@ -120,16 +109,15 @@
 		background-color: vars.$blue_very_light;
 		position: sticky;
 		bottom: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
 
 		> button {
 			text-transform: uppercase;
 			width: func.adapt(125px, 1920px);
 			height: func.adapt(40px, 1920px);
 			font-size: 1rem;
-			// transition:
-			// 	font-size 0.3s ease,
-			// 	width 0.3s ease,
-			// 	height 0.3s ease;
 			transition:
 				background-color 0.3s ease,
 				color 0.3s ease;
@@ -138,27 +126,18 @@
 				background-color: vars.$white !important;
 				color: vars.$green !important;
 				border: 1px solid vars.$green;
-				// font-size: 1.08rem;
-				// width: func.adapt(130px, 1920px);
-				// height: func.adapt(45px, 1920px);
-				// @media (max-width: 767.98px) {
-				// 	width: 100%;
-				// 	height: func.adapt(40px, 480px);
-				// }
-				// @media (max-width: 479.98px) {
-				// 	height: func.adapt(40px, 360px);
-				// }
 			}
-		}
 
-		@media (max-width: 767.98px) {
-			width: 100%;
-			height: func.adapt(40px, 480px);
-			border-radius: func.adapt(8px, 480px);
-		}
-		@media (max-width: 479.98px) {
-			height: func.adapt(40px, 360px);
-			border-radius: func.adapt(8px, 360px);
+			@media (max-width: 767.98px) {
+				width: 100%;
+				height: func.adapt(40px, 480px);
+				border-radius: func.adapt(8px, 480px);
+				margin-bottom: 1rem;
+			}
+			@media (max-width: 479.98px) {
+				height: func.adapt(40px, 360px);
+				border-radius: func.adapt(8px, 360px);
+			}
 		}
 	}
 }

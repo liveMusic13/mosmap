@@ -6,17 +6,23 @@
 	display: grid;
 	grid-template-columns: 1.42rem func.adapt(400px, 1920px) repeat(2, 1fr);
 	gap: func.adapt(15px, 1920px);
-	padding: func.adapt(20px, 1920px);
+	// padding: func.adapt(20px, 1920px);
+	padding: 0 func.adapt(20px, 1920px);
+
+	max-height: 40vh; // Можно настроить под свои нужды
+	overflow-y: auto;
+	align-content: start;
+	@include mix.scrollbar();
 
 	@media (max-width: 767.98px) {
 		grid-template-columns: 1.42rem func.adapt(140px, 480px) repeat(2, 1fr);
 		gap: func.adapt(10px, 480px);
-		padding: func.adapt(10px, 480px);
+		padding: 0 func.adapt(10px, 480px);
 	}
 	@media (max-width: 479.98px) {
 		grid-template-columns: 1.42rem func.adapt(140px, 360px) repeat(2, 1fr);
 		gap: func.adapt(10px, 360px);
-		padding: func.adapt(10px, 360px);
+		padding: 0 func.adapt(10px, 360px);
 	}
 }
 
@@ -26,6 +32,30 @@
 
 .block__titles_table {
 	display: contents;
+
+	// Делаем заголовки sticky
+	h2 {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		padding-bottom: func.adapt(10px, 1920px);
+		padding-top: func.adapt(20px, 1920px);
+		background-color: vars.$blue_very_light;
+
+		@media (max-width: 767.98px) {
+			padding-top: func.adapt(20px, 480px);
+		}
+		// // Добавляем нижнюю границу только последнему видимому заголовку
+		// &::after {
+		// 	content: '';
+		// 	position: absolute;
+		// 	bottom: 0;
+		// 	left: 0;
+		// 	right: 0;
+		// 	height: 1px;
+		// 	background-color: #e0e0e0; // Опционально
+		// }
+	}
 }
 
 .title_table {
@@ -42,6 +72,7 @@
 
 .table__body {
 	display: contents;
+	// padding-bottom: 10rem;
 }
 
 .icon_svg {
@@ -73,3 +104,245 @@
 .block__icons {
 	position: relative;
 }
+
+.color {
+	width: func.adapt(25px, 1920px);
+	height: func.adapt(25px, 1920px);
+	border-radius: func.adapt(4px, 1920px);
+	transition:
+		width 0.3s ease,
+		height 0.3s ease;
+
+	&:hover {
+		cursor: pointer;
+		width: func.adapt(28px, 1920px);
+		height: func.adapt(28px, 1920px);
+
+		@media (max-width: 767.98px) {
+			width: func.adapt(27px, 480px);
+			height: func.adapt(27px, 480px);
+		}
+
+		@media (max-width: 479.98px) {
+			width: func.adapt(27px, 360px);
+			height: func.adapt(27px, 360px);
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(27px, 480px);
+		height: func.adapt(27px, 480px);
+		border-radius: func.adapt(4px, 480px);
+	}
+
+	@media (max-width: 479.98px) {
+		width: func.adapt(27px, 360px);
+		height: func.adapt(27px, 360px);
+		border-radius: func.adapt(4px, 360px);
+	}
+}
+
+.fiveColumns {
+	grid-template-columns: 5% 56% 8% 10% 15%; // # | Название | Иконка | Цвет | Delete
+}
+.grid-four {
+	grid-template-columns: 5% 30% 30% 15%; // # | Название | Icon OR Color | Delete
+}
+.threeColumns {
+	grid-template-columns: 5% 70% 15%; // # | Название | Delete
+}
+
+// @use '@st/functions.scss' as func;
+// @use '@st/variables.scss' as vars;
+// @use '@st/mixins.scss' as mix;
+
+// .block__iconsSettings {
+// 	display: flex;
+// 	flex-direction: column;
+// 	max-height: 70vh; // Можно настроить под свои нужды
+// 	padding: func.adapt(20px, 1920px);
+// 	min-width: 55rem;
+
+// 	@media (max-width: 767.98px) {
+// 		padding: func.adapt(10px, 480px);
+// 	}
+// 	@media (max-width: 479.98px) {
+// 		padding: func.adapt(10px, 360px);
+// 	}
+// }
+
+// .isOnlyList {
+// 	.block__titles_table,
+// 	.table__body {
+// 		grid-template-columns: 1.42rem func.adapt(600px, 1920px) 1fr !important;
+// 	}
+// }
+
+// .block__titles_table {
+// 	display: grid;
+// 	grid-template-columns: 1.42rem func.adapt(600px, 1920px) repeat(2, 1fr);
+// 	gap: func.adapt(15px, 1920px);
+// 	position: sticky;
+// 	top: 0;
+// 	// background-color: #fff; // Добавьте нужный цвет фона
+// 	z-index: 10;
+// 	padding-bottom: func.adapt(10px, 1920px);
+// 	// border-bottom: 1px solid #e0e0e0; // Опционально
+
+// 	@media (max-width: 767.98px) {
+// 		grid-template-columns: 1.42rem func.adapt(140px, 480px) repeat(2, 1fr);
+// 		gap: func.adapt(10px, 480px);
+// 	}
+// 	@media (max-width: 479.98px) {
+// 		grid-template-columns: 1.42rem func.adapt(140px, 360px) repeat(2, 1fr);
+// 		gap: func.adapt(10px, 360px);
+// 	}
+// }
+
+// .table__wrapper {
+// 	overflow-y: auto;
+// 	overflow-x: hidden;
+// 	flex: 1;
+
+// 	// Кастомный скроллбар (опционально)
+// 	&::-webkit-scrollbar {
+// 		width: 8px;
+// 	}
+
+// 	&::-webkit-scrollbar-track {
+// 		background: #f1f1f1;
+// 		border-radius: 4px;
+// 	}
+
+// 	&::-webkit-scrollbar-thumb {
+// 		background: #888;
+// 		border-radius: 4px;
+// 	}
+
+// 	&::-webkit-scrollbar-thumb:hover {
+// 		background: #555;
+// 	}
+// }
+
+// .table__body {
+// 	display: grid;
+// 	grid-template-columns: 1.42rem func.adapt(400px, 1920px) repeat(2, 1fr);
+// 	gap: func.adapt(15px, 1920px);
+// 	align-items: center;
+// 	padding: func.adapt(10px, 1920px) 0;
+// 	border-bottom: 1px solid #f0f0f0; // Опционально
+
+// 	@media (max-width: 767.98px) {
+// 		grid-template-columns: 1.42rem func.adapt(140px, 480px) repeat(2, 1fr);
+// 		gap: func.adapt(10px, 480px);
+// 	}
+// 	@media (max-width: 479.98px) {
+// 		grid-template-columns: 1.42rem func.adapt(140px, 360px) repeat(2, 1fr);
+// 		gap: func.adapt(10px, 360px);
+// 	}
+// }
+
+// .position {
+// 	grid-column: 1;
+// }
+
+// .title_table {
+// 	font-size: 1.28rem;
+// 	font-weight: 700;
+// 	grid-column: span 1;
+// 	display: flex;
+// 	align-items: center;
+
+// 	@media (max-width: 767.98px) {
+// 		font-size: 0.857rem;
+// 	}
+// }
+
+// .icon_svg {
+// 	width: func.adapt(27px, 1920px);
+// 	height: func.adapt(27px, 1920px);
+// 	transition:
+// 		width 0.3s ease,
+// 		height 0.3s ease;
+
+// 	@media (max-width: 767.98px) {
+// 		width: func.adapt(27px, 480px);
+// 		height: func.adapt(27px, 480px);
+// 	}
+
+// 	@media (max-width: 479.98px) {
+// 		width: func.adapt(27px, 360px);
+// 		height: func.adapt(27px, 360px);
+// 	}
+
+// 	&:hover {
+// 		@media (min-width: 767.98px) {
+// 			cursor: pointer;
+// 			width: func.adapt(30px, 1920px);
+// 			height: func.adapt(30px, 1920px);
+// 		}
+// 	}
+// }
+
+// .block__icons {
+// 	position: relative;
+// }
+
+// .color {
+// 	width: func.adapt(25px, 1920px);
+// 	height: func.adapt(25px, 1920px);
+// 	border-radius: func.adapt(4px, 1920px);
+// 	transition:
+// 		width 0.3s ease,
+// 		height 0.3s ease;
+
+// 	&:hover {
+// 		cursor: pointer;
+// 		width: func.adapt(28px, 1920px);
+// 		height: func.adapt(28px, 1920px);
+
+// 		@media (max-width: 767.98px) {
+// 			width: func.adapt(27px, 480px);
+// 			height: func.adapt(27px, 480px);
+// 		}
+
+// 		@media (max-width: 479.98px) {
+// 			width: func.adapt(27px, 360px);
+// 			height: func.adapt(27px, 360px);
+// 		}
+// 	}
+
+// 	@media (max-width: 767.98px) {
+// 		width: func.adapt(27px, 480px);
+// 		height: func.adapt(27px, 480px);
+// 		border-radius: func.adapt(4px, 480px);
+// 	}
+
+// 	@media (max-width: 479.98px) {
+// 		width: func.adapt(27px, 360px);
+// 		height: func.adapt(27px, 360px);
+// 		border-radius: func.adapt(4px, 360px);
+// 	}
+// }
+
+// // Классы для динамических колонок
+// .fiveColumns {
+// 	&.block__titles_table,
+// 	.table__body {
+// 		grid-template-columns: 5% 56% 8% 10% 15%; // # | Название | Иконка | Цвет | Delete
+// 	}
+// }
+
+// .gridFour {
+// 	&.block__titles_table,
+// 	.table__body {
+// 		grid-template-columns: 5% 30% 30% 15%; // # | Название | Icon OR Color | Delete
+// 	}
+// }
+
+// .threeColumns {
+// 	&.block__titles_table,
+// 	.table__body {
+// 		grid-template-columns: 5% 70% 15%; // # | Название | Delete
+// 	}
+// }

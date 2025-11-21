@@ -265,6 +265,7 @@ const DatabaseOptions: FC<Props> = ({
 				<>
 					<BackgroundOpacity />
 					<IconAndColorSettings
+						editableData={editableData}
 						column={targetColumn.column}
 						targetIdObject={targetIdObject}
 						closeFunc={handleCloseTargetPopup}
@@ -306,7 +307,18 @@ const DatabaseOptions: FC<Props> = ({
 									className={styles.icon_svg}
 									style={{ color: colors.green }}
 									onClick={() =>
-										isActive ? handleViewSettings(el) : undefined
+										// isActive ? handleViewSettings(el) : undefined
+										{
+											const test = editableData.find(element => {
+												if (el.name === 'Иконка') {
+													return element.icon === 1 ? element : 0;
+												} else if (el.name === 'Цвет') {
+													return element.color === 1 ? element : 0;
+												}
+											});
+											setTargetIdObject(test?.id);
+											handleViewSettings(el);
+										}
 									}
 								>
 									<use xlinkHref={`/images/icons/sprite.svg#gear`}></use>
@@ -343,6 +355,7 @@ const DatabaseOptions: FC<Props> = ({
 							activeMoveButton={activeMoveButton}
 							setActiveMoveButton={setActiveMoveButton}
 							setTargetIdObject={setTargetIdObject}
+							saveDatabaseData={saveDatabaseData}
 						/>
 					))}
 			</div>

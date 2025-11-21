@@ -13,8 +13,7 @@ import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 import styles from './IconAndColorSettings.module.scss';
-import ColorSettings from './color-settings/ColorSettings';
-import IconsSettings from './icons-settings/IconsSettings';
+import UnifiedSettings from './icons-settings/UnifiedSettings';
 import { ACTUAL_MAP, colors } from '@/app.constants';
 
 const IconAndColorSettings: FC<IIconAndColorSettings> = ({
@@ -22,6 +21,7 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 	targetIdObject,
 	closeFunc,
 	viewTargetHandler,
+	editableData,
 }) => {
 	const ref = useRef(null);
 	const windowSize = useCheckWidth();
@@ -54,6 +54,12 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 		}
 	}, [isSuccess_mutate]);
 
+	const isAllColumns = editableData.some(
+		el => targetIdObject === el.id && el.color === 1 && el.icon === 1,
+	);
+	// const isColor =
+	// const isIcon =
+
 	useClickOutside(ref, () => viewTargetHandler(false));
 
 	const handleUpdate = (
@@ -82,7 +88,7 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 				<h2 className={styles.title}>Настроить группу</h2>
 				<Button onClick={closeFunc}>Назад</Button>
 			</div>
-			<div className={styles.line}></div>
+			<div className={styles.line} />
 			<div className={styles.block__content}>
 				{isLoading && (
 					<Loader
@@ -92,7 +98,7 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 						}}
 					/>
 				)}
-				{isSuccess &&
+				{/* {isSuccess &&
 					(column === 'Иконка' || column === 'Наименование столбца') && (
 						<>
 							<IconsSettings
@@ -108,6 +114,16 @@ const IconAndColorSettings: FC<IIconAndColorSettings> = ({
 						editListData={editListData}
 						onUpdate={handleUpdate}
 						handleDelete={handleDelete}
+					/>
+				)} */}
+				{isSuccess && (
+					<UnifiedSettings
+						showColor={isAllColumns ? true : column === 'Цвет'}
+						showIcon={isAllColumns ? true : column === 'Иконка'}
+						editListData={editListData}
+						onUpdate={handleUpdate}
+						handleDelete={handleDelete}
+						isOnlyList={column === 'Наименование столбца'}
 					/>
 				)}
 				<div className={styles.block__buttons}>

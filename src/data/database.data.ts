@@ -55,6 +55,10 @@ export const arrColumnPopup = [
 		name: 'Название',
 	},
 	{
+		id: 6,
+		name: 'Цвет',
+	},
+	{
 		id: 3,
 		name: 'Иконка',
 	},
@@ -74,7 +78,7 @@ export const arrColumnPopupColor = [
 		name: 'Название',
 	},
 	{
-		id: 3,
+		id: 6,
 		name: 'Цвет',
 	},
 	{
