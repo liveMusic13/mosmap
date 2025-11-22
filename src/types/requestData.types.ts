@@ -32,6 +32,12 @@ export interface IDataMap {
 	title: string;
 	tiles_url: string;
 	description: string;
+	buttons?: {
+		image_full: string;
+		image_min: string;
+		text: string;
+		url: string;
+	}[];
 	'all-points': number;
 	bounds: string;
 	clastering: number;

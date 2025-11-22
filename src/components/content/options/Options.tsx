@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CSSProperties, FC, useCallback } from 'react';
 
@@ -17,6 +18,7 @@ import {
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
+import { useGetDataMap } from '@/hooks/useGetDataMap';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { srcStandard } from '@/utils/pathSvg';
@@ -60,6 +62,8 @@ const Options: FC = () => {
 	const { isColorIntervalMobile, setIsColorIntervalMobile, isColorInterval } =
 		useColorsIntervalStore(store => store);
 	const isListOfObjects = useListOfObjectsStore(store => store.isListOfObjects);
+	const { refetch, data, isSuccess } = useGetDataMap(queryString, map);
+
 	// const isFilters = useFiltersStore(store => store.isFilters);
 	const view = useViewStore(store => store.view);
 	const openView = useViewStore(store => store.openView);
@@ -175,6 +179,39 @@ const Options: FC = () => {
 	return (
 		<div className={styles.block__options}>
 			<div className={styles.one}>
+				{isSuccess &&
+					isMobile &&
+					data?.buttons?.map((but, ind) => (
+						<Button
+							key={ind}
+							style={{
+								width: 'calc(39/1920*100vw)',
+								height: 'calc(39/1920*100vw)',
+								border: `1px solid ${colors.grey_middle}`,
+								backgroundColor: 'transparent',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								position: 'relative',
+							}}
+						>
+							<a
+								href={but.url}
+								target='_blanc'
+								className={styles.link__button}
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<Image src={but.image_min} alt='image' width={30} height={30} />
+							</a>
+							<p className={styles.hover__text} style={{ left: 0 }}>
+								{but.text}
+							</p>
+						</Button>
+					))}
 				{standardArr.map(opt => {
 					const isDisabled =
 						((opt.id === 0 || opt.id === 1) && !token) ||
@@ -223,6 +260,36 @@ const Options: FC = () => {
 					}}
 				/>
 				<Line style={{ backgroundColor: colors.grey_lines }} />
+				{isSuccess &&
+					!isMobile &&
+					data?.buttons?.map((but, ind) => (
+						<Button
+							key={ind}
+							style={{
+								width: 'calc(169/1920*100vw)',
+								height: 'calc(39/1920*100vw)',
+								border: `1px solid ${colors.grey_middle}`,
+								backgroundColor: 'transparent',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								position: 'relative',
+							}}
+						>
+							<a href={but.url} target='_blanc' className={styles.link__button}>
+								<Image
+									src={but.image_full}
+									alt='image'
+									style={{ objectFit: 'contain' }}
+									fill
+									sizes='(max-width: 1920px) 39vw, 39px'
+								/>
+							</a>
+							<p className={styles.hover__text} style={{ left: 0 }}>
+								{but.text}
+							</p>
+						</Button>
+					))}
 			</div>
 			<div className={styles.two}>
 				<Line style={{ backgroundColor: colors.grey_lines }} />

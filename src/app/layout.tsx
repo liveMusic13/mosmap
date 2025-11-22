@@ -1,10 +1,5 @@
 import type { Metadata } from 'next';
 
-import FullscreenDesktop from '@/components/ad/FullscreenDesktop';
-import FullscreenMobile from '@/components/ad/FullscreenMobile';
-import MailRu from '@/components/counters/MailRu';
-import YandexMetrika from '@/components/counters/YandexMetrika';
-
 import { MapProvider } from '@/providers/MapProvider';
 
 //@ts-ignore
@@ -27,14 +22,14 @@ export default function RootLayout({
 		<html lang='ru'>
 			<MapProvider>
 				<body>
-					<YandexMetrika />
-					<MailRu />
+					{/* <YandexMetrika />
+					<MailRu /> */}
 
-					<script>window.yaContextCb=window.yaContextCb||[]</script>
-					<script src='https://yandex.ru/ads/system/context.js' async></script>
+					{/* <script>window.yaContextCb=window.yaContextCb||[]</script>
+					<script src='https://yandex.ru/ads/system/context.js' async></script> */}
 
-					<FullscreenDesktop />
-					<FullscreenMobile />
+					{/* <FullscreenDesktop />
+					<FullscreenMobile /> */}
 					{children}
 				</body>
 			</MapProvider>
