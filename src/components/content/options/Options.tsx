@@ -193,6 +193,7 @@ const Options: FC = () => {
 								alignItems: 'center',
 								justifyContent: 'center',
 								position: 'relative',
+								padding: 'calc(4/1920*100vw) calc(8/1920*100vw)',
 							}}
 						>
 							<a
@@ -274,6 +275,7 @@ const Options: FC = () => {
 								alignItems: 'center',
 								justifyContent: 'center',
 								position: 'relative',
+								padding: 'calc(4/1920*100vw) calc(8/1920*100vw)',
 							}}
 						>
 							<a href={but.url} target='_blanc' className={styles.link__button}>
