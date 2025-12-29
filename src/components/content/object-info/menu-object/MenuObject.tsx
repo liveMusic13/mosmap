@@ -11,6 +11,7 @@ import {
 	useIdObjectInfoStore,
 	usePopupStore,
 	useToggleViewAreaStore,
+	useViewPeopleAreaStore,
 } from '@/store/store';
 
 import { useCheckWidth } from '@/hooks/useCheckWidth';
@@ -24,42 +25,24 @@ import { colors } from '@/app.constants';
 import { arrMenuObject } from '@/data/menuObject.data';
 
 const MenuObject: FC = memo(() => {
-	// const map = Cookies.get(ACTUAL_MAP);
-	// const token = Cookies.get(TOKEN);
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const isMobile_mini = windowSize <= 481;
 	const searchParams = useSearchParams();
-	// const map = getMapId(searchParams); // работает с SEO URL
-	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
 	const token = checkMapAccess(Number(map) || null).hasMapAccess;
 
-	// const { mapId: map } = useContext(MapContext);
-
-	// const seoUrl = pathname.startsWith('/map/')
-	// 	? pathname.split('/map/')[1]
-	// 	: null;
-
-	// const queryString = searchParams.toString();
-
-	// const resultQuery = seoUrl
-	// 	? `?url=${seoUrl}&${queryString}`
-	// 	: `?${queryString}`;
-	// const searchParams = useSearchParams();
-	// //HELP: Преобразование searchParams в строку
-	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const queryString = getQueryString(searchParams, map); // включает map параметр
-
-	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
 
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 	const { isViewArea, setIsViewArea } = useToggleViewAreaStore(store => store);
 	const { setIsPopup, setMessageInPopup } = usePopupStore(store => store);
+	const { setIsViewPeopleArea, isViewPeopleArea }: any = useViewPeopleAreaStore(
+		store => store,
+	);
 
 	const { data } = useGetDataMap(queryString, map);
-	console.log('test map MenuObject', queryString, map);
 
 	const findTargetObject = data?.points.find(el => el.id === idObjectInfo); //HELP: Находим объект таргета
 
@@ -79,6 +62,9 @@ const MenuObject: FC = memo(() => {
 			setIsPopup(true);
 		} else if (id === 2) {
 			handleViewArea();
+		} else if (id === 3) {
+			setIsViewPeopleArea(!isViewPeopleArea);
+			console.log('!isViewPeopleArea', !isViewPeopleArea);
 		}
 	};
 
@@ -120,9 +106,7 @@ const MenuObject: FC = memo(() => {
 						position: 'relative',
 					}}
 					onClick={() => onClick(el.id)}
-					disabled={
-						(!token && el.id === 1) || el.id === 2 || el.id === 3 || el.id === 4
-					}
+					disabled={(!token && el.id === 1) || el.id === 2 || el.id === 4}
 				>
 					<svg className={styles.icon_svg} style={personActiveStyle(el.id)}>
 						<use xlinkHref={`/images/icons/sprite.svg#${el.src}`}></use>

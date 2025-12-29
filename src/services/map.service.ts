@@ -225,6 +225,23 @@ export const mapService = {
 			throw new Error(error.response?.data?.message || error.message);
 		}
 	},
+	getObjectArea: async (
+		lat: number,
+		lng: number,
+	): Promise<IApiResponse<any>> => {
+		try {
+			const response = await $axios.get(
+				`/api/object_area.php?lng=${lng}&lat=${lat}&radius=5`,
+			);
+			return {
+				status: response.status,
+				data: response.data,
+			};
+		} catch (axiosError: any) {
+			const error = axiosError;
+			throw new Error(error.response?.data?.message || error.message);
+		}
+	},
 	save_object: async (
 		map: string,
 		marker: IMarker,

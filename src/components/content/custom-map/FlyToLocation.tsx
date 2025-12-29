@@ -40,10 +40,10 @@ const FlyToLocation: FC<{ toZoom: number | undefined }> = ({ toZoom }) => {
 	const hasFlownRef = useRef(false);
 
 	useEffect(() => {
-		console.log('FlyToLocation effect, centerMap:', centerMap);
+		// console.log('FlyToLocation effect, centerMap:', centerMap);
 
 		if (!centerMap) {
-			console.log('No centerMap, returning');
+			// console.log('No centerMap, returning');
 			return;
 		}
 
@@ -51,7 +51,7 @@ const FlyToLocation: FC<{ toZoom: number | undefined }> = ({ toZoom }) => {
 			JSON.stringify(centerMap) === JSON.stringify([55.7522, 37.6156]);
 
 		if (isDefault) {
-			console.log('Default coordinates detected, NOT flying');
+			// console.log('Default coordinates detected, NOT flying');
 			// При дефолтных координатах вообще ничего не делаем
 			return;
 		}
@@ -78,7 +78,7 @@ const FlyToLocation: FC<{ toZoom: number | undefined }> = ({ toZoom }) => {
 			return;
 		}
 
-		console.log('Actually flying to:', centerMap);
+		// console.log('Actually flying to:', centerMap);
 		hasFlownRef.current = true;
 
 		const targetZoom = toZoom ? toZoom - 2 : map.getZoom(); // Вернул оригинальную логику, но с меньшим зумом

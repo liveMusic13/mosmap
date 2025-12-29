@@ -29,18 +29,6 @@ export const useListOfObjectsStore = create<IListOfObjectsStore>(set => ({
 	setIsListOfObjects: bol => set({ isListOfObjects: bol }),
 }));
 
-// export const useFiltersStore = create<IFiltersStore>(set => ({
-// 	isFilters: true,
-// 	setIsFilters: bol => set({ isFilters: bol }),
-// }));
-
-// export const useObjectInfoStore = create<IObjectInfoStore>(set => ({
-// 	isObjectInfo: false,
-// 	setIsObjectInfo: bol => set({ isObjectInfo: bol }),
-// 	isObjectInfoReserve: false,
-// 	setIsObjectInfoReserve: bol => set({ isObjectInfoReserve: bol }),
-// }));
-
 export const useIdObjectInfoStore = create<IIdObjectInfoStore>((set, get) => ({
 	idObjectInfo: null,
 	setIdObjectInfo: id => set({ idObjectInfo: id }),
@@ -114,11 +102,6 @@ export const useMapLayersStore = create<IMapLayersStore>(set => ({
 	addPolygon: pol =>
 		set(state => ({ arrayPolygons: [...state.arrayPolygons, pol] })),
 }));
-
-// export const useViewDotInfoStore = create<IViewDotInfoStore>(set => ({
-// 	isViewDotInfo: false,
-// 	setViewDotInfo: bol => set({ isViewDotInfo: bol }),
-// }));
 
 // один store вместо трёх
 export const useViewStore = create<IViewStore>(set => ({
@@ -211,3 +194,32 @@ export const useViewObjectAbdAreaInfoStore =
 		isViewObjectInfo: false,
 		setIsViewObjectInfo: bol => set({ isViewObjectInfo: bol }),
 	}));
+
+export const useViewPeopleAreaStore = create(set => ({
+	isViewPeopleArea: false,
+	setIsViewPeopleArea: (bol: boolean) =>
+		set({
+			isViewPeopleArea: bol,
+		}),
+}));
+
+export const useIdPeopleAreaStore = create<{
+	idPeopleArea: number[];
+	setIdPeopleArea: (id: number) => void;
+}>(set => ({
+	idPeopleArea: [],
+	setIdPeopleArea: (id: number) =>
+		set(state => ({
+			idPeopleArea: state.idPeopleArea.includes(id)
+				? state.idPeopleArea.filter(existingId => existingId !== id)
+				: [...state.idPeopleArea, id],
+		})),
+}));
+
+export const useViewOrganizationAreaStore = create(set => ({
+	isViewOrganizationArea: false,
+	setIsViewOrganizationArea: (bol: boolean) =>
+		set({
+			isViewOrganizationArea: bol,
+		}),
+}));

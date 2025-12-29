@@ -17,8 +17,8 @@ export const arrMenuObject = [
 	},
 	{
 		id: 3,
-		// hover_text: 'Пешеходный трафик',
-		hover_text: 'Скоро!',
+		hover_text: 'Пешеходный трафик',
+		// hover_text: 'Скоро!',
 		src: 'menu-object-trafick',
 	},
 	{

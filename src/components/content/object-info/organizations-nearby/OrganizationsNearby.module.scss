@@ -1,0 +1,65 @@
+@use '@st/functions.scss' as func;
+@use '@st/variables.scss' as vars;
+@use '@st/mixins.scss' as mix;
+
+.wrapper_organizationsNearby {
+	max-height: 30vh;
+	border: 1px dotted vars.$grey_border_icons;
+	border-top: none;
+	padding: 0.5rem 0.3rem;
+
+	overflow-x: hidden;
+	overflow-y: auto;
+	@include mix.scrollbar();
+}
+
+.block__organization {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	border-top: 1px dotted vars.$grey_border_icons;
+	padding: 0.3rem;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	> p {
+		font-size: 1rem;
+	}
+}
+
+.first_org {
+	border-top: none;
+}
+
+.org_name {
+	color: vars.$grey;
+}
+
+.title_orgs {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+}
+
+.title {
+	font-weight: 600;
+	font-size: 1.2rem;
+}
+
+.image_title {
+	width: func.adapt(16px, 1920px);
+	height: func.adapt(16px, 1920px);
+
+	@media (max-width: 767.98px) {
+		width: func.adapt(16px, 480px);
+		height: func.adapt(16px, 480px);
+	}
+	@media (max-width: 479.98px) {
+		width: func.adapt(16px, 360px);
+		height: func.adapt(16px, 360px);
+	}
+}

@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { useSearchParams } from 'next/navigation';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect } from 'react';
 import { FeatureGroup, MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { EditControl } from 'react-leaflet-draw';
@@ -10,11 +10,7 @@ import { useMapContext } from '@/providers/MapProvider';
 import { ICustomMap } from '@/types/props.types';
 import { IDataMap } from '@/types/requestData.types';
 
-import {
-	useCenterMapStore,
-	useSelectAreaStore,
-	useZoomLevelStore,
-} from '@/store/store';
+import { useSelectAreaStore, useZoomLevelStore } from '@/store/store';
 
 import { useGetDataMap } from '@/hooks/useGetDataMap';
 import { useSelectArea } from '@/hooks/useSelectArea';
@@ -31,36 +27,16 @@ import MarkerEmptyArea from './MarkerEmptyArea';
 import RenderArea from './RenderArea';
 import RenderColorMap from './RenderColorMap';
 import RenderMarkers from './RenderMarkers';
+import RenderPeopleArea from './RenderPeopleArea';
 import SaveMapCenter from './SaveMapCenter';
 import UpdateMapSettings from './UpdateMapSettings';
 import ZoomTracker from './ZoomTracker';
 
 const CustomMap: FC<ICustomMap> = () => {
-	// const map = Cookies.get(ACTUAL_MAP);
-
 	const searchParams = useSearchParams();
-	// const map = getMapId(searchParams);
-	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
 
-	// const { mapId: map } = useContext(MapContext);
-
 	const queryString = getQueryString(searchParams, map); // включает map параметр
-	//HELP: Преобразование searchParams в строку
-	// const queryString = new URLSearchParams(searchParams.toString()).toString();
-	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
-	// const pathname = usePathname(); // "/map/renovation"
-	// const searchParams = useSearchParams();
-
-	// const seoUrl = pathname.startsWith('/map/')
-	// 	? pathname.split('/map/')[1]
-	// 	: null;
-
-	// const queryString = searchParams.toString();
-
-	// const resultQuery = seoUrl
-	// 	? `?url=${seoUrl}&${queryString}`
-	// 	: `?${queryString}`;
 
 	const { data, isLoading, isSuccess } = useGetDataMap(queryString, map);
 
@@ -68,16 +44,15 @@ const CustomMap: FC<ICustomMap> = () => {
 
 	const { _onCreated, _onDeleted } = useSelectArea();
 
-	// const isFirstLoad = useRef(true);
 	const zoomLevel = useZoomLevelStore(state => state.zoomLevel);
-	const setZoomLevel = useZoomLevelStore(state => state.setZoomLevel);
-	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
-	const centerMap = useCenterMapStore(store => store.centerMap);
-	// Создаем стабильный ключ основанный на mapId
-	const mapKey = useMemo(() => `map-${map}`, [map]);
-	// useEffect(() => {
-	// 	isFirstLoad.current = false;
-	// }, []);
+	// const setZoomLevel = useZoomLevelStore(state => state.setZoomLevel);
+	// const setCenterMap = useCenterMapStore(store => store.setCenterMap);
+	// const centerMap = useCenterMapStore(store => store.centerMap);
+	// // Создаем стабильный ключ основанный на mapId
+	// const mapKey = useMemo(() => `map-${map}`, [map]);
+	// // useEffect(() => {
+	// // 	isFirstLoad.current = false;
+	// // }, []);
 
 	useEffect(() => {
 		const L = (window as any).L;
@@ -135,12 +110,14 @@ const CustomMap: FC<ICustomMap> = () => {
 							<RenderMarkers dataMap={data} />
 							<RenderArea />
 							<ControlledPopup markers={data.points} />
+							<RenderPeopleArea />
 						</>
 					) : (
 						<MarkerClusterGroup chunkedLoading={true}>
 							<RenderMarkers dataMap={data} />
 							<RenderArea />
 							<ControlledPopup markers={data.points} />
+							<RenderPeopleArea />
 						</MarkerClusterGroup>
 					)
 				) : (

@@ -11,6 +11,7 @@
 
 	max-height: 40vh; // Можно настроить под свои нужды
 	overflow-y: auto;
+	overflow-x: hidden;
 	align-content: start;
 	@include mix.scrollbar();
 

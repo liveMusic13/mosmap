@@ -18,6 +18,8 @@ import {
 	useSearchAddressStore,
 	useSelectAreaStore,
 	useViewObjectAbdAreaInfoStore,
+	useViewOrganizationAreaStore,
+	useViewPeopleAreaStore,
 	useViewStore,
 } from '@/store/store';
 
@@ -41,6 +43,7 @@ import ColorInterval from './color-interval/ColorInterval';
 import InfoAboutZone from './info-about-zone/InfoAboutZone';
 import ObjectInfo from './object-info/ObjectInfo';
 import ViewObjectInfo from './object-info/view-object-info/ViewObjectInfo';
+import Organizations from './organizations/Organizations';
 import { colors } from '@/app.constants';
 import { buttonsMap } from '@/data/content.data';
 
@@ -97,6 +100,11 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	const { isViewAreaInfo, isViewObjectInfo } = useViewObjectAbdAreaInfoStore(
 		store => store,
 	);
+	const { isViewPeopleArea, setIsViewPeopleArea }: any = useViewPeopleAreaStore(
+		store => store,
+	);
+	const { isViewOrganizationArea, setIsViewOrganizationArea }: any =
+		useViewOrganizationAreaStore();
 
 	const objectInfoRef = useScrollToElement(
 		isMobile && view === 'objectInfo',
@@ -113,6 +121,13 @@ const Content: FC<IContent> = ({ dataMap }) => {
 	useDisabledStatesForMobile(isMobile); //HELP: Для того чтобы отключало состояния фильтров и прочего, чтобы правильные значки отображались
 	useDisabledRemoveMarker(); //HELP: Для того чтобы по правому клику мыши отменялась смена координат
 	usePushUserToMap();
+
+	useEffect(() => {
+		if (view !== 'objectInfo') {
+			setIsViewPeopleArea(false);
+			setIsViewOrganizationArea(false);
+		}
+	}, [view]);
 
 	const handleClickButtonInMap = useCallback((id: number) => {
 		if (id === 0) {
@@ -183,6 +198,9 @@ const Content: FC<IContent> = ({ dataMap }) => {
 						)}
 
 						{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+						{!isMobile && isViewPeopleArea && isViewOrganizationArea && (
+							<Organizations />
+						)}
 
 						{!isMobile && isListOfObjects && <DynamicLists />}
 						{!isMobile && isColorInterval && <ColorInterval />}

@@ -16,6 +16,7 @@ import {
 
 import {
 	useActiveAddObjectStore,
+	useCenterMapStore,
 	useDotInfoCoordsStore,
 	// useFiltersStore,
 	useIdObjectInfoStore,
@@ -24,9 +25,12 @@ import {
 	useRemoveMarkerCrdStore,
 	useTargetObjectStore,
 	useToggleViewAreaStore,
+	useViewOrganizationAreaStore,
+	useViewPeopleAreaStore,
 	useViewStore,
 } from '@/store/store';
 
+import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 import { useCheckDirtyDataObject } from '@/hooks/useCheckDirtyDataObject';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDeleteObject } from '@/hooks/useDeleteObject';
@@ -40,11 +44,14 @@ import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { getQueryString } from '@/utils/url';
 
+import Organizations from '../organizations/Organizations';
+
 import styles from './ObjectInfo.module.scss';
 import InfoBlock from './info-block/InfoBlock';
 import InfoEdit from './info-edit/InfoEdit';
 import Info from './info/Info';
 import MenuObject from './menu-object/MenuObject';
+import OrganizationsNearby from './organizations-nearby/OrganizationsNearby';
 import { colors } from '@/app.constants';
 
 const messageSave = 'Вы действительно хотите сохранить?';
@@ -61,6 +68,7 @@ const ObjectInfo: FC = () => {
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const closeView = useViewStore(store => store.closeView);
 	const view = useViewStore(store => store.view);
+	const centerMap = useCenterMapStore(store => store.centerMap);
 
 	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
 	const { setMarker, clearMarker } = useTargetObjectStore(store => store);
@@ -81,7 +89,6 @@ const ObjectInfo: FC = () => {
 		data: dataMap,
 		data: data_getDataMap,
 	} = useGetDataMap(queryString, map);
-	console.log('test map ObjectInfo', queryString, map);
 
 	const { refetch, data, isSuccess, isLoading } = useGetObjectInfo(
 		idObjectInfo || 0,
@@ -96,6 +103,11 @@ const ObjectInfo: FC = () => {
 	const { mutate: mutate_delete } = useDeleteObject();
 	const { data: dataFilters, isLoading: isLoading_dataFilters } =
 		useGetFilters(map);
+	const { data: data_area } = useGetObjectArea(
+		(centerMap as any)[0],
+		(centerMap as any)[1],
+	);
+	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 
 	// const token = Cookies.get(TOKEN);
 	const token = checkMapAccess(dataMap?.map || null).hasMapAccess;
@@ -110,6 +122,7 @@ const ObjectInfo: FC = () => {
 	const prevIdRef = useRef<number>(idObjectInfo);
 	const pendingIdRef = useRef<number | null>(null);
 	const snapshotRef = useRef<IMarker | null>(null); // снимок старых данных
+	const { isViewOrganizationArea }: any = useViewOrganizationAreaStore();
 
 	const [isDirty, setIsDirty] = useState(false);
 
@@ -373,6 +386,12 @@ const ObjectInfo: FC = () => {
 					</Button>
 				</div>
 				{!isActiveAddObject && !isLoading && <MenuObject />}
+				{isViewPeopleArea && data_area?.data && (
+					<OrganizationsNearby orgs={data_area.data.orgs} />
+				)}
+				{isMobile && isViewPeopleArea && isViewOrganizationArea && (
+					<Organizations />
+				)}
 				{isLoading && (
 					<Loader
 						style={{

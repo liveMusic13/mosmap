@@ -5,10 +5,14 @@ import { useMap } from 'react-leaflet';
 import { ICanvasMarkersLayer } from '@/types/props.types';
 
 import {
+	useCenterMapStore,
 	useIdObjectInfoStore,
+	useIdPeopleAreaStore,
 	useViewObjectAbdAreaInfoStore,
+	useViewPeopleAreaStore,
 } from '@/store/store';
 
+import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 import { useClickOnMarker } from '@/hooks/useClickOnMarker';
 import { useGetSizeMarker } from '@/hooks/useGetSizeMarkers';
 
@@ -23,6 +27,13 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const setIsViewObjectInfo = useViewObjectAbdAreaInfoStore(
 		store => store.setIsViewObjectInfo,
 	);
+	const centerMap = useCenterMapStore(store => store.centerMap);
+	const { data: data_area } = useGetObjectArea(
+		(centerMap as any)[0],
+		(centerMap as any)[1],
+	);
+	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
 
 	const sizeMarker = useGetSizeMarker();
 
@@ -64,10 +75,45 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 			const zoomLevelMap = map.getZoom();
 			const bounds = map.getBounds(); //HELP: Получаем границы видимой области карты
 
-			dataMap.points.forEach(marker => {
+			dataMap.points.forEach((marker, ind) => {
 				const crd = marker.crd || [0, 0];
 				const markerName = marker.name || 'No name';
 				let mapObject: L.Layer | null = null;
+
+				if (isViewPeopleArea && data_area?.data?.area && ind === 1) {
+					const color = 'red';
+					const weight = 3;
+
+					mapObject = L.polygon(data_area?.data?.area, {
+						color: color,
+						weight: weight,
+					}).addTo(markersLayerRef.current!);
+
+					if (idPeopleArea.length > 0 && data_area?.data?.orgs) {
+						idPeopleArea.forEach((id: string) => {
+							const orgs = data_area?.data?.orgs[id];
+							if (orgs?.org.length > 0) {
+								orgs?.org.forEach((org: any) => {
+									// Проверяем что организация существует И у неё есть координаты
+									if (!org.lat || !org.lng) {
+										console.log('Организация без координат:', id, org);
+										return;
+									}
+									const colorOrg = '#000';
+									const orgCrd = [org.lat, org.lng];
+
+									L.circleMarker(orgCrd as LatLngExpression, {
+										renderer: canvasLayerRef.current!,
+										radius: 2,
+										color: colorOrg,
+									})
+										.addTo(markersLayerRef.current!)
+										.bindPopup(org.name);
+								});
+							}
+						});
+					}
+				}
 
 				//HELP: Проверяем, входит ли маркер в видимую область карты. Если нет, то не отрисовываем его
 				if (!bounds.contains(crd as LatLngExpression)) return;
@@ -135,7 +181,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 			map.off('moveend', updateMarkers);
 			markersLayerRef.current?.clearLayers();
 		};
-	}, [dataMap, map, idObjectInfo, sizeMarker]);
+	}, [dataMap, map, idObjectInfo, sizeMarker, isViewPeopleArea, idPeopleArea]);
 
 	return null;
 };

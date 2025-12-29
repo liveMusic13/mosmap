@@ -17,7 +17,6 @@ const MarkerEmptyArea: FC = () => {
 	const isMobile = windowSize <= 767;
 
 	const coords = useDotInfoCoordsStore(store => store.coords);
-	// const isViewDotInfo = useViewDotInfoStore(store => store.isViewDotInfo);
 	const view = useViewStore(store => store.view);
 
 	const isViewAreaInfo = useViewObjectAbdAreaInfoStore(
@@ -28,6 +27,8 @@ const MarkerEmptyArea: FC = () => {
 
 	// const shouldShowMarker = isMobile ? isViewAreaInfo : isViewDotInfo;
 	const shouldShowMarker = isMobile ? isViewAreaInfo : view === 'zoneInfo';
+
+	console.log('shouldShowMarker', shouldShowMarker, isViewAreaInfo, view);
 
 	return shouldShowMarker ? (
 		<Marker

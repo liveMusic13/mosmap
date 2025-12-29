@@ -34,14 +34,16 @@ const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 						positions={mark.polygon}
 						color={color}
 						weight={weight}
-						eventHandlers={{ click: () => handleClickOnMarker(mark.id) }}
-					>
-						{/* <Popup>
-							{mark.values
-							? mark.values?.find(el => el.label === 'Наименование')?.value
-							: mark.name}
-							</Popup> */}
-					</Polygon>
+						eventHandlers={{
+							click: e => {
+								const L = (window as any).L;
+								if (L && L.DomEvent) {
+									L.DomEvent.stopPropagation(e);
+								}
+								handleClickOnMarker(mark.id);
+							},
+						}}
+					/>
 				</Fragment>
 			);
 		} else {
@@ -76,13 +78,7 @@ const RenderMarkers: FC<IRenderMarkers> = ({ dataMap }) => {
 						position={(mark.crd as LatLngExpression) || [0, 0]}
 						icon={customMarkerIcon}
 						eventHandlers={{ click: () => handleClickOnMarker(mark.id) }}
-					>
-						{/* <Popup>
-							{mark.values
-								? mark.values?.find(el => el.label === 'Наименование')?.value
-								: mark.name}
-						</Popup> */}
-					</Marker>
+					/>
 				</Fragment>
 			);
 		}
