@@ -1,18 +1,20 @@
+'use client';
+
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
-
-import Button from '@/components/ui/button/Button';
-import Loader from '@/components/ui/loader/Loader';
-import Popup from '@/components/ui/popup/Popup';
-
-import { useMapContext } from '@/providers/MapProvider';
+import { FC, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
 import {
 	IItemFilter,
 	IMarker,
 	IValuesObjectInfo,
 } from '@/types/requestData.types';
+
+import Button from '@/components/ui/button/Button';
+import Loader from '@/components/ui/loader/Loader';
+import Popup from '@/components/ui/popup/Popup';
+
+import { useMapContext } from '@/providers/MapProvider';
 
 import {
 	useActiveAddObjectStore,
@@ -387,7 +389,9 @@ const ObjectInfo: FC = () => {
 				</div>
 				{!isActiveAddObject && !isLoading && <MenuObject />}
 				{isViewPeopleArea && data_area?.data && (
-					<OrganizationsNearby orgs={data_area.data.orgs} />
+					<Suspense>
+						<OrganizationsNearby orgs={data_area.data.orgs} />
+					</Suspense>
 				)}
 				{isMobile && isViewPeopleArea && isViewOrganizationArea && (
 					<Organizations />

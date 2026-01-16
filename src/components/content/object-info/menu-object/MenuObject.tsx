@@ -61,10 +61,10 @@ const MenuObject: FC = memo(() => {
 			setMessageInPopup('Вы хотите удалить или переместить маркер?');
 			setIsPopup(true);
 		} else if (id === 2) {
-			handleViewArea();
-		} else if (id === 3) {
+			// handleViewArea();
 			setIsViewPeopleArea(!isViewPeopleArea);
 			console.log('!isViewPeopleArea', !isViewPeopleArea);
+		} else if (id === 3) {
 		}
 	};
 
@@ -106,7 +106,7 @@ const MenuObject: FC = memo(() => {
 						position: 'relative',
 					}}
 					onClick={() => onClick(el.id)}
-					disabled={(!token && el.id === 1) || el.id === 2 || el.id === 4}
+					disabled={(!token && el.id === 1) || el.id === 3 || el.id === 4}
 				>
 					<svg className={styles.icon_svg} style={personActiveStyle(el.id)}>
 						<use xlinkHref={`/images/icons/sprite.svg#${el.src}`}></use>
