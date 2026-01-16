@@ -36,7 +36,7 @@ const OrganizationsNearby: FC<any> = ({ orgs }) => {
 					/>
 				</Button>
 			</div>
-			{Object.values(orgs).map((org: any, ind) => (
+			{(Object.values(orgs || {}) || []).map((org: any, ind) => (
 				<div
 					key={org?.group_id || ind}
 					className={`${styles.block__organization} ${ind === 0 ? styles.first_org : ''}`}

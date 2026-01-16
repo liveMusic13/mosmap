@@ -11,14 +11,14 @@ export const arrMenuObject = [
 	},
 	{
 		id: 2,
-		// hover_text: 'Зона доступности',
-		hover_text: 'Скоро!',
+		hover_text: 'Зона доступности',
+		// hover_text: 'Скоро!',
 		src: 'menu-object-zone', //TODO: Разобраться с прозрачность в картинке
 	},
 	{
 		id: 3,
-		hover_text: 'Пешеходный трафик',
-		// hover_text: 'Скоро!',
+		// hover_text: 'Пешеходный трафик',
+		hover_text: 'Скоро!',
 		src: 'menu-object-trafick',
 	},
 	{
