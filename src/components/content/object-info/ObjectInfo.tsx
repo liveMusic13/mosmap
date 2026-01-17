@@ -113,10 +113,11 @@ const ObjectInfo: FC = () => {
 	const findTargetObject = data_getDataMap?.points.find(
 		el => el.id === idObjectInfo,
 	); //HELP: Находим объект таргета
-	const { data: data_area } = useGetObjectArea(
+	const { data: data_area, isLoading: isLoading_data_area } = useGetObjectArea(
 		(centerMap as any)[0],
 		(centerMap as any)[1],
 		idObjectInfo,
+		isViewPeopleArea,
 	);
 
 	const [editValuesObject, setEditValuesObject] = useState<IMarker | null>( //HELP: Записываем в стейт данные, чтобы можно было изменять при активной авторизации. А после спокойно отправлять весь объект
@@ -272,9 +273,9 @@ const ObjectInfo: FC = () => {
 		});
 	};
 
-	useEffect(() => {
-		console.log('isPopup', isPopup, isDirty);
-	}, [isPopup, isDirty]);
+	// useEffect(() => {
+	// 	console.log('isPopup', isPopup, isDirty);
+	// }, [isPopup, isDirty]);
 
 	const deleteObject = () => {
 		mutate_delete(idObjectInfo);
@@ -395,6 +396,7 @@ const ObjectInfo: FC = () => {
 						<OrganizationsNearby orgs={data_area.data.orgs} />
 					</Suspense>
 				)}
+				{isLoading_data_area && <Loader style={{}} />}
 				{isMobile && isViewPeopleArea && isViewOrganizationArea && (
 					<Organizations />
 				)}

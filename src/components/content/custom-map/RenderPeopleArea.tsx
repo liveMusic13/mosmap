@@ -19,6 +19,7 @@ const RenderPeopleArea: FC = () => {
 		(centerMap as any)[0],
 		(centerMap as any)[1],
 		idObjectInfo,
+		isViewPeopleArea,
 	);
 	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
 
