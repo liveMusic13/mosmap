@@ -1,15 +1,25 @@
 import { FC, useEffect, useState } from 'react';
 import { CircleMarker, Polygon, Popup } from 'react-leaflet';
 
-import { useCenterMapStore, useIdPeopleAreaStore } from '@/store/store';
+import {
+	useCenterMapStore,
+	useIdObjectInfoStore,
+	useIdPeopleAreaStore,
+	useViewPeopleAreaStore,
+} from '@/store/store';
 
 import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 
 const RenderPeopleArea: FC = () => {
 	const centerMap = useCenterMapStore(store => store.centerMap);
+	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+
 	const { data: data_area } = useGetObjectArea(
 		(centerMap as any)[0],
 		(centerMap as any)[1],
+		idObjectInfo,
+		isViewPeopleArea,
 	);
 	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
 
@@ -35,7 +45,7 @@ const RenderPeopleArea: FC = () => {
 
 	return (
 		<>
-			{data_area?.data?.area && (
+			{data_area?.data?.area && isViewPeopleArea && (
 				<Polygon
 					positions={data_area?.data?.area}
 					color='red'
