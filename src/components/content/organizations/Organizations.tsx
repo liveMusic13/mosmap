@@ -7,8 +7,10 @@ import Button from '@/components/ui/button/Button';
 
 import {
 	useCenterMapStore,
+	useIdObjectInfoStore,
 	useIdPeopleAreaStore,
 	useViewOrganizationAreaStore,
+	useViewPeopleAreaStore,
 } from '@/store/store';
 
 import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
@@ -31,10 +33,15 @@ const Organizations: FC = () => {
 	const { idPeopleArea, setIdPeopleArea }: any = useIdPeopleAreaStore(
 		store => store,
 	);
+	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
+
 	const centerMap = useCenterMapStore(store => store.centerMap);
-	const { data: data_area, isSuccess } = useGetObjectArea(
+	const { data: data_area } = useGetObjectArea(
 		(centerMap as any)[0],
 		(centerMap as any)[1],
+		idObjectInfo,
+		isViewPeopleArea,
 	);
 
 	const organizations: any[] = [];
