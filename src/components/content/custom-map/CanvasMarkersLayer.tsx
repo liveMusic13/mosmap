@@ -31,6 +31,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const { data: data_area } = useGetObjectArea(
 		(centerMap as any)[0],
 		(centerMap as any)[1],
+		idObjectInfo,
 	);
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
