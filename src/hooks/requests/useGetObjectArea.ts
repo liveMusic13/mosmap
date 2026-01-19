@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useViewStore } from '@/store/store';
-
 import { mapService } from '@/services/map.service';
 
 export const useGetObjectArea = (
@@ -10,12 +8,10 @@ export const useGetObjectArea = (
 	idObjectInfo: number | null,
 	isViewPeopleArea: boolean,
 ) => {
-	const view = useViewStore(store => store.view);
-
+	// console.log(`get_object_area_${idObjectInfo}_${isViewPeopleArea}`, lat, lng);
 	return useQuery({
-		queryKey: ['get_object_area', idObjectInfo],
+		queryKey: [`get_object_area_${idObjectInfo}_${isViewPeopleArea}`],
 		queryFn: () => mapService.getObjectArea(lat, lng),
-		// enabled: view === 'objectInfo' || view === 'addObject',
 		enabled: isViewPeopleArea,
 	});
 };

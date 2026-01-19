@@ -4,8 +4,9 @@ import { useMap } from 'react-leaflet';
 
 import { ICanvasMarkersLayer } from '@/types/props.types';
 
+import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
+
 import {
-	useCenterMapStore,
 	useIdObjectInfoStore,
 	useIdPeopleAreaStore,
 	useViewObjectAbdAreaInfoStore,
@@ -27,14 +28,16 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const setIsViewObjectInfo = useViewObjectAbdAreaInfoStore(
 		store => store.setIsViewObjectInfo,
 	);
-	const centerMap = useCenterMapStore(store => store.centerMap);
 
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+
+	const { areaCoords } = useGetAreaPeoples();
+
 	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
 
 	const { data: data_area } = useGetObjectArea(
-		(centerMap as any)[0],
-		(centerMap as any)[1],
+		areaCoords[0],
+		areaCoords[1],
 		idObjectInfo,
 		isViewPeopleArea,
 	);

@@ -5,8 +5,9 @@ import { FC, Fragment } from 'react';
 
 import Button from '@/components/ui/button/Button';
 
+import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
+
 import {
-	useCenterMapStore,
 	useIdObjectInfoStore,
 	useIdPeopleAreaStore,
 	useViewOrganizationAreaStore,
@@ -36,10 +37,11 @@ const Organizations: FC = () => {
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 
-	const centerMap = useCenterMapStore(store => store.centerMap);
+	const { areaCoords } = useGetAreaPeoples();
+
 	const { data: data_area } = useGetObjectArea(
-		(centerMap as any)[0],
-		(centerMap as any)[1],
+		areaCoords[0],
+		areaCoords[1],
 		idObjectInfo,
 		isViewPeopleArea,
 	);

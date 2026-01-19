@@ -28,8 +28,6 @@ const MarkerEmptyArea: FC = () => {
 	// const shouldShowMarker = isMobile ? isViewAreaInfo : isViewDotInfo;
 	const shouldShowMarker = isMobile ? isViewAreaInfo : view === 'zoneInfo';
 
-	console.log('shouldShowMarker', shouldShowMarker, isViewAreaInfo, view);
-
 	return shouldShowMarker ? (
 		<Marker
 			position={[coords.lat, coords.lng]}

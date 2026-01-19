@@ -14,11 +14,11 @@ import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 import Popup from '@/components/ui/popup/Popup';
 
+import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
 import { useMapContext } from '@/providers/MapProvider';
 
 import {
 	useActiveAddObjectStore,
-	useCenterMapStore,
 	useDotInfoCoordsStore,
 	// useFiltersStore,
 	useIdObjectInfoStore,
@@ -70,7 +70,6 @@ const ObjectInfo: FC = () => {
 	const setIdObjectInfo = useIdObjectInfoStore(store => store.setIdObjectInfo);
 	const closeView = useViewStore(store => store.closeView);
 	const view = useViewStore(store => store.view);
-	const centerMap = useCenterMapStore(store => store.centerMap);
 
 	const setIsViewArea = useToggleViewAreaStore(store => store.setIsViewArea);
 	const { setMarker, clearMarker } = useTargetObjectStore(store => store);
@@ -106,16 +105,30 @@ const ObjectInfo: FC = () => {
 	const { data: dataFilters, isLoading: isLoading_dataFilters } =
 		useGetFilters(map);
 
-	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+	const { isViewPeopleArea, setIsViewPeopleArea }: any = useViewPeopleAreaStore(
+		store => store,
+	);
+
+	useEffect(() => console.log('isViewPeopleArea', isViewPeopleArea), []);
+
+	useEffect(() => {
+		setIsViewPeopleArea(false);
+	}, [idObjectInfo]);
+
+	const { areaCoords } = useGetAreaPeoples();
 
 	// const token = Cookies.get(TOKEN);
 	const token = checkMapAccess(dataMap?.map || null).hasMapAccess;
 	const findTargetObject = data_getDataMap?.points.find(
 		el => el.id === idObjectInfo,
 	); //HELP: Находим объект таргета
-	const { data: data_area, isLoading: isLoading_data_area } = useGetObjectArea(
-		(centerMap as any)[0],
-		(centerMap as any)[1],
+	const {
+		data: data_area,
+		isLoading: isLoading_data_area,
+		refetch: refetch_data_area,
+	} = useGetObjectArea(
+		areaCoords[0],
+		areaCoords[1],
 		idObjectInfo,
 		isViewPeopleArea,
 	);

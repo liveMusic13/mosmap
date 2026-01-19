@@ -5,9 +5,10 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import dynamic from 'next/dynamic';
 import { CSSProperties, FC, useCallback, useEffect, useState } from 'react';
 
-import QueryProvider from '@/providers/QueryProvider';
-
 import { IContent } from '@/types/props.types';
+
+import GetAreaPeoplesProvider from '@/providers/GetAreaPeoplesProvider';
+import QueryProvider from '@/providers/QueryProvider';
 
 import {
 	useBurgerMenuStore,
@@ -179,104 +180,106 @@ const Content: FC<IContent> = ({ dataMap }) => {
 
 	return (
 		<QueryProvider>
-			{/* HELP: Для того чтобы когда глобально вызывается попап, затемнялась область за ним не только в блоке контента, но и во всем приложении */}
-			{isPopup && <BackgroundOpacity />}
+			<GetAreaPeoplesProvider>
+				{/* HELP: Для того чтобы когда глобально вызывается попап, затемнялась область за ним не только в блоке контента, но и во всем приложении */}
+				{isPopup && <BackgroundOpacity />}
 
-			{isBurgerMenu ? (
-				<BurgerMenu />
-			) : (
-				<div className={styles.wrapper_content}>
-					{/* <h1 className={styles.title}>{dataMap.title}</h1> */}
-					<TitleContent />
-					<DynamicOptions />
-					<div className={styles.block__content}>
-						{/* условный рендеринг */}
-						{!isMobile && view === 'filters' && <DynamicFilters />}
+				{isBurgerMenu ? (
+					<BurgerMenu />
+				) : (
+					<div className={styles.wrapper_content}>
+						{/* <h1 className={styles.title}>{dataMap.title}</h1> */}
+						<TitleContent />
+						<DynamicOptions />
+						<div className={styles.block__content}>
+							{/* условный рендеринг */}
+							{!isMobile && view === 'filters' && <DynamicFilters />}
 
-						{!isMobile && (view === 'objectInfo' || view === 'addObject') && (
-							<ObjectInfo />
-						)}
-
-						{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
-						{!isMobile && isViewPeopleArea && isViewOrganizationArea && (
-							<Organizations />
-						)}
-
-						{!isMobile && isListOfObjects && <DynamicLists />}
-						{!isMobile && isColorInterval && <ColorInterval />}
-						{isSearchAddress && <SearchAddress />}
-
-						<DynamicCustomMap />
-						{isMobile && view === 'objectInfo' && (
-							<div ref={objectInfoRef}>
+							{!isMobile && (view === 'objectInfo' || view === 'addObject') && (
 								<ObjectInfo />
-							</div>
-						)}
-						{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+							)}
 
-						{isMobile && isViewAreaInfo && (
-							<div ref={viewObjectInfoAreaRef}>
-								<ViewObjectInfo area={true} />
-							</div>
-						)}
-						{isMobile && isViewObjectInfo && (
-							<div ref={viewObjectInfoObjectRef}>
-								<ViewObjectInfo area={false} />
-							</div>
-						)}
-						<div className={styles.block__buttons_map}>
-							{buttonsMap.map(el => (
-								<Button
-									key={el.id}
-									style={{
-										width: isMobile
-											? 'calc(39/480*100vw)'
-											: 'calc(39/1920*100vw)',
-										height: isMobile
-											? 'calc(39/480*100vw)'
-											: 'calc(39/1920*100vw)',
-										backgroundColor: colors.white,
-										display: 'flex',
-										alignItems: 'center',
-										justifyContent: 'center',
-										position: 'relative',
-									}}
-									onClick={() => handleClickButtonInMap(el.id)}
-								>
-									{mounted && (
-										<svg
-											className={styles.icon_svg}
-											style={personActiveStyle(el.id)}
-										>
-											{/* <use
+							{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+							{!isMobile && isViewPeopleArea && isViewOrganizationArea && (
+								<Organizations />
+							)}
+
+							{!isMobile && isListOfObjects && <DynamicLists />}
+							{!isMobile && isColorInterval && <ColorInterval />}
+							{isSearchAddress && <SearchAddress />}
+
+							<DynamicCustomMap />
+							{isMobile && view === 'objectInfo' && (
+								<div ref={objectInfoRef}>
+									<ObjectInfo />
+								</div>
+							)}
+							{isMobile && view === 'zoneInfo' && <InfoAboutZone />}
+
+							{isMobile && isViewAreaInfo && (
+								<div ref={viewObjectInfoAreaRef}>
+									<ViewObjectInfo area={true} />
+								</div>
+							)}
+							{isMobile && isViewObjectInfo && (
+								<div ref={viewObjectInfoObjectRef}>
+									<ViewObjectInfo area={false} />
+								</div>
+							)}
+							<div className={styles.block__buttons_map}>
+								{buttonsMap.map(el => (
+									<Button
+										key={el.id}
+										style={{
+											width: isMobile
+												? 'calc(39/480*100vw)'
+												: 'calc(39/1920*100vw)',
+											height: isMobile
+												? 'calc(39/480*100vw)'
+												: 'calc(39/1920*100vw)',
+											backgroundColor: colors.white,
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											position: 'relative',
+										}}
+										onClick={() => handleClickButtonInMap(el.id)}
+									>
+										{mounted && (
+											<svg
+												className={styles.icon_svg}
+												style={personActiveStyle(el.id)}
+											>
+												{/* <use
 											xlinkHref={
 												isSelectArea && el.id === 1
 													? `/images/icons/sprite.svg#selection-remove`
 													: srcStandard(el, isListOfObjects, view === 'filters')
 											}
 										></use> */}
-											<use
-												href={
-													isSelectArea && el.id === 1
-														? `/images/icons/sprite.svg#selection-remove`
-														: srcStandard(
-																el,
-																isListOfObjects,
-																view === 'filters',
-															)
-												}
-											></use>
-										</svg>
-									)}
-									<p className={styles.hover__text} style={{ right: 0 }}>
-										{el.hover_text}
-									</p>
-								</Button>
-							))}
+												<use
+													href={
+														isSelectArea && el.id === 1
+															? `/images/icons/sprite.svg#selection-remove`
+															: srcStandard(
+																	el,
+																	isListOfObjects,
+																	view === 'filters',
+																)
+													}
+												></use>
+											</svg>
+										)}
+										<p className={styles.hover__text} style={{ right: 0 }}>
+											{el.hover_text}
+										</p>
+									</Button>
+								))}
+							</div>
 						</div>
 					</div>
-				</div>
-			)}
+				)}
+			</GetAreaPeoplesProvider>
 		</QueryProvider>
 	);
 };

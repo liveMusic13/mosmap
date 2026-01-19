@@ -1,73 +1,7 @@
-// 'use client';
-
-// import { ReactNode, Suspense, createContext, useContext } from 'react';
-
-// import { useMapId } from '@/hooks/useMapId';
-
-// interface MapContextType {
-// 	mapId: string | null;
-// 	loading: boolean;
-// }
-
-// const MapContext = createContext<MapContextType | undefined>(undefined);
-
-// export function MapProvider({ children }: { children: ReactNode }) {
-// 	const mapId = useMapId();
-
-// 	return (
-// 		<Suspense fallback={null}>
-// 			<MapContext.Provider value={{ mapId, loading: false }}>
-// 				{children}
-// 			</MapContext.Provider>
-// 		</Suspense>
-// 	);
-// }
-
-// export function useMapContext(): MapContextType {
-// 	const context = useContext(MapContext);
-// 	if (context === undefined) {
-// 		throw new Error('useMapContext must be used within a MapProvider');
-// 	}
-// 	return context;
-// }
-
 'use client';
 
 import { usePathname } from 'next/navigation';
 import { ReactNode, Suspense, createContext, useContext } from 'react';
-
-// 'use client';
-
-// import { ReactNode, Suspense, createContext, useContext } from 'react';
-
-// import { useMapId } from '@/hooks/useMapId';
-
-// interface MapContextType {
-// 	mapId: string | null;
-// 	loading: boolean;
-// }
-
-// const MapContext = createContext<MapContextType | undefined>(undefined);
-
-// export function MapProvider({ children }: { children: ReactNode }) {
-// 	const mapId = useMapId();
-
-// 	return (
-// 		<Suspense fallback={null}>
-// 			<MapContext.Provider value={{ mapId, loading: false }}>
-// 				{children}
-// 			</MapContext.Provider>
-// 		</Suspense>
-// 	);
-// }
-
-// export function useMapContext(): MapContextType {
-// 	const context = useContext(MapContext);
-// 	if (context === undefined) {
-// 		throw new Error('useMapContext must be used within a MapProvider');
-// 	}
-// 	return context;
-// }
 
 interface MapContextType {
 	mapId: string | null;
