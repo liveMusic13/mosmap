@@ -4,9 +4,10 @@ import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 
-import QueryProvider from '@/providers/QueryProvider';
-
 import { IContent } from '@/types/props.types';
+
+import GetAreaPeoplesProvider from '@/providers/GetAreaPeoplesProvider';
+import QueryProvider from '@/providers/QueryProvider';
 
 import { useBurgerMenuStore } from '@/store/store';
 
@@ -43,22 +44,26 @@ const ContentMobile: FC<IContent> = ({ dataMap }) => {
 
 	return (
 		<QueryProvider>
-			{isBurgerMenu ? (
-				<BurgerMenu />
-			) : (
-				<div className={styles.wrapper_content}>
-					<h1 className={styles.title}>{dataMap.title}</h1>
-					<DynamicOptions />
-					<div className={styles.block__content}>
-						{pathname === '/mobile-filters/filters' && <Filters />}
-						{pathname === '/mobile-filters/list-of-objects' && (
-							// <ListOfObjects />
-							<DynamicListOfObject />
-						)}
-						{pathname === '/mobile-filters/color-interval' && <ColorInterval />}
+			<GetAreaPeoplesProvider>
+				{isBurgerMenu ? (
+					<BurgerMenu />
+				) : (
+					<div className={styles.wrapper_content}>
+						<h1 className={styles.title}>{dataMap.title}</h1>
+						<DynamicOptions />
+						<div className={styles.block__content}>
+							{pathname === '/mobile-filters/filters' && <Filters />}
+							{pathname === '/mobile-filters/list-of-objects' && (
+								// <ListOfObjects />
+								<DynamicListOfObject />
+							)}
+							{pathname === '/mobile-filters/color-interval' && (
+								<ColorInterval />
+							)}
+						</div>
 					</div>
-				</div>
-			)}
+				)}
+			</GetAreaPeoplesProvider>
 		</QueryProvider>
 	);
 };

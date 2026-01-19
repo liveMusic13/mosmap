@@ -10,33 +10,13 @@ import { getQueryString } from '@/utils/url';
 import { useGetDataMap } from './useGetDataMap';
 
 export const useSaveUpdateAfterRemoveMarker = (isSuccess_save: boolean) => {
-	// const map = Cookies.get(ACTUAL_MAP);
-
 	const searchParams = useSearchParams();
-	// const map = getMapId(searchParams); // работает с SEO URL
-	// const map = useMapId();
 	const { mapId: map, loading } = useMapContext();
 
-	// const { mapId: map } = useContext(MapContext);
-
 	// //HELP: Преобразование searchParams в строку
-	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const queryString = getQueryString(searchParams, map); // включает map параметр
-	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
-	// const pathname = usePathname(); // "/map/renovation"
-	// const searchParams = useSearchParams();
 
-	// const seoUrl = pathname.startsWith('/map/')
-	// 	? pathname.split('/map/')[1]
-	// 	: null;
-
-	// const queryString = searchParams.toString();
-
-	// const resultQuery = seoUrl
-	// 	? `?url=${seoUrl}&${queryString}`
-	// 	: `?${queryString}`;
 	const { refetch: refetch_getDataMap } = useGetDataMap(queryString, map);
-	console.log('test map useSaveUpdateAfterRemoveMarker', queryString, map);
 
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 
