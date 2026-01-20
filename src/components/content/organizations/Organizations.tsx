@@ -8,7 +8,6 @@ import Button from '@/components/ui/button/Button';
 import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
 
 import {
-	useIdObjectInfoStore,
 	useIdPeopleAreaStore,
 	useViewOrganizationAreaStore,
 	useViewPeopleAreaStore,
@@ -35,14 +34,12 @@ const Organizations: FC = () => {
 		store => store,
 	);
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
-	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 
 	const { areaCoords } = useGetAreaPeoples();
 
 	const { data: data_area } = useGetObjectArea(
 		areaCoords[0],
 		areaCoords[1],
-		idObjectInfo,
 		isViewPeopleArea,
 	);
 
