@@ -3,16 +3,11 @@ import { CircleMarker, Polygon, Popup } from 'react-leaflet';
 
 import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
 
-import {
-	useIdObjectInfoStore,
-	useIdPeopleAreaStore,
-	useViewPeopleAreaStore,
-} from '@/store/store';
+import { useIdPeopleAreaStore, useViewPeopleAreaStore } from '@/store/store';
 
 import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 
 const RenderPeopleArea: FC = () => {
-	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 
 	const { areaCoords } = useGetAreaPeoples();
@@ -20,7 +15,6 @@ const RenderPeopleArea: FC = () => {
 	const { data: data_area } = useGetObjectArea(
 		areaCoords[0],
 		areaCoords[1],
-		idObjectInfo,
 		isViewPeopleArea,
 	);
 	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);

@@ -111,9 +111,9 @@ const ObjectInfo: FC = () => {
 
 	useEffect(() => console.log('isViewPeopleArea', isViewPeopleArea), []);
 
-	useEffect(() => {
-		setIsViewPeopleArea(false);
-	}, [idObjectInfo]);
+	// useEffect(() => {
+	// 	setIsViewPeopleArea(false);
+	// }, [idObjectInfo]);
 
 	const { areaCoords } = useGetAreaPeoples();
 
@@ -122,14 +122,9 @@ const ObjectInfo: FC = () => {
 	const findTargetObject = data_getDataMap?.points.find(
 		el => el.id === idObjectInfo,
 	); //HELP: Находим объект таргета
-	const {
-		data: data_area,
-		isLoading: isLoading_data_area,
-		refetch: refetch_data_area,
-	} = useGetObjectArea(
+	const { data: data_area, isLoading: isLoading_data_area } = useGetObjectArea(
 		areaCoords[0],
 		areaCoords[1],
-		idObjectInfo,
 		isViewPeopleArea,
 	);
 

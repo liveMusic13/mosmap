@@ -38,7 +38,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const { data: data_area } = useGetObjectArea(
 		areaCoords[0],
 		areaCoords[1],
-		idObjectInfo,
 		isViewPeopleArea,
 	);
 

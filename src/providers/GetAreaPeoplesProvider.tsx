@@ -11,7 +11,6 @@ import { IMarker } from '@/types/requestData.types';
 
 import { useIdObjectInfoStore, useViewPeopleAreaStore } from '@/store/store';
 
-import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 import { useGetObjectInfo } from '@/hooks/useGetObjectInfo';
 
 export const GetAreaPeoplesContext = createContext<{ areaCoords: number[] }>({
@@ -33,18 +32,6 @@ const GetAreaPeoplesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 			setAreaCords((data as IMarker)?.crd ?? [0, 0]);
 		}
 	}, [data, isSuccess, idObjectInfo, isViewPeopleArea]);
-
-	const { refetch: refetch_data_area } = useGetObjectArea(
-		areaCoords[0],
-		areaCoords[1],
-		idObjectInfo,
-		isViewPeopleArea,
-	);
-
-	useEffect(() => {
-		// console.log('refetch', idObjectInfo, areaCoords, new Date());
-		refetch_data_area();
-	}, [areaCoords, idObjectInfo]);
 
 	return (
 		<GetAreaPeoplesContext.Provider value={{ areaCoords: areaCoords }}>
