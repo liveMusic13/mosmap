@@ -187,7 +187,17 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 			map.off('moveend', updateMarkers);
 			markersLayerRef.current?.clearLayers();
 		};
-	}, [dataMap, map, idObjectInfo, sizeMarker, isViewPeopleArea, idPeopleArea]);
+	}, [
+		dataMap,
+		map,
+		idObjectInfo,
+		sizeMarker,
+		isViewPeopleArea,
+		idPeopleArea,
+		areaCoords[0],
+		areaCoords[1],
+		data_area,
+	]);
 
 	return null;
 };
