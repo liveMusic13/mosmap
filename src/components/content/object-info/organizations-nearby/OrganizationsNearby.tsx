@@ -1,8 +1,10 @@
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, Fragment, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import Checkbox from '@/components/ui/checkbox/Checkbox';
+
+import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
 
 import {
 	useIdPeopleAreaStore,
@@ -10,14 +12,33 @@ import {
 	useViewPeopleAreaStore,
 } from '@/store/store';
 
+import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
+
+import Organizations from '../../organizations/Organizations';
+
 import styles from './OrganizationsNearby.module.scss';
 
-const OrganizationsNearby: FC<any> = ({ orgs }) => {
+const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 	const { setIsViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 	const { idPeopleArea, setIdPeopleArea }: any = useIdPeopleAreaStore(
 		store => store,
 	);
 	const { setIsViewOrganizationArea }: any = useViewOrganizationAreaStore();
+	const [openedIds, setOpenedIds] = useState<number[]>([]);
+
+	const { areaCoords } = useGetAreaPeoples(isArea);
+	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+	const { data: data_area } = useGetObjectArea(
+		areaCoords[0],
+		areaCoords[1],
+		isViewPeopleArea,
+	);
+
+	const toggleOpen = (id: number) => {
+		setOpenedIds(prev =>
+			prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id],
+		);
+	};
 
 	return (
 		<div className={styles.wrapper_organizationsNearby}>
@@ -36,23 +57,40 @@ const OrganizationsNearby: FC<any> = ({ orgs }) => {
 					/>
 				</Button>
 			</div>
-			{(Object.values(orgs || {}) || []).map((org: any, ind) => (
-				<div
-					key={org?.group_id || ind}
-					className={`${styles.block__organization} ${ind === 0 ? styles.first_org : ''}`}
-					onClick={() => setIsViewOrganizationArea(true)}
-				>
-					<Checkbox
-						value=''
-						onChange={() => {
-							setIdPeopleArea(org?.group_id);
-						}}
-						checked={idPeopleArea?.includes(org?.group_id)}
-					/>
-					<p className={styles.org_name}>{org.group_name}</p>
-					<p className={styles.org_count}>{org.org.length}</p>
-				</div>
-			))}
+			{(Object.values(orgs || {}) || []).map((org: any, ind) => {
+				const isOpen = openedIds.includes(org.group_id);
+
+				return (
+					<Fragment key={org?.group_id || ind}>
+						<div
+							className={`${styles.block__organization} ${ind === 0 ? styles.first_org : ''}`}
+							onClick={() => setIsViewOrganizationArea(true)}
+						>
+							<Checkbox
+								value=''
+								onChange={() => {
+									setIdPeopleArea(org?.group_id);
+								}}
+								checked={idPeopleArea?.includes(org?.group_id)}
+							/>
+							<div
+								className={styles.block_name}
+								onClick={() => toggleOpen(org.group_id)}
+							>
+								<p className={styles.org_name}>{org.group_name}</p>
+								<Image
+									src={'/images/icons/arrow_viewObject_mobile.svg'}
+									alt='arrow'
+									width={9}
+									height={9}
+								/>
+							</div>
+							<p className={styles.org_count}>{org.org.length}</p>
+						</div>
+						{isOpen && <Organizations group_id={org?.group_id} isArea={true} />}
+					</Fragment>
+				);
+			})}
 		</div>
 	);
 };

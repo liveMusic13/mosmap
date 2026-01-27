@@ -34,6 +34,14 @@ export const useIdObjectInfoStore = create<IIdObjectInfoStore>((set, get) => ({
 	setIdObjectInfo: id => set({ idObjectInfo: id }),
 }));
 
+export const useTargetMarkerInAreaStore = create<{
+	marker: string | null;
+	setMarker: (id: string) => void;
+}>((set, get) => ({
+	marker: null,
+	setMarker: id => set({ marker: id }),
+}));
+
 export const useCenterMapStore = create<ICenterMapStore>(set => ({
 	centerMap: [55.7522, 37.6156],
 	setCenterMap: coords => set({ centerMap: coords }),

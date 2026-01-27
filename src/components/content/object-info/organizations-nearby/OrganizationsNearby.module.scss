@@ -30,12 +30,21 @@
 	}
 }
 
+.extra {
+}
+
 .first_org {
 	border-top: none;
 }
 
 .org_name {
 	color: vars.$grey;
+}
+
+.block_name {
+	display: flex;
+	align-items: center;
+	gap: 0.2rem;
 }
 
 .title_orgs {

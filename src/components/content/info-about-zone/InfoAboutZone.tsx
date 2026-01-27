@@ -1,15 +1,16 @@
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FC, useCallback } from 'react';
+import { FC, Suspense, useCallback } from 'react';
+
+import { IDotInfoData } from '@/types/requestData.types';
 
 import Button from '@/components/ui/button/Button';
 import Loader from '@/components/ui/loader/Loader';
 import Popup from '@/components/ui/popup/Popup';
 
+import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
 import { useMapContext } from '@/providers/MapProvider';
-
-import { IDotInfoData } from '@/types/requestData.types';
 
 import {
 	useActiveAddObjectStore,
@@ -17,9 +18,11 @@ import {
 	useIdObjectInfoStore,
 	usePopupStore,
 	useRemoveMarkerCrdStore,
+	useViewPeopleAreaStore,
 	useViewStore,
 } from '@/store/store';
 
+import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 import { useCheckWidth } from '@/hooks/useCheckWidth';
 import { useDotInfo } from '@/hooks/useDotInfo';
 import { useGetDataMap } from '@/hooks/useGetDataMap';
@@ -27,6 +30,9 @@ import { useSaveObject } from '@/hooks/useSaveObject';
 import { useSaveUpdateAfterRemoveMarker } from '@/hooks/useSaveUpdateAfterRemoveMarker';
 
 import { getQueryString } from '@/utils/url';
+
+import MenuObject from '../object-info/menu-object/MenuObject';
+import OrganizationsNearby from '../object-info/organizations-nearby/OrganizationsNearby';
 
 import styles from './InfoAboutZone.module.scss';
 import InfoZone from './info-zone/InfoZone';
@@ -57,24 +63,12 @@ const InfoAboutZone: FC = () => {
 	const view = useViewStore(store => store.view);
 	const openView = useViewStore(store => store.openView);
 	const closeView = useViewStore(store => store.closeView);
+	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 
 	const { isPopup, messageInPopup, setIsPopup } = usePopupStore(store => store);
 
 	// //HELP: Преобразование searchParams в строку
-	// const queryString = new URLSearchParams(searchParams.toString()).toString();
 	const queryString = getQueryString(searchParams, map); // включает map параметр
-	// const resultQuery = map ? `?map=${map}${queryString}` : queryString;
-	// const pathname = usePathname(); // "/map/renovation"
-
-	// const seoUrl = pathname.startsWith('/map/')
-	// 	? pathname.split('/map/')[1]
-	// 	: null;
-
-	// const queryString = searchParams.toString();
-
-	// const resultQuery = seoUrl
-	// 	? `?url=${seoUrl}&${queryString}`
-	// 	: `?${queryString}`;
 
 	const { data: data_getDataMap } = useGetDataMap(queryString, map);
 	console.log('test map InfoAboutZone', queryString, map);
@@ -83,6 +77,13 @@ const InfoAboutZone: FC = () => {
 	const { mutate, isSuccess: isSuccess_save } = useSaveObject();
 
 	useSaveUpdateAfterRemoveMarker(isSuccess_save);
+
+	const { areaCoords } = useGetAreaPeoples(true);
+	const { data: data_area, isLoading: isLoading_data_area } = useGetObjectArea(
+		areaCoords[0],
+		areaCoords[1],
+		isViewPeopleArea,
+	);
 
 	const handleClose = () => {
 		// setViewDotInfo(false)
@@ -166,14 +167,17 @@ const InfoAboutZone: FC = () => {
 					</Button>
 				</div>
 			</div>
+			<MenuObject isArea={true} />
+			{isLoading_data_area && <Loader style={{}} />}
+			{isViewPeopleArea && data_area?.data && (
+				<Suspense>
+					<OrganizationsNearby orgs={data_area.data.orgs} isArea={true} />
+				</Suspense>
+			)}
 			<div className={styles.block__info}>
 				{isLoading && (
 					<Loader
 						style={{
-							// position: 'absolute',
-							// top: '50%',
-							// left: '50%',
-							// transform: 'translate(-50%, -50%)',
 							width: 'calc(50/1920*100vw)',
 							height: 'calc(50/1920*100vw)',
 						}}
