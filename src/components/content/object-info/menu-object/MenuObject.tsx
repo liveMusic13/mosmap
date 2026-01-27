@@ -24,7 +24,7 @@ import styles from './MenuObject.module.scss';
 import { colors } from '@/app.constants';
 import { arrMenuObject } from '@/data/menuObject.data';
 
-const MenuObject: FC = memo(() => {
+const MenuObject: FC<{ isArea?: boolean }> = memo(({ isArea }) => {
 	const windowSize = useCheckWidth();
 	const isMobile = windowSize <= 767;
 	const isMobile_mini = windowSize <= 481;
@@ -106,7 +106,14 @@ const MenuObject: FC = memo(() => {
 						position: 'relative',
 					}}
 					onClick={() => onClick(el.id)}
-					disabled={(!token && el.id === 1) || el.id === 3 || el.id === 4}
+					disabled={
+						(el.id === 0 && isArea) ||
+						(el.id === 1 && isArea) ||
+						(!token && el.id === 1) ||
+						(el.id === 2 && !findTargetObject?.crd && !isArea) ||
+						el.id === 3 ||
+						el.id === 4
+					}
 				>
 					<svg className={styles.icon_svg} style={personActiveStyle(el.id)}>
 						<use xlinkHref={`/images/icons/sprite.svg#${el.src}`}></use>

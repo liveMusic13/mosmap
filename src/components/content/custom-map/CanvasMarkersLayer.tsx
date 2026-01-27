@@ -9,8 +9,10 @@ import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
 import {
 	useIdObjectInfoStore,
 	useIdPeopleAreaStore,
+	useTargetMarkerInAreaStore,
 	useViewObjectAbdAreaInfoStore,
 	useViewPeopleAreaStore,
+	useViewStore,
 } from '@/store/store';
 
 import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
@@ -24,14 +26,16 @@ import { colors } from '@/app.constants';
 const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	if (!dataMap.points || dataMap.points.length === 0) return null;
 
+	const { marker: marker_in_area } = useTargetMarkerInAreaStore(store => store);
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIsViewObjectInfo = useViewObjectAbdAreaInfoStore(
 		store => store.setIsViewObjectInfo,
 	);
 
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
+	const view = useViewStore(store => store.view);
 
-	const { areaCoords } = useGetAreaPeoples();
+	const { areaCoords } = useGetAreaPeoples(view === 'zoneInfo');
 
 	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
 
@@ -48,6 +52,11 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const map = useMap();
 	const canvasLayerRef = useRef<Canvas | null>(null);
 	const markersLayerRef = useRef<L.LayerGroup | null>(null);
+
+	useEffect(
+		() => console.log('isViewPeopleArea in canvas', isViewPeopleArea),
+		[isViewPeopleArea],
+	);
 
 	useEffect(() => {
 		if (!map || !idObjectInfo) return;
@@ -85,7 +94,8 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 				const crd = marker.crd || [0, 0];
 				const markerName = marker.name || 'No name';
 				let mapObject: L.Layer | null = null;
-
+				if (ind === 1)
+					console.log('isViewPeopleArea in render marks', isViewPeopleArea);
 				if (isViewPeopleArea && data_area?.data?.area && ind === 1) {
 					const color = 'red';
 					const weight = 3;
@@ -93,11 +103,16 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 					mapObject = L.polygon(data_area?.data?.area, {
 						color: color,
 						weight: weight,
+						interactive: false,
 					}).addTo(markersLayerRef.current!);
 
 					if (idPeopleArea.length > 0 && data_area?.data?.orgs) {
+						console.log('check orgs', data_area?.data?.orgs, idPeopleArea);
 						idPeopleArea.forEach((id: string) => {
-							const orgs = data_area?.data?.orgs[id];
+							const orgs = data_area?.data?.orgs.find(
+								(el: any) => el.group_id === id,
+							);
+							console.log('orgs in idPeopleArea', orgs);
 							if (orgs?.org.length > 0) {
 								orgs?.org.forEach((org: any) => {
 									// Проверяем что организация существует И у неё есть координаты
@@ -105,16 +120,21 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 										console.log('Организация без координат:', id, org);
 										return;
 									}
-									const colorOrg = '#000';
+									const colorOrg =
+										marker_in_area === `${org.name}${org.distance}`
+											? colors.green
+											: '#000';
 									const orgCrd = [org.lat, org.lng];
 
 									L.circleMarker(orgCrd as LatLngExpression, {
 										renderer: canvasLayerRef.current!,
-										radius: 2,
+										radius: 10,
 										color: colorOrg,
+										weight: 6,
 									})
 										.addTo(markersLayerRef.current!)
-										.bindPopup(org.name);
+										.bindPopup(`${org.name}. Расстояние: ${org.distance} м.`)
+										.on('click', () => console.log('test', org));
 								});
 							}
 						});
@@ -133,8 +153,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 					mapObject = L.polygon(marker.polygon, {
 						color: color,
 						weight: weight,
-						// fillColor: marker.color,
-						// fillOpacity: 0.4,
 					}).addTo(markersLayerRef.current!);
 				}
 				//HELP: Если зум < или равен 13 то рисуем круглый маркер (CircleMarker)
@@ -146,8 +164,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 						renderer: canvasLayerRef.current!,
 						radius: 6,
 						color: color,
-						// fillColor: marker.color,
-						// fillOpacity: 1,
 					}).addTo(markersLayerRef.current!);
 				}
 				//HELP: В других случая рисуем кастомную иконку
@@ -157,10 +173,8 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 							? { ...marker, icon: 'target', color: colors.red }
 							: marker;
 					const svg = getIconForMarker(editMarker, sizeMarker);
-					// const svg = getIconForMarker(marker);
 					const encodedSvg = encodeURIComponent(svg);
 					const dataUrl = 'data:image/svg+xml,' + encodedSvg;
-					// console.log(svg);
 					const icon = L.icon({
 						iconUrl: dataUrl,
 						iconSize: sizeMarker,
@@ -197,6 +211,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 		areaCoords[0],
 		areaCoords[1],
 		data_area,
+		marker_in_area,
 	]);
 
 	return null;

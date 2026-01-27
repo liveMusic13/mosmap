@@ -44,7 +44,6 @@ import ColorInterval from './color-interval/ColorInterval';
 import InfoAboutZone from './info-about-zone/InfoAboutZone';
 import ObjectInfo from './object-info/ObjectInfo';
 import ViewObjectInfo from './object-info/view-object-info/ViewObjectInfo';
-import Organizations from './organizations/Organizations';
 import { colors } from '@/app.constants';
 import { buttonsMap } from '@/data/content.data';
 
@@ -200,9 +199,9 @@ const Content: FC<IContent> = ({ dataMap }) => {
 							)}
 
 							{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
-							{!isMobile && isViewPeopleArea && isViewOrganizationArea && (
+							{/* {!isMobile && isViewPeopleArea && isViewOrganizationArea && (
 								<Organizations />
-							)}
+							)} */}
 
 							{!isMobile && isListOfObjects && <DynamicLists />}
 							{!isMobile && isColorInterval && <ColorInterval />}

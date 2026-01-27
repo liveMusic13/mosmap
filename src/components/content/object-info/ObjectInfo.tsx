@@ -27,7 +27,6 @@ import {
 	useRemoveMarkerCrdStore,
 	useTargetObjectStore,
 	useToggleViewAreaStore,
-	useViewOrganizationAreaStore,
 	useViewPeopleAreaStore,
 	useViewStore,
 } from '@/store/store';
@@ -45,8 +44,6 @@ import { useSelectFromInfoComponent } from '@/hooks/useSelectFromInfoComponent';
 
 import { checkMapAccess } from '@/utils/jwtTokenDecoder';
 import { getQueryString } from '@/utils/url';
-
-import Organizations from '../organizations/Organizations';
 
 import styles from './ObjectInfo.module.scss';
 import InfoBlock from './info-block/InfoBlock';
@@ -109,12 +106,6 @@ const ObjectInfo: FC = () => {
 		store => store,
 	);
 
-	useEffect(() => console.log('isViewPeopleArea', isViewPeopleArea), []);
-
-	// useEffect(() => {
-	// 	setIsViewPeopleArea(false);
-	// }, [idObjectInfo]);
-
 	const { areaCoords } = useGetAreaPeoples();
 
 	// const token = Cookies.get(TOKEN);
@@ -135,7 +126,6 @@ const ObjectInfo: FC = () => {
 	const prevIdRef = useRef<number>(idObjectInfo);
 	const pendingIdRef = useRef<number | null>(null);
 	const snapshotRef = useRef<IMarker | null>(null); // снимок старых данных
-	const { isViewOrganizationArea }: any = useViewOrganizationAreaStore();
 
 	const [isDirty, setIsDirty] = useState(false);
 
@@ -328,7 +318,6 @@ const ObjectInfo: FC = () => {
 		setIsDirty(false);
 	};
 
-	// 1) Обработчик для вашей toolbar–кнопки «Сохранить»
 	const handleToolbarSave = () => {
 		if (!editValuesObject) return;
 
@@ -401,13 +390,10 @@ const ObjectInfo: FC = () => {
 				{!isActiveAddObject && !isLoading && <MenuObject />}
 				{isViewPeopleArea && data_area?.data && (
 					<Suspense>
-						<OrganizationsNearby orgs={data_area.data.orgs} />
+						<OrganizationsNearby orgs={data_area.data.orgs} isArea={false} />
 					</Suspense>
 				)}
 				{isLoading_data_area && <Loader style={{}} />}
-				{isMobile && isViewPeopleArea && isViewOrganizationArea && (
-					<Organizations />
-				)}
 				{isLoading && (
 					<Loader
 						style={{
