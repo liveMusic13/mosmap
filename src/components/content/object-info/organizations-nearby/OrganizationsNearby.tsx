@@ -83,6 +83,9 @@ const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 									alt='arrow'
 									width={9}
 									height={9}
+									style={{
+										transform: isOpen ? '' : 'rotate(-90deg)',
+									}}
 								/>
 							</div>
 							<p className={styles.org_count}>{org.org.length}</p>
