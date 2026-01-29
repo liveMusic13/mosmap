@@ -52,12 +52,12 @@ const Organizations: FC<{ group_id: string; isArea: boolean }> = ({
 			(el: any) => el.group_id === group_id,
 		);
 
-		const hasOrganization = idPeopleArea.includes((org as any).group_id);
-		if (hasOrganization) {
-			org.org.forEach((element: any) => {
-				organizations.push(element);
-			});
-		}
+		// const hasOrganization = idPeopleArea.includes((org as any).group_id);
+		// if (hasOrganization) {
+		org.org.forEach((element: any) => {
+			organizations.push(element);
+		});
+		// }
 	}
 
 	return (
