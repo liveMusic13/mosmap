@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FC, Fragment, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 
 import Button from '@/components/ui/button/Button';
 import Checkbox from '@/components/ui/checkbox/Checkbox';
@@ -20,9 +20,8 @@ import styles from './OrganizationsNearby.module.scss';
 
 const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 	const { setIsViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
-	const { idPeopleArea, setIdPeopleArea }: any = useIdPeopleAreaStore(
-		store => store,
-	);
+	const { idPeopleArea, setIdPeopleArea, setAllIdPeopleArea }: any =
+		useIdPeopleAreaStore(store => store);
 	const { setIsViewOrganizationArea }: any = useViewOrganizationAreaStore();
 	const [openedIds, setOpenedIds] = useState<number[]>([]);
 
@@ -39,6 +38,18 @@ const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 			prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id],
 		);
 	};
+
+	useEffect(() => {
+		if (orgs) {
+			// Собираем все group_id в массив
+			const allGroupIds = Object.values(orgs || {})
+				.map((el: any) => el?.group_id)
+				.filter((id): id is number => id !== undefined && id !== null);
+
+			// Устанавливаем весь массив за один раз
+			setAllIdPeopleArea(allGroupIds);
+		}
+	}, [orgs]);
 
 	return (
 		<div className={styles.wrapper_organizationsNearby}>
@@ -90,7 +101,13 @@ const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 							</div>
 							<p className={styles.org_count}>{org.org.length}</p>
 						</div>
-						{isOpen && <Organizations group_id={org?.group_id} isArea={true} />}
+						{isOpen && (
+							<Organizations
+								data_area={data_area}
+								group_id={org?.group_id}
+								isArea={true}
+							/>
+						)}
 					</Fragment>
 				);
 			})}

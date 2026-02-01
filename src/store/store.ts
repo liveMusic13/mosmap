@@ -214,6 +214,7 @@ export const useViewPeopleAreaStore = create(set => ({
 export const useIdPeopleAreaStore = create<{
 	idPeopleArea: number[];
 	setIdPeopleArea: (id: number) => void;
+	setAllIdPeopleArea: (id: number[]) => void;
 }>(set => ({
 	idPeopleArea: [],
 	setIdPeopleArea: (id: number) =>
@@ -222,6 +223,7 @@ export const useIdPeopleAreaStore = create<{
 				? state.idPeopleArea.filter(existingId => existingId !== id)
 				: [...state.idPeopleArea, id],
 		})),
+	setAllIdPeopleArea: (ids: number[]) => set({ idPeopleArea: ids }),
 }));
 
 export const useViewOrganizationAreaStore = create(set => ({

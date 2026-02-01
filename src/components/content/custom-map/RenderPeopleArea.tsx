@@ -16,7 +16,9 @@ import { colors } from '@/app.constants';
 
 const RenderPeopleArea: FC = () => {
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
-	const { marker } = useTargetMarkerInAreaStore(store => store);
+	const { marker, setMarker: setMarkerArea } = useTargetMarkerInAreaStore(
+		store => store,
+	);
 	const view = useViewStore(store => store.view);
 
 	const { areaCoords } = useGetAreaPeoples(view === 'zoneInfo');
@@ -58,14 +60,6 @@ const RenderPeopleArea: FC = () => {
 		return newMarkers;
 	}, [data_area, idPeopleArea, isViewPeopleArea]);
 
-	console.log(
-		'in render markers',
-		data_area,
-		idPeopleArea,
-		areaCoords,
-		markers,
-	);
-
 	return (
 		<>
 			{data_area?.data?.area && isViewPeopleArea && (
@@ -77,25 +71,51 @@ const RenderPeopleArea: FC = () => {
 				/>
 			)}
 			{isViewPeopleArea &&
-				markers.map((org, ind) => (
-					<CircleMarker
-						key={`${org.name}-${org.distance}-${ind}`}
-						center={[Number(org.lat), Number(org.lng)]}
-						radius={10}
-						fillColor={
-							marker === `${org.name}${org.distance}` ? colors.green : '#000'
-						}
-						color='#fff'
-						weight={6}
-						fillOpacity={0.7}
-					>
-						<Popup>
-							{org.name || org.distance
-								? `${org.name}. Расстояние ${org.distance}`
-								: 'Нету данных'}
-						</Popup>
-					</CircleMarker>
-				))}
+				markers.map((org, ind) => {
+					const markerId = `${org.name}${org.distance}`;
+					const isSelected = marker === markerId;
+					return (
+						<CircleMarker
+							key={`${markerId}-${ind}-${isSelected}`}
+							center={[Number(org.lat), Number(org.lng)]}
+							radius={10}
+							fillColor={
+								marker === `${org.name}${org.distance}` ? colors.green : '#000'
+							}
+							color='#fff'
+							weight={6}
+							fillOpacity={0.7}
+							eventHandlers={{
+								click: e => {
+									const L = (window as any).L;
+									if (L && L.DomEvent) {
+										L.DomEvent.stopPropagation(e);
+									}
+									setMarkerArea(`${org.name}${org.distance}`);
+								},
+							}}
+						>
+							<Popup>
+								{org.name || org.distance ? (
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											fontSize: '1.3rem !important',
+										}}
+									>
+										<div>{org.name}</div>
+										<div className='text-sm text-gray-600'>
+											Расстояние {org.distance} м.
+										</div>
+									</div>
+								) : (
+									'Нету данных'
+								)}
+							</Popup>
+						</CircleMarker>
+					);
+				})}
 		</>
 	);
 };
