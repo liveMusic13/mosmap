@@ -2,16 +2,11 @@
 
 import { FC, Fragment } from 'react';
 
-import { useGetAreaPeoples } from '@/providers/GetAreaPeoplesProvider';
-
 import {
 	useCenterMapStore,
-	useIdPeopleAreaStore,
 	useTargetMarkerInAreaStore,
 	useViewPeopleAreaStore,
 } from '@/store/store';
-
-import { useGetObjectArea } from '@/hooks/requests/useGetObjectArea';
 
 import styles from './Organizations.module.scss';
 
@@ -26,24 +21,27 @@ const titlesTable = [
 	},
 ];
 
-const Organizations: FC<{ group_id: string; isArea: boolean }> = ({
-	group_id,
-	isArea,
-}) => {
-	const { idPeopleArea }: any = useIdPeopleAreaStore(store => store);
+const Organizations: FC<{
+	group_id: string;
+	isArea: boolean;
+	data_area: any;
+}> = ({ group_id, isArea, data_area }) => {
+	if (!data_area) return null;
 	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
 	const { setMarker: setMarkerArea } = useTargetMarkerInAreaStore(
 		store => store,
 	);
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
 
-	const { areaCoords } = useGetAreaPeoples(isArea);
+	// const { areaCoords } = useGetAreaPeoples(isArea);
 
-	const { data: data_area } = useGetObjectArea(
-		areaCoords[0],
-		areaCoords[1],
-		isViewPeopleArea,
-	);
+	// const { data: data_area } = useGetObjectArea(
+	// 	areaCoords[0],
+	// 	areaCoords[1],
+	// 	isViewPeopleArea,
+	// );
+
+	console.log('in table', data_area);
 
 	const organizations: any[] = [];
 

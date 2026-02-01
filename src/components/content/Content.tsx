@@ -199,9 +199,6 @@ const Content: FC<IContent> = ({ dataMap }) => {
 							)}
 
 							{!isMobile && view === 'zoneInfo' && <InfoAboutZone />}
-							{/* {!isMobile && isViewPeopleArea && isViewOrganizationArea && (
-								<Organizations />
-							)} */}
 
 							{!isMobile && isListOfObjects && <DynamicLists />}
 							{!isMobile && isColorInterval && <ColorInterval />}
