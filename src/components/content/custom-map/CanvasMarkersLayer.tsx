@@ -113,7 +113,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 				if (ind === 1)
 					if (isViewPeopleArea && data_area?.data?.area && ind === 1) {
 						// if (isViewPeopleArea && data_area?.data?.area && ind === 1) {
-						// 	// console.log('isViewPeopleArea in render marks', isViewPeopleArea);
 						// 	const color = 'red';
 						// 	const weight = 3;
 
@@ -124,42 +123,56 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 						// 	}).addTo(markersLayerRef.current!);
 
 						// 	if (idPeopleArea.length > 0 && data_area?.data?.orgs) {
-						// 		// console.log('check orgs', data_area?.data?.orgs, idPeopleArea);
 						// 		idPeopleArea.forEach((id: string) => {
 						// 			const orgs = data_area?.data?.orgs.find(
 						// 				(el: any) => el.group_id === id,
 						// 			);
-						// 			// console.log('orgs in idPeopleArea', orgs);
+
 						// 			if (orgs?.org.length > 0) {
 						// 				orgs?.org.forEach((org: any) => {
-						// 					// Проверяем что организация существует И у неё есть координаты
 						// 					if (!org.lat || !org.lng) {
 						// 						console.log('Организация без координат:', id, org);
 						// 						return;
 						// 					}
+
+						// 					// Получаем АКТУАЛЬНОЕ значение из стора напрямую
+						// 					const currentMarker =
+						// 						useTargetMarkerInAreaStore.getState().marker;
 						// 					const colorOrg =
-						// 						marker_in_area === `${org.name}${org.distance}`
+						// 						currentMarker === `${org.name}${org.distance}`
 						// 							? colors.green
 						// 							: '#000';
+
 						// 					const orgCrd = [org.lat, org.lng];
 
-						// 					L.circleMarker(orgCrd as LatLngExpression, {
-						// 						renderer: canvasLayerRef.current!,
-						// 						radius: 10,
-						// 						color: colorOrg,
-						// 						weight: 6,
-						// 					})
+						// 					const circleMarker = L.circleMarker(
+						// 						orgCrd as LatLngExpression,
+						// 						{
+						// 							renderer: canvasLayerRef.current!,
+						// 							radius: 10,
+						// 							color: colorOrg,
+						// 							weight: 6,
+						// 						},
+						// 					)
 						// 						.addTo(markersLayerRef.current!)
-						// 						.bindPopup(createPopupContent(org))
-						// 						.on('popupopen', () =>
-						// 							setMarkerArea(`${org.name}${org.distance}`),
-						// 						);
+						// 						.bindPopup(createPopupContent(org));
+
+						// 					// Обработчик клика
+						// 					circleMarker.on('click', function (this: L.CircleMarker) {
+						// 						// Обновляем состояние
+						// 						setMarkerArea(`${org.name}${org.distance}`);
+
+						// 						// Перекрашиваем только этот маркер без пересоздания всех
+						// 						this.setStyle({ color: colors.green });
+
+						// 						// Открываем попап
+						// 						this.openPopup();
+						// 					});
 						// 				});
 						// 			}
 						// 		});
 						// 	}
 						// }
-
 						const color = 'red';
 						const weight = 3;
 
@@ -168,6 +181,9 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 							weight: weight,
 							interactive: false,
 						}).addTo(markersLayerRef.current!);
+
+						// Создаём Map для хранения всех маркеров организаций
+						const orgMarkersMap = new Map<string, L.CircleMarker>();
 
 						if (idPeopleArea.length > 0 && data_area?.data?.orgs) {
 							idPeopleArea.forEach((id: string) => {
@@ -191,6 +207,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 												: '#000';
 
 										const orgCrd = [org.lat, org.lng];
+										const markerId = `${org.name}${org.distance}`;
 
 										const circleMarker = L.circleMarker(
 											orgCrd as LatLngExpression,
@@ -204,12 +221,20 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 											.addTo(markersLayerRef.current!)
 											.bindPopup(createPopupContent(org));
 
+										// Сохраняем ссылку на маркер
+										orgMarkersMap.set(markerId, circleMarker);
+
 										// Обработчик клика
 										circleMarker.on('click', function (this: L.CircleMarker) {
-											// Обновляем состояние
-											setMarkerArea(`${org.name}${org.distance}`);
+											// Сбрасываем цвет у ВСЕХ маркеров организаций
+											orgMarkersMap.forEach(marker => {
+												marker.setStyle({ color: '#000' });
+											});
 
-											// Перекрашиваем только этот маркер без пересоздания всех
+											// Обновляем состояние
+											setMarkerArea(markerId);
+
+											// Перекрашиваем ТОЛЬКО этот маркер
 											this.setStyle({ color: colors.green });
 
 											// Открываем попап
