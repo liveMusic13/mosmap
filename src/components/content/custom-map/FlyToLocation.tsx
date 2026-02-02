@@ -81,8 +81,8 @@ const FlyToLocation: FC<{ toZoom: number | undefined }> = ({ toZoom }) => {
 		// console.log('Actually flying to:', centerMap);
 		hasFlownRef.current = true;
 
-		const targetZoom = toZoom ? toZoom - 2 : map.getZoom(); // Вернул оригинальную логику, но с меньшим зумом
-
+		const targetZoom = toZoom ? toZoom - 1 : map.getZoom(); // Вернул оригинальную логику, но с меньшим зумом
+		console.log('targetZoom', targetZoom);
 		map.flyTo(centerMap, targetZoom, {
 			animate: true,
 			duration: 1,

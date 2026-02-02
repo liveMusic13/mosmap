@@ -21,7 +21,8 @@ const Organizations: FC<{
 	group_id: string;
 	isArea: boolean;
 	data_area: any;
-}> = ({ group_id, isArea, data_area }) => {
+	checked: boolean;
+}> = ({ group_id, isArea, data_area, checked }) => {
 	if (!data_area) return null;
 	const { setMarker: setMarkerArea, triggerPopupOpen } =
 		useTargetMarkerInAreaStore(store => store);
@@ -55,7 +56,7 @@ const Organizations: FC<{
 						<p
 							onClick={() => {
 								console.log('[org?.lat, org?.lng]', [org?.lat, org?.lng], org);
-								if (org && org.lat && org.lng) {
+								if (org && org.lat && org.lng && checked) {
 									setCenterMap([Number(org.lat), Number(org.lng)]);
 								}
 								setMarkerArea(`${org.name}${org.distance}`);

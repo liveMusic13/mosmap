@@ -109,6 +109,7 @@ const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 								data_area={data_area}
 								group_id={org?.group_id}
 								isArea={true}
+								checked={idPeopleArea?.includes(org?.group_id)}
 							/>
 						)}
 					</Fragment>
