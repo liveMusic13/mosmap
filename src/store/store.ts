@@ -220,12 +220,19 @@ export const useIdPeopleAreaStore = create<{
 	idPeopleArea: number[];
 	setIdPeopleArea: (id: number) => void;
 	setAllIdPeopleArea: (id: number[]) => void;
+	setIdPeopleAreaNoToggle: (id: number) => void;
 }>(set => ({
 	idPeopleArea: [],
 	setIdPeopleArea: (id: number) =>
 		set(state => ({
 			idPeopleArea: state.idPeopleArea.includes(id)
 				? state.idPeopleArea.filter(existingId => existingId !== id)
+				: [...state.idPeopleArea, id],
+		})),
+	setIdPeopleAreaNoToggle: (id: number) =>
+		set(state => ({
+			idPeopleArea: state.idPeopleArea.includes(id)
+				? [...state.idPeopleArea]
 				: [...state.idPeopleArea, id],
 		})),
 	setAllIdPeopleArea: (ids: number[]) => set({ idPeopleArea: ids }),

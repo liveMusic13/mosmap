@@ -20,8 +20,12 @@ import styles from './OrganizationsNearby.module.scss';
 
 const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 	const { setIsViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
-	const { idPeopleArea, setIdPeopleArea, setAllIdPeopleArea }: any =
-		useIdPeopleAreaStore(store => store);
+	const {
+		idPeopleArea,
+		setIdPeopleArea,
+		setAllIdPeopleArea,
+		setIdPeopleAreaNoToggle,
+	}: any = useIdPeopleAreaStore(store => store);
 	const { setIsViewOrganizationArea }: any = useViewOrganizationAreaStore();
 	const [openedIds, setOpenedIds] = useState<number[]>([]);
 
@@ -88,7 +92,7 @@ const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 								className={styles.block_name}
 								onClick={() => {
 									if (!isOpen) {
-										setIdPeopleArea(org?.group_id);
+										setIdPeopleAreaNoToggle(org?.group_id);
 									} else {
 										setAllIdPeopleArea([]);
 									}
