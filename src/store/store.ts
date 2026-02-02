@@ -37,9 +37,14 @@ export const useIdObjectInfoStore = create<IIdObjectInfoStore>((set, get) => ({
 export const useTargetMarkerInAreaStore = create<{
 	marker: string | null;
 	setMarker: (id: string) => void;
+	shouldOpenPopup: boolean;
+	triggerPopupOpen: (markerId: string) => void;
 }>((set, get) => ({
 	marker: null,
 	setMarker: id => set({ marker: id }),
+	shouldOpenPopup: false,
+	triggerPopupOpen: markerId =>
+		set({ marker: markerId, shouldOpenPopup: true }),
 }));
 
 export const useCenterMapStore = create<ICenterMapStore>(set => ({
