@@ -2,11 +2,7 @@
 
 import { FC, Fragment } from 'react';
 
-import {
-	useCenterMapStore,
-	useTargetMarkerInAreaStore,
-	useViewPeopleAreaStore,
-} from '@/store/store';
+import { useCenterMapStore, useTargetMarkerInAreaStore } from '@/store/store';
 
 import styles from './Organizations.module.scss';
 
@@ -27,21 +23,9 @@ const Organizations: FC<{
 	data_area: any;
 }> = ({ group_id, isArea, data_area }) => {
 	if (!data_area) return null;
-	const { isViewPeopleArea }: any = useViewPeopleAreaStore(store => store);
-	const { setMarker: setMarkerArea } = useTargetMarkerInAreaStore(
-		store => store,
-	);
+	const { setMarker: setMarkerArea, triggerPopupOpen } =
+		useTargetMarkerInAreaStore(store => store);
 	const setCenterMap = useCenterMapStore(store => store.setCenterMap);
-
-	// const { areaCoords } = useGetAreaPeoples(isArea);
-
-	// const { data: data_area } = useGetObjectArea(
-	// 	areaCoords[0],
-	// 	areaCoords[1],
-	// 	isViewPeopleArea,
-	// );
-
-	console.log('in table', data_area);
 
 	const organizations: any[] = [];
 
@@ -75,6 +59,7 @@ const Organizations: FC<{
 									setCenterMap([Number(org.lat), Number(org.lng)]);
 								}
 								setMarkerArea(`${org.name}${org.distance}`);
+								triggerPopupOpen(`${org.name}${org.distance}`);
 							}}
 							className={styles.name}
 						>

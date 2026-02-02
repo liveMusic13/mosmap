@@ -46,8 +46,11 @@ const createPopupContent = (org: any) => {
 const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	if (!dataMap.points || dataMap.points.length === 0) return null;
 
-	const { marker: marker_in_area, setMarker: setMarkerArea } =
-		useTargetMarkerInAreaStore(store => store);
+	const {
+		marker: marker_in_area,
+		setMarker: setMarkerArea,
+		shouldOpenPopup,
+	} = useTargetMarkerInAreaStore(store => store);
 	const idObjectInfo = useIdObjectInfoStore(store => store.idObjectInfo);
 	const setIsViewObjectInfo = useViewObjectAbdAreaInfoStore(
 		store => store.setIsViewObjectInfo,
@@ -73,6 +76,8 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 	const map = useMap();
 	const canvasLayerRef = useRef<Canvas | null>(null);
 	const markersLayerRef = useRef<L.LayerGroup | null>(null);
+	const orgMarkersRef = useRef<Map<string, L.CircleMarker>>(new Map());
+	const isPopupOpenRef = useRef(false); // Новый ref для отслеживания
 
 	useEffect(() => {
 		if (!map || !idObjectInfo) return;
@@ -88,6 +93,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 
 	useEffect(() => {
 		if (!map) return;
+
 		//HELP: Если слой уже существует, очищаем его
 		if (markersLayerRef.current) {
 			markersLayerRef.current.clearLayers();
@@ -102,7 +108,17 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 		const updateMarkers = () => {
 			if (!dataMap || dataMap.points.length === 0) return;
 
+			// КРИТИЧНО: Не делаем clearLayers если попап открыт
+			if (isPopupOpenRef.current) {
+				console.log('Skipping marker update - popup is open');
+				return;
+			}
+
 			markersLayerRef.current!.clearLayers();
+
+			// Очищаем Map перед добавлением новых маркеров
+			orgMarkersRef.current.clear();
+
 			const zoomLevelMap = map.getZoom();
 			const bounds = map.getBounds(); //HELP: Получаем границы видимой области карты
 
@@ -112,67 +128,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 				let mapObject: L.Layer | null = null;
 				if (ind === 1)
 					if (isViewPeopleArea && data_area?.data?.area && ind === 1) {
-						// if (isViewPeopleArea && data_area?.data?.area && ind === 1) {
-						// 	const color = 'red';
-						// 	const weight = 3;
-
-						// 	mapObject = L.polygon(data_area?.data?.area, {
-						// 		color: color,
-						// 		weight: weight,
-						// 		interactive: false,
-						// 	}).addTo(markersLayerRef.current!);
-
-						// 	if (idPeopleArea.length > 0 && data_area?.data?.orgs) {
-						// 		idPeopleArea.forEach((id: string) => {
-						// 			const orgs = data_area?.data?.orgs.find(
-						// 				(el: any) => el.group_id === id,
-						// 			);
-
-						// 			if (orgs?.org.length > 0) {
-						// 				orgs?.org.forEach((org: any) => {
-						// 					if (!org.lat || !org.lng) {
-						// 						console.log('Организация без координат:', id, org);
-						// 						return;
-						// 					}
-
-						// 					// Получаем АКТУАЛЬНОЕ значение из стора напрямую
-						// 					const currentMarker =
-						// 						useTargetMarkerInAreaStore.getState().marker;
-						// 					const colorOrg =
-						// 						currentMarker === `${org.name}${org.distance}`
-						// 							? colors.green
-						// 							: '#000';
-
-						// 					const orgCrd = [org.lat, org.lng];
-
-						// 					const circleMarker = L.circleMarker(
-						// 						orgCrd as LatLngExpression,
-						// 						{
-						// 							renderer: canvasLayerRef.current!,
-						// 							radius: 10,
-						// 							color: colorOrg,
-						// 							weight: 6,
-						// 						},
-						// 					)
-						// 						.addTo(markersLayerRef.current!)
-						// 						.bindPopup(createPopupContent(org));
-
-						// 					// Обработчик клика
-						// 					circleMarker.on('click', function (this: L.CircleMarker) {
-						// 						// Обновляем состояние
-						// 						setMarkerArea(`${org.name}${org.distance}`);
-
-						// 						// Перекрашиваем только этот маркер без пересоздания всех
-						// 						this.setStyle({ color: colors.green });
-
-						// 						// Открываем попап
-						// 						this.openPopup();
-						// 					});
-						// 				});
-						// 			}
-						// 		});
-						// 	}
-						// }
 						const color = 'red';
 						const weight = 3;
 
@@ -181,9 +136,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 							weight: weight,
 							interactive: false,
 						}).addTo(markersLayerRef.current!);
-
-						// Создаём Map для хранения всех маркеров организаций
-						const orgMarkersMap = new Map<string, L.CircleMarker>();
 
 						if (idPeopleArea.length > 0 && data_area?.data?.orgs) {
 							idPeopleArea.forEach((id: string) => {
@@ -221,13 +173,13 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 											.addTo(markersLayerRef.current!)
 											.bindPopup(createPopupContent(org));
 
-										// Сохраняем ссылку на маркер
-										orgMarkersMap.set(markerId, circleMarker);
+										// ВАЖНО: Сохраняем ссылку на маркер
+										orgMarkersRef.current.set(markerId, circleMarker);
 
 										// Обработчик клика
 										circleMarker.on('click', function (this: L.CircleMarker) {
 											// Сбрасываем цвет у ВСЕХ маркеров организаций
-											orgMarkersMap.forEach(marker => {
+											orgMarkersRef.current.forEach(marker => {
 												marker.setStyle({ color: '#000' });
 											});
 
@@ -305,6 +257,7 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 			map.off('zoomend', updateMarkers);
 			map.off('moveend', updateMarkers);
 			markersLayerRef.current?.clearLayers();
+			orgMarkersRef.current.clear();
 		};
 	}, [
 		dataMap,
@@ -316,7 +269,6 @@ const CanvasMarkersLayer: FC<ICanvasMarkersLayer> = ({ dataMap }) => {
 		areaCoords[0],
 		areaCoords[1],
 		data_area,
-		// marker_in_area,
 	]);
 
 	return null;
