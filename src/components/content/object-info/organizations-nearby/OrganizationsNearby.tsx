@@ -87,7 +87,11 @@ const OrganizationsNearby: FC<any> = ({ orgs, isArea }) => {
 							<div
 								className={styles.block_name}
 								onClick={() => {
-									setIdPeopleArea(org?.group_id);
+									if (!isOpen) {
+										setIdPeopleArea(org?.group_id);
+									} else {
+										setAllIdPeopleArea([]);
+									}
 									toggleOpen(org.group_id);
 								}}
 							>
